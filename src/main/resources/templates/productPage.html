@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
 	<title th:text="${product.name}"></title>
 </head>
-<body style="background-color: peachpuff;">
-	<div th:insert="navbar.html"/>
-	<div class="container" style="background-color: white;">
-		<div class="row" style="height: 70vh;overflow: hidden;">
+
+<body style="background-color: peachpuff">
+	<div th:insert="navbar.html" />
+	<div class="container" style="background-color: white">
+		<div class="row" style="height: 70vh; overflow: hidden">
 			<div class="col-8">
-				<div th:if="${!product.images.isEmpty()}" id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+				<div th:if="${!product.images.isEmpty()}" id="carouselExampleControls" class="carousel slide"
+					data-ride="carousel">
 					<div th:id="right" class="carousel-inner">
-							<div th:each="image : ${product.images}" th:class="'carousel-item' + ${imageStat.index!=0 ? '':' active'}">
-								<img class="img-fluid d-block w-100" th:src="'/images/'+${image.id}"/>
-							</div>
+						<div th:each="image : ${product.images}"
+							th:class="'carousel-item' + ${imageStat.index!=0 ? '':' active'}">
+							<img class="img-fluid d-block w-100" th:src="'/images/'+${image.id}"
+								th:alt="${image.name}" />
+						</div>
 					</div>
 					<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
 						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -31,11 +43,11 @@
 				</div>
 			</div>
 			<div class="col">
-				<h3 th:text="${product.name}"/>
-				<p th:text="'Price: '+${product.price}+€"/>
+				<h3 th:text="${product.name}" />
+				<p th:text="'Price: '+${product.price}+€" />
 				<form method="POST" th:action="'/products/'+${product.id}">
-					<input type="number" name="quantity" value="1" min="1" th:max="${product.stock}">
-					<input type="submit" value="Add to Cart">
+					<input type="number" name="quantity" value="1" min="1" th:max="${product.stock}" />
+					<input type="submit" value="Add to Cart" />
 				</form>
 			</div>
 		</div>
@@ -47,4 +59,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

@@ -1,51 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:text-align="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
 	<title>Products page</title>
 </head>
-<body style="background-color: peachpuff;">
-	<div th:insert="navbar.html"/>
-	<div class="container" style="background-color: white; max-width: inherit;">
+
+<body style="background-color: peachpuff">
+	<div th:insert="navbar.html" />
+	<div class="container" style="background-color: white;">
 		<div class="row">
-			<div class="col col-lg-8"></div>
+			<div class="col"></div>
 			<div class="col col-lg-2">
-				<form method="GET" class="form-inline" >
+				<form method="GET" class="form-inline">
 					<label class="my-1 mr-2" for="inlineFormCustomSelectPref">View</label>
 					<select name="size" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					 <option selected>Choose...</option>
-					 <option value="5">5</option>
-					 <option value="10">10</option>
-					 <option value="20">20</option>
+						<option selected>Choose...</option>
+						<option value="5">5</option>
+						<option value="10">10</option>
+						<option value="20">20</option>
 					</select>
-				  
+
 					<button type="submit" class="btn btn-primary my-1">Submit</button>
-				  </form>
+				</form>
 			</div>
-  			<div class="col col-lg-2">
-				<form method="GET" class="form-inline" >
+			<div class="col col-lg-2">
+				<form method="GET" class="form-inline">
 					<label class="my-1 mr-2" for="inlineFormCustomSelectPref">Sort By</label>
 					<select name="sort" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-					 <option selected>Choose...</option>
-					 <option value="id">Default</option>
-					 <option value="price,asc">Price Ascending</option>
-					 <option value="price,desc">Price Descending</option>
-					 <option value="stock,asc">Stock Ascending</option>
-					 <option value="stock,desc">Stock Descending</option>
-					 <option value="name,asc">Name Ascending</option>
-					 <option value="name,desc">Name Descending</option>
+						<option selected>Choose...</option>
+						<option value="id">Default</option>
+						<option value="price,asc">Price Ascending</option>
+						<option value="price,desc">Price Descending</option>
+						<option value="stock,asc">Stock Ascending</option>
+						<option value="stock,desc">Stock Descending</option>
+						<option value="name,asc">Name Ascending</option>
+						<option value="name,desc">Name Descending</option>
 					</select>
-				  
+
 					<button type="submit" class="btn btn-primary my-1">Submit</button>
-				  </form>
+				</form>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col">
 				<table th:if="${!products.empty}" class="table table-hover">
@@ -57,19 +66,20 @@
 							<th scope="col">Price</th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						<tr th:each="product: ${products}">
 							<td>
-								<a th:href="@{'/categories/' + ${product.category.id}}" th:text="${product.category.name}"/>
-							</td> 
-							<td>
-								<a th:href="@{'/products/' + ${product.id}}" th:text="${product.name}"/>
+								<a th:href="@{'/categories/' + ${product.category.id}}"
+									th:text="${product.category.name}" />
 							</td>
-							<td th:text="${product.stock}+' available'"/>
-							<td th:text="${product.price}+'€'"/>
+							<td>
+								<a th:href="@{'/products/' + ${product.id}}" th:text="${product.name}" />
+							</td>
+							<td th:text="${product.stock}+' available'" />
+							<td th:text="${product.price}+'€'" />
 						</tr>
-					</tbody>	
+					</tbody>
 				</table>
 
 				<p th:if="${products.empty}">No products found.</p>
@@ -77,4 +87,5 @@
 		</div>
 	</div>
 </body>
+
 </html>

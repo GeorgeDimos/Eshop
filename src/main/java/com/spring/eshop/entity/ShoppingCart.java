@@ -29,9 +29,9 @@ public class ShoppingCart {
     }
 
     public void add(Product product, int quantity) {
-        itemsList.merge(product, quantity, (oldQuantity, newQuantity) -> {
-            return newQuantity + oldQuantity > product.getStock() ? oldQuantity : newQuantity + oldQuantity;
-        });
+        itemsList.merge(product, quantity, (oldQuantity, newQuantity) -> 
+            newQuantity + oldQuantity > product.getStock() ? oldQuantity : newQuantity + oldQuantity
+        );
     }
 
     public void remove(Product product) {

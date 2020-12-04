@@ -1,6 +1,9 @@
 package com.spring.eshop.controller;
 
+import java.util.Optional;
+
 import com.spring.eshop.dao.ImageDAO;
+import com.spring.eshop.entity.Image;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +19,12 @@ public class ImagesController {
 
     @GetMapping("/images/{id}")
     public ResponseEntity<byte[]> getImageAsResponseEntity(@PathVariable int id) {
-
-        return new ResponseEntity<>(imageDAO.findById(id).get().getData(), null, HttpStatus.OK);
+		Optional<Image> img = imageDAO.findById(id);
+		if(img.isPresent()){
+			return new ResponseEntity<>(img.get().getData(), null, HttpStatus.OK);
+		}
+		
+        return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
     }
 
 }

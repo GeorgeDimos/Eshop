@@ -8,16 +8,21 @@ import javax.transaction.Transactional;
 import com.spring.eshop.dao.ProductDAO;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.service.ProductService;
+import com.spring.eshop.service.SortingFilter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import exceptions.NotEnoughStockException;
+
 @Service
 public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> implements ProductService {
 
-	private final static Set<String> fields = Set.of("images", "category", "description");
+	private static final Set<String> invalidSortingFields = Set.of("images", "category", "description");
 
 	@Autowired
 	private ProductDAO productDAO;
@@ -27,24 +32,33 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 	public void buyItems(Map<Product, Integer> list) {
 
 		list.forEach((product, quantity) -> {
-			if (!product.buyProduct(quantity)) {
-				// TODO
-				// throw not enough stock exception
+			if (productDAO.findById(product.getId()).get().getStock() < quantity) {
+				throw new NotEnoughStockException(product.getId());
 			}
-			productDAO.saveAndFlush(product);
+			product.setStock(product.getStock() - quantity);
 		});
-
+		productDAO.saveAll(list.keySet());
 		list.clear();
 	}
 
 	@Override
 	public final Set<String> getClassFields() {
-		return fields;
+		return invalidSortingFields;
 	}
 
 	@Override
 	public Page<Product> getProductsByCategory(Integer id, Pageable pageable) {
-		return productDAO.findByCategoryId(id, filterPageable(pageable));
+		return productDAO.findByCategoryId(id, pageable);
 	}
 
+	@Bean
+	public FilterRegistrationBean<SortingFilter> productSortingFilter(){
+
+		FilterRegistrationBean<SortingFilter> sortFilter = new FilterRegistrationBean<>();
+		sortFilter.setFilter(new SortingFilter(invalidSortingFields));
+		sortFilter.addUrlPatterns("/products/*");
+		sortFilter.setName("productSortingFilter");
+			
+		return sortFilter;    
+	}
 }

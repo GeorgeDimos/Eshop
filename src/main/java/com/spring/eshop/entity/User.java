@@ -2,6 +2,8 @@ package com.spring.eshop.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,7 +16,11 @@ import lombok.Setter;
 @Table(name = "users")
 public class User {
 
-    @Id
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "id")
+	private int id;
+
     @Column(name = "username")
     private String username;
 
@@ -27,7 +33,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String password, Boolean enabled) {
+    public User(int id, String username, String password, Boolean enabled) {
+		this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;

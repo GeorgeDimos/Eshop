@@ -77,18 +77,7 @@ public class Product {
         if (getClass() != obj.getClass())
             return false;
         Product other = (Product) obj;
-        if (id != other.id)
-            return false;
-        return true;
-    }
-
-    public boolean buyProduct(int quantity) {
-        if (quantity > this.stock) {
-            return false;
-        }
-
-        this.stock -= quantity;
-        return true;
+        return id == other.id;
     }
 
 }
