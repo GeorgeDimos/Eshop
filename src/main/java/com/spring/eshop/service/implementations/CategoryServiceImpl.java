@@ -21,13 +21,13 @@ public class CategoryServiceImpl extends BasicServicesImpl<Category, Integer> im
 	}
 
 	@Bean
-	public FilterRegistrationBean<SortingFilter> categorySortingFilter(){
+	public FilterRegistrationBean<SortingFilter> categorySortingFilter() {
 
 		FilterRegistrationBean<SortingFilter> sortFilter = new FilterRegistrationBean<>();
 		sortFilter.setFilter(new SortingFilter(invalidSortingFields));
 		sortFilter.addUrlPatterns("/categories/*");
 		sortFilter.setName("categorySortingFilter");
-		return sortFilter;    
+		return sortFilter;
 	}
 
 }

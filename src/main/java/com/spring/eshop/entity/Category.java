@@ -20,23 +20,23 @@ import lombok.Setter;
 @Table(name = "category")
 public class Category {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int id;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-    private List<Product> products;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+	private List<Product> products;
 
-    public Category() {
-    }
+	public Category() {
+	}
 
-    public Category(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+	public Category(int id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 
 }

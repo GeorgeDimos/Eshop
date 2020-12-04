@@ -20,17 +20,17 @@ public class SortingFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-				
-				String[] parameters = request.getParameterValues("sort");
-				if(parameters!=null){
-					for (String parameter : parameters) {
-						if(invalidFields.contains(parameter)){
-							throw new IOException("Invalid sort");
-						}
-					}
+
+		String[] parameters = request.getParameterValues("sort");
+		if (parameters != null) {
+			for (String parameter : parameters) {
+				if (invalidFields.contains(parameter)) {
+					throw new IOException("Invalid sort");
 				}
-				
-				chain.doFilter(request, response);
+			}
+		}
+
+		chain.doFilter(request, response);
 	}
-	
+
 }

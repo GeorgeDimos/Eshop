@@ -21,23 +21,23 @@ public class User {
 	@Column(name = "id")
 	private int id;
 
-    @Column(name = "username")
-    private String username;
+	@Column(name = "username")
+	private String username;
 
-    @Column(name = "password")
-    private String password;
+	@Column(name = "password")
+	private String password;
 
-    @Column(name = "enabled")
-    private Boolean enabled;
+	@Column(name = "enabled")
+	private Boolean enabled;
 
-    public User() {
-    }
+	public User() {
+	}
 
-    public User(int id, String username, String password, Boolean enabled) {
+	public User(int id, String username, String password, Boolean enabled) {
 		this.id = id;
-        this.username = username;
-        this.password = password;
-        this.enabled = enabled;
-    }
+		this.username = username;
+		this.password = password;
+		this.enabled = enabled;
+	}
 
 }

@@ -35,5 +35,5 @@ public class CheckoutController {
 
 		return "redirect:/products";
 	}
-	
+
 }

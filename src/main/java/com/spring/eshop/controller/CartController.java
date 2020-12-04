@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/cart")
 public class CartController {
 
-    @Autowired
-    private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-    @Autowired
-    private ShoppingCart shoppingCart;
+	@Autowired
+	private ShoppingCart shoppingCart;
 
-    @GetMapping
-    public String goToCart(Model model) {
-        model.addAttribute("shoppingList", shoppingCart.getShoppingCart());
-        return "cart";
-    }
+	@GetMapping
+	public String goToCart(Model model) {
+		model.addAttribute("shoppingList", shoppingCart.getShoppingCart());
+		return "cart";
+	}
 
-    @PostMapping
-    public String editCart(@RequestParam int id) {
-        shoppingCart.remove(productService.getItem(id));
-        return "redirect:/cart";
-    }
+	@PostMapping
+	public String editCart(@RequestParam int id) {
+		shoppingCart.remove(productService.getItem(id));
+		return "redirect:/cart";
+	}
 
 }

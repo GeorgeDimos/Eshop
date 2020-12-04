@@ -30,14 +30,12 @@ public class UserPrinciple implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if(authGroup==null){
+		if (authGroup == null) {
 			return Collections.emptySet();
 		}
 
 		Set<SimpleGrantedAuthority> grantedAuthorities = new HashSet<>();
-		authGroup.forEach(group ->
-			grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthority()))
-		);
+		authGroup.forEach(group -> grantedAuthorities.add(new SimpleGrantedAuthority(group.getAuthority())));
 
 		return grantedAuthorities;
 	}
@@ -71,5 +69,5 @@ public class UserPrinciple implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 }

@@ -10,39 +10,37 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class ShoppingCart {
 
-    private Map<Product, Integer> itemsList;
+	private Map<Product, Integer> itemsList;
 
-    public ShoppingCart() {
-        this.itemsList = new HashMap<>();
-    }
+	public ShoppingCart() {
+		this.itemsList = new HashMap<>();
+	}
 
-    public ShoppingCart(Map<Product, Integer> itemsList) {
-        this.itemsList = itemsList;
-    }
+	public ShoppingCart(Map<Product, Integer> itemsList) {
+		this.itemsList = itemsList;
+	}
 
-    public Map<Product, Integer> getShoppingCart() {
-        return this.itemsList;
-    }
+	public Map<Product, Integer> getShoppingCart() {
+		return this.itemsList;
+	}
 
-    public void setShoppingCart(Map<Product, Integer> itemsList) {
-        this.itemsList = itemsList;
-    }
+	public void setShoppingCart(Map<Product, Integer> itemsList) {
+		this.itemsList = itemsList;
+	}
 
-    public void add(Product product, int quantity) {
-        itemsList.merge(product, quantity, (oldQuantity, newQuantity) -> 
-            newQuantity + oldQuantity > product.getStock() ? oldQuantity : newQuantity + oldQuantity
-        );
-    }
+	public void add(Product product, int quantity) {
+		itemsList.merge(product, quantity,
+				(oldQuantity, newQuantity) -> newQuantity + oldQuantity > product.getStock() ? oldQuantity
+						: newQuantity + oldQuantity);
+	}
 
-    public void remove(Product product) {
-        itemsList.remove(product);
-    }
+	public void remove(Product product) {
+		itemsList.remove(product);
+	}
 
-    @Override
-    public String toString() {
-        return "{" +
-                " itemsList='" + itemsList + "'" +
-                "}";
-    }
+	@Override
+	public String toString() {
+		return "{" + " itemsList='" + itemsList + "'" + "}";
+	}
 
 }

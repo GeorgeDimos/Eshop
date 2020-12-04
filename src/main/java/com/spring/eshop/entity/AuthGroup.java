@@ -13,14 +13,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="authorities")
+@Table(name = "authorities")
 public class AuthGroup {
 	@Id
-	@Column(name="id")
+	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
-	@Column(name="username")
+
+	@Column(name = "username")
 	private String username;
 
 	@Column(name = "authority")
