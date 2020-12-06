@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("profiles/{pid}/orders")
 public class OrdersController {
 
-    @Autowired
-    private OrderDAO orderDAO;
+	@Autowired
+	private OrderDAO orderDAO;
 
-    @Autowired
-    private UserDAO userDAO;
+	@Autowired
+	private UserDAO userDAO;
 
-    @GetMapping
-    public String getOrdersList(@PathVariable int pid,
-                                Model model){
-        model.addAttribute("user", userDAO.findById(pid).get());
-        return "orders";
-    }
+	@GetMapping
+	public String getOrdersList(@PathVariable int pid,
+								Model model) {
+		model.addAttribute("user", userDAO.findById(pid).get());
+		return "orders";
+	}
 
-    @GetMapping("/{oid}")
-    public String getOrderDetails(@PathVariable int oid, Model model){
-        model.addAttribute("order", orderDAO.findById(oid).get());
-        return "order";
-    }
+	@GetMapping("/{oid}")
+	public String getOrderDetails(@PathVariable int oid, Model model) {
+		model.addAttribute("order", orderDAO.findById(oid).get());
+		return "order";
+	}
 }

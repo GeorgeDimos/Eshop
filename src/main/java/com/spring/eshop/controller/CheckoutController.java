@@ -2,7 +2,6 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.service.ProductService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,5 +34,4 @@ public class CheckoutController {
 
 		return "redirect:/products";
 	}
-
 }

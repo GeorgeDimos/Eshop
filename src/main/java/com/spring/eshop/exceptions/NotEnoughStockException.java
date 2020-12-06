@@ -17,5 +17,4 @@ public class NotEnoughStockException extends RuntimeException {
 	public String getProductName() {
 		return this.productName;
 	}
-
 }

@@ -1,10 +1,10 @@
 package com.spring.eshop.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @SessionScope
@@ -42,5 +42,4 @@ public class ShoppingCart {
 	public String toString() {
 		return "{" + " itemsList='" + itemsList + "'" + "}";
 	}
-
 }

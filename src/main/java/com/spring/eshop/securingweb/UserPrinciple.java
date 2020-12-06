@@ -1,17 +1,12 @@
 package com.spring.eshop.securingweb;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.*;
 
 public class UserPrinciple implements UserDetails {
 
@@ -40,7 +35,7 @@ public class UserPrinciple implements UserDetails {
 		return grantedAuthorities;
 	}
 
-	public int getUserId(){
+	public int getUserId() {
 		return user.getId();
 	}
 
@@ -73,5 +68,4 @@ public class UserPrinciple implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
 }

@@ -1,6 +1,5 @@
 package com.spring.eshop.securingweb;
 
-import com.spring.eshop.entity.User;
 import com.spring.eshop.service.implementations.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +10,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,16 +25,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public WebSecurityConfig(MyUserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		 http
-			.csrf().disable()
-			.authorizeRequests().antMatchers("/checkout").authenticated()
-			.and()
-		 	.authorizeRequests().antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
-		 	.and()
-			.formLogin().and().logout();
+		http
+				.csrf().disable()
+				.authorizeRequests().antMatchers("/checkout").authenticated()
+				.and()
+				.authorizeRequests().antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
+				.and()
+				.formLogin().and().logout();
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public DaoAuthenticationProvider authenticationProvider(){
+	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(new BCryptPasswordEncoder(4));
@@ -54,11 +52,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public GrantedAuthoritiesMapper authoritiesMapper(){
+	public GrantedAuthoritiesMapper authoritiesMapper() {
 		SimpleAuthorityMapper authorityMapper = new SimpleAuthorityMapper();
 		authorityMapper.setConvertToUpperCase(true);
 		authorityMapper.setDefaultAuthority("USER");
 		return authorityMapper;
 	}
-	
 }

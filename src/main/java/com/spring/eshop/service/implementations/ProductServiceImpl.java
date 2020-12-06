@@ -6,7 +6,6 @@ import com.spring.eshop.dao.ProductDAO;
 import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
-import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.securingweb.UserPrinciple;
 import com.spring.eshop.service.ProductService;
@@ -21,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.websocket.Session;
 import java.util.Map;
 import java.util.Set;
 
@@ -61,7 +59,6 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 			OrderItem item = new OrderItem(product.getId(), quantity, order.getId());
 			orderItemDAO.save(item);
 		});
-
 
 		productDAO.saveAll(list.keySet());
 		list.clear();

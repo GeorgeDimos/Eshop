@@ -1,12 +1,9 @@
 package com.spring.eshop.entity;
 
-import javax.persistence.*;
-import javax.transaction.Transactional;
-
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -14,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders")
 public class Order {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -26,5 +23,4 @@ public class Order {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id")
 	private List<OrderItem> items;
-
 }
