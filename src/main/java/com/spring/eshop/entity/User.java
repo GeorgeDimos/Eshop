@@ -1,14 +1,11 @@
 package com.spring.eshop.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,6 +26,10 @@ public class User {
 
 	@Column(name = "enabled")
 	private Boolean enabled;
+
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "customer_id")
+	List<Order> orders;
 
 	public User() {
 	}
