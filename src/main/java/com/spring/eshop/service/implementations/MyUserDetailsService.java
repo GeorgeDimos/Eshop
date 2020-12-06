@@ -15,8 +15,8 @@ import java.util.List;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-	private UserDAO userDAO;
-	private AuthGroupdDAO authGroupdDAO;
+	private final UserDAO userDAO;
+	private final AuthGroupdDAO authGroupdDAO;
 
 	public MyUserDetailsService(UserDAO userDAO, AuthGroupdDAO authGroupdDAO) {
 		this.userDAO = userDAO;

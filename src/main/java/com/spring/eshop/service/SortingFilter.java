@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class SortingFilter implements Filter {
 
-	private Set<String> invalidFields;
+	private final Set<String> invalidFields;
 
 	public SortingFilter(Set<String> invalidFields) {
 		this.invalidFields = invalidFields;

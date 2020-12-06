@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/cart")
 public class CartController {
 
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
+
+	private final ShoppingCart shoppingCart;
 
 	@Autowired
-	private ShoppingCart shoppingCart;
+	public CartController(ProductService productService, ShoppingCart shoppingCart) {
+		this.productService = productService;
+		this.shoppingCart = shoppingCart;
+	}
 
 	@GetMapping
 	public String goToCart(Model model) {

@@ -14,11 +14,6 @@ public class CategoryServiceImpl extends BasicServicesImpl<Category, Integer> im
 
 	private static final Set<String> invalidSortingFields = Set.of("products");
 
-	@Override
-	public final Set<String> getClassFields() {
-		return invalidSortingFields;
-	}
-
 	@Bean
 	public FilterRegistrationBean<SortingFilter> categorySortingFilter() {
 

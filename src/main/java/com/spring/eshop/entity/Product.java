@@ -37,17 +37,6 @@ public class Product {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	public Product() {
-	}
-
-	public Product(int id, String name, String description, int stock, int price) {
-		this.id = id;
-		this.name = name;
-		this.description = description;
-		this.stock = stock;
-		this.price = price;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -7,7 +7,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface ItemDAO<T, ID> extends JpaRepository<T, ID> {
-	public Page<T> findByNameContaining(String name, Pageable pageable);
+	Page<T> findByNameContaining(String name, Pageable pageable);
 
-	public Page<T> findAll(Pageable pageable);
+	Page<T> findAll(Pageable pageable);
 }

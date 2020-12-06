@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Map;
 
 public interface ProductService extends BasicServices<Product, Integer> {
-	public void buyItems(Map<Product, Integer> list);
+	void buyItems(Map<Product, Integer> list);
 
-	public Page<Product> getProductsByCategory(Integer id, Pageable pageable);
+	Page<Product> getProductsByCategory(Integer id, Pageable pageable);
 }

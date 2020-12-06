@@ -13,16 +13,17 @@ import java.util.Optional;
 
 @Controller
 public class ImagesController {
+
+	private final ImageDAO imageDAO;
+
 	@Autowired
-	private ImageDAO imageDAO;
+	public ImagesController(ImageDAO imageDAO) {
+		this.imageDAO = imageDAO;
+	}
 
 	@GetMapping("/images/{id}")
 	public ResponseEntity<byte[]> getImageAsResponseEntity(@PathVariable int id) {
 		Optional<Image> img = imageDAO.findById(id);
-		if (img.isPresent()) {
-			return new ResponseEntity<>(img.get().getData(), null, HttpStatus.OK);
-		}
-
-		return new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND);
+		return img.map(image -> new ResponseEntity<>(image.getData(), null, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND));
 	}
 }

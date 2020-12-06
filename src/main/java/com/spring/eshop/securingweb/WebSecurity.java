@@ -7,9 +7,6 @@ import org.springframework.stereotype.Component;
 public class WebSecurity {
 	public boolean checkUserId(Authentication authentication, int id) {
 		UserPrinciple user = (UserPrinciple) authentication.getPrincipal();
-		if (user.getUserId() == id) {
-			return true;
-		}
-		return false;
+		return user.getUserId() == id;
 	}
 }

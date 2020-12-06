@@ -15,8 +15,8 @@ public class UserPrinciple implements UserDetails {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private transient User user;
-	private transient List<AuthGroup> authGroup;
+	private final transient User user;
+	private final transient List<AuthGroup> authGroup;
 
 	public UserPrinciple(User user, List<AuthGroup> authGroup) {
 		this.user = user;

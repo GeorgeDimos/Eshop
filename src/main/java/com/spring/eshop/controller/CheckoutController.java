@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/checkout")
 public class CheckoutController {
 
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
+
+	private final ShoppingCart shoppingCart;
 
 	@Autowired
-	private ShoppingCart shoppingCart;
+	public CheckoutController(ProductService productService, ShoppingCart shoppingCart) {
+		this.productService = productService;
+		this.shoppingCart = shoppingCart;
+	}
 
 	@GetMapping
 	public String checkout(Model model) {

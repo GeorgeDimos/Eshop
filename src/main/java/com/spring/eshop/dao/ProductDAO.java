@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductDAO extends ItemDAO<Product, Integer> {
-	public Page<Product> findByCategoryId(Integer id, Pageable pageable);
+	Page<Product> findByCategoryId(Integer id, Pageable pageable);
 }

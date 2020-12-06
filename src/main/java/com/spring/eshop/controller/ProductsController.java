@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductsController {
 
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
+
+	private final ShoppingCart shoppingCart;
 
 	@Autowired
-	private ShoppingCart shoppingCart;
+	public ProductsController(ProductService productService, ShoppingCart shoppingCart) {
+		this.productService = productService;
+		this.shoppingCart = shoppingCart;
+	}
 
 	@GetMapping
 	public String getProductsTest(Pageable pageable, Model model) {

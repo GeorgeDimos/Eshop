@@ -21,13 +21,4 @@ public class Image {
 
 	@Column(name = "data")
 	private byte[] data;
-
-	public Image() {
-	}
-
-	public Image(int id, String name, byte[] data) {
-		this.id = id;
-		this.name = name;
-		this.data = data;
-	}
 }

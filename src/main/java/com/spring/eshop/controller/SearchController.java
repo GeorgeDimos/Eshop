@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class SearchController {
 
+	private final ProductService productService;
+
 	@Autowired
-	private ProductService productService;
+	public SearchController(ProductService productService) {
+		this.productService = productService;
+	}
 
 	@GetMapping("/search")
 	public String searchProductByName(@RequestParam("name") String name, Pageable pageable, Model model) {

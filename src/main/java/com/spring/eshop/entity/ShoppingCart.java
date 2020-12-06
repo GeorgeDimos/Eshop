@@ -10,7 +10,7 @@ import java.util.Map;
 @SessionScope
 public class ShoppingCart {
 
-	private Map<Product, Integer> itemsList;
+	private final Map<Product, Integer> itemsList;
 
 	public ShoppingCart() {
 		this.itemsList = new HashMap<>();
@@ -22,10 +22,6 @@ public class ShoppingCart {
 
 	public Map<Product, Integer> getShoppingCart() {
 		return this.itemsList;
-	}
-
-	public void setShoppingCart(Map<Product, Integer> itemsList) {
-		this.itemsList = itemsList;
 	}
 
 	public void add(Product product, int quantity) {

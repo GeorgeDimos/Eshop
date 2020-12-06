@@ -29,14 +29,4 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
 	List<Order> orders;
-
-	public User() {
-	}
-
-	public User(int id, String username, String password, Boolean enabled) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.enabled = enabled;
-	}
 }

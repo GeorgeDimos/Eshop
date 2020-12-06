@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/categories")
 public class CategoriesController {
 
-	@Autowired
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
+
+	private final ProductService productService;
 
 	@Autowired
-	private ProductService productService;
+	public CategoriesController(CategoryService categoryService, ProductService productService) {
+		this.categoryService = categoryService;
+		this.productService = productService;
+	}
 
 	@GetMapping
 	public String getCategories(Pageable pageable, Model model) {

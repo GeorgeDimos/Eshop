@@ -28,21 +28,25 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 
 	private static final Set<String> invalidSortingFields = Set.of("images", "category", "description");
 
-	@Autowired
-	private ProductDAO productDAO;
+	private final ProductDAO productDAO;
+
+	private final OrderDAO orderDAO;
+
+	private final OrderItemDAO orderItemDAO;
 
 	@Autowired
-	private OrderDAO orderDAO;
-
-	@Autowired
-	private OrderItemDAO orderItemDAO;
+	public ProductServiceImpl(ProductDAO productDAO, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
+		this.productDAO = productDAO;
+		this.orderDAO = orderDAO;
+		this.orderItemDAO = orderItemDAO;
+	}
 
 	@Transactional
 	@Override
 	public void buyItems(Map<Product, Integer> list) {
 		list.forEach((product, quantity) -> {
-			int currentStock = productDAO.findById(product.getId()).get().getStock();
-			if (currentStock < quantity) {
+			Product currentProduct = productDAO.findById(product.getId()).orElseThrow();
+			if (currentProduct.getStock() < quantity) {
 				throw new NotEnoughStockException(product.getName());
 			}
 			product.setStock(product.getStock() - quantity);
@@ -62,11 +66,6 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 
 		productDAO.saveAll(list.keySet());
 		list.clear();
-	}
-
-	@Override
-	public final Set<String> getClassFields() {
-		return invalidSortingFields;
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	MyUserDetailsService userDetailsService;
+	final MyUserDetailsService userDetailsService;
 
 	@Autowired
 	public WebSecurityConfig(MyUserDetailsService userDetailsService) {

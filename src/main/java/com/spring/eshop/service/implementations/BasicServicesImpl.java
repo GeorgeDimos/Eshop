@@ -18,10 +18,7 @@ public abstract class BasicServicesImpl<T, ID> implements BasicServices<T, ID> {
 	@Override
 	public T getItem(ID id) {
 		Optional<T> item = itemDAO.findById(id);
-		if (item.isPresent()) {
-			return item.get();
-		}
-		return null;
+		return item.orElse(null);
 	}
 
 	@Override
