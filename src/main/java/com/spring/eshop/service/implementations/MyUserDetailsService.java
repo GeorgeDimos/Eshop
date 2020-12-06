@@ -1,4 +1,4 @@
-package com.spring.eshop.securingweb;
+package com.spring.eshop.service.implementations;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
 
+import com.spring.eshop.securingweb.UserPrinciple;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

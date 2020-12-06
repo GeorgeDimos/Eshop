@@ -40,6 +40,10 @@ public class UserPrinciple implements UserDetails {
 		return grantedAuthorities;
 	}
 
+	public int getUserId(){
+		return user.getId();
+	}
+
 	@Override
 	public String getPassword() {
 		return user.getPassword();
