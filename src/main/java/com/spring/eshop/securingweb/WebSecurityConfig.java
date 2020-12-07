@@ -34,7 +34,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeRequests().antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
 				.and()
-				.formLogin().and().logout();
+				.formLogin()
+					.loginPage("/login")
+					.permitAll()
+					.and()
+				.logout().permitAll();
 	}
 
 	@Override
