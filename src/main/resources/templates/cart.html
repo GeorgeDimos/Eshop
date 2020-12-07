@@ -19,14 +19,14 @@
 </head>
 
 <body>
-	<div th:insert="navbar.html" />
+	<div th:insert="navbar.html"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col">
 				<h3>Cart</h3>
 				<br>
 				<div class="alert alert-warning" role="alert" th:if="${notEnoughStockError}" 
-					th:text="${notEnoughStockError}+' is not in stock anymore. Please remove it.'"/>
+					th:text="${notEnoughStockError}+' is not in stock anymore. Please remove it.'"></div>
 				<p th:if="${shoppingList.empty}">Shopping Cart is empty</p>
 				<table th:if="${!shoppingList.empty}" class="table table-hover">
 					<thead class="thead-dark">
@@ -42,10 +42,10 @@
 						<tr th:each="item: ${shoppingList}">
 							<td>
 								<a th:href="@{'/products/' + ${item.getKey().getId()}}"
-								   th:text="${item.key.name}" />
+								   th:text="${item.key.name}"></a>
 							</td>
 							<!--<td th:text="${item.key.name}" />-->
-							<td th:text="${item.value}" />
+							<td th:text="${item.value}"></td>
 							<td th:text="${item.value*item.key.price}+'€'" />
 							<td>
 								<form method="POST">

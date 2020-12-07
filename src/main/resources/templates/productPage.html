@@ -21,15 +21,13 @@
 <body>
 	<div th:insert="navbar.html" />
 	<div class="container">
-		<div class="row" style="height: 70vh; overflow: hidden">
+		<div class="row">
 			<div class="col-8">
 				<div th:if="${!product.images.isEmpty()}" id="carouselExampleControls" class="carousel slide"
 					data-ride="carousel">
-					<div th:id="right" class="carousel-inner">
-						<div th:each="image : ${product.images}"
-							th:class="'carousel-item' + ${imageStat.index!=0 ? '':' active'}">
-							<img class="img-fluid d-block w-100" th:src="'/images/'+${image.id}"
-								th:alt="${image.name}" />
+					<div th:id="right" class="carousel-inner embed-responsive embed-responsive-16by9">
+						<div th:each="image : ${product.images}" th:class="'embed-responsive-item carousel-item' + ${imageStat.index!=0 ? '':' active'}">
+							<img class="img-fluid d-block w-100 embed-responsive-item " th:src="'/images/'+${image.id}" th:alt="${image.name}" />
 						</div>
 					</div>
 					<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">

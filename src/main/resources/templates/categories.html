@@ -30,15 +30,13 @@
 			</thead>
 
 			<tbody>
-				<tr th:each="category: ${categories}">
-					<span th:if="${!category.products.empty}">
-						<td>
-							<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.name}" />
-						</td>
-						<td>
-							<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.products.size()}" />
-						</td>
-					</span>
+				<tr th:each="category: ${categories}" th:if="${!category.products.empty}">
+					<td>
+						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.name}" />
+					</td>
+					<td>
+						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.products.size()}" />
+					</td>
 				</tr>
 			</tbody>
 
