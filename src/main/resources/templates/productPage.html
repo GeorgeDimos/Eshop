@@ -18,9 +18,9 @@
 	<title th:text="${product.name}"></title>
 </head>
 
-<body style="background-color: peachpuff">
+<body>
 	<div th:insert="navbar.html" />
-	<div class="container" style="background-color: white">
+	<div class="container">
 		<div class="row" style="height: 70vh; overflow: hidden">
 			<div class="col-8">
 				<div th:if="${!product.images.isEmpty()}" id="carouselExampleControls" class="carousel slide"

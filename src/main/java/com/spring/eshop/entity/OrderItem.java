@@ -19,8 +19,9 @@ public class OrderItem {
 	@Column(name = "order_id")
 	private int orderId;
 
-	@Column(name = "product_id")
-	private int productId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
 	@Column(name = "quantity")
 	private int quantity;
@@ -28,8 +29,8 @@ public class OrderItem {
 	public OrderItem() {
 	}
 
-	public OrderItem(int productId, int quantity, int orderId) {
-		this.productId = productId;
+	public OrderItem(Product product, int quantity, int orderId) {
+		this.product = product;
 		this.quantity = quantity;
 		this.orderId = orderId;
 	}

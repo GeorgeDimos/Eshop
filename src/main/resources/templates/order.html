@@ -17,27 +17,35 @@
     <title th:text="'Order '+${order.getId()}"/>
 </head>
 <body>
+    <div th:insert="navbar.html" />
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2 th:text="'Order #' + ${order.getId()}"/>
+                <table th:if="${!order.getItems().empty}" class="table table-hover">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                    </thead>
 
-<table th:if="${!order.getItems().empty}" class="table table-hover">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Item</th>
-        <th scope="col">Quantity</th>
-    </tr>
-    </thead>
+                    <tbody>
 
-    <tbody>
-    <tr th:each="item: ${order.getItems()}">
-        <td th:text="${itemStat.count}"/>
-        <td>
-            <a th:href="@{'/products/' + ${item.productId}}" th:text="${item.productId}" />
-        </td>
-        <td th:text="${item.quantity}+' ordered'" />
-    </tr>
-    </tbody>
-</table>
+                    <tr th:each="item: ${order.getItems()}">
+                        <td th:text="${itemStat.count}"/>
+                        <td>
+                             <a th:href="@{'/products/' + ${item.getProduct().getId()}}" th:text="${item.getProduct().getName()}" />
+                        </td>
+                        <td th:text="${item.quantity}+' ordered'" />
+                    </tr>
+                    </tbody>
+                </table>
 
-<p th:if="${order.getItems().empty}">No products found.</p>
+                <p th:if="${order.getItems().empty}">No products found.</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

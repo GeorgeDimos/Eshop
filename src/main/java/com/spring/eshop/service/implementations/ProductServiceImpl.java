@@ -60,7 +60,7 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 		orderDAO.save(order);
 
 		list.forEach((product, quantity) -> {
-			OrderItem item = new OrderItem(product.getId(), quantity, order.getId());
+			OrderItem item = new OrderItem(product, quantity, order.getId());
 			orderItemDAO.save(item);
 		});
 

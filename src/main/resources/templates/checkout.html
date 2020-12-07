@@ -18,15 +18,15 @@
 	<title>Checkout</title>
 </head>
 
-<body style="background-color: peachpuff;">
+<body>
 	<div th:insert="navbar.html" />
-	<div class="container" style="background-color: white;">
+	<div class="container">
 		<div class="row">
 			<div class="col">
 				<h3>Checkout</h3>
 				<br>
 				<table class="table table-hover">
-					<thead>
+					<thead class="thead-dark">
 						<tr>
 							<th scope="col">Product</th>
 							<th scope="col">Quantity</th>
@@ -44,8 +44,8 @@
 				</table>
 
 				<form method="POST" action="/checkout">
-					<input type="submit" name="confirm" value="Purchase">
-					<input type="submit" name="cancel" value="Cancel">
+					<input class="btn btn-primary" type="submit" name="confirm" value="Purchase">
+					<input class="btn btn-secondary" type="submit" name="cancel" value="Cancel">
 				</form>
 			</div>
 		</div>

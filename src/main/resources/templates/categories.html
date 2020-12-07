@@ -18,11 +18,11 @@
 	<title>Categories</title>
 </head>
 
-<body style="background-color: peachpuff;">
+<body>
 	<div th:insert="navbar.html" />
-	<div class="container" style="background-color: white;">
+	<div class="container">
 		<table th:if="${!categories.empty}" class="table table-hover">
-			<thead>
+			<thead class="thead-dark">
 				<tr>
 					<th scope="col">Category</th>
 					<th scope="col">Number of Products</th>

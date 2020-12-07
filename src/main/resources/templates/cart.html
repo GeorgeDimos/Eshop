@@ -18,9 +18,9 @@
 	<title>Cart</title>
 </head>
 
-<body style="background-color: peachpuff;">
+<body>
 	<div th:insert="navbar.html" />
-	<div class="container" style="background-color: white;">
+	<div class="container">
 		<div class="row">
 			<div class="col">
 				<h3>Cart</h3>
@@ -29,7 +29,7 @@
 					th:text="${notEnoughStockError}+' is not in stock anymore. Please remove it.'"/>
 				<p th:if="${shoppingList.empty}">Shopping Cart is empty</p>
 				<table th:if="${!shoppingList.empty}" class="table table-hover">
-					<thead>
+					<thead class="thead-dark">
 						<tr>
 							<th scope="col">Product</th>
 							<th scope="col">Quantity</th>
@@ -40,12 +40,18 @@
 
 					<tbody>
 						<tr th:each="item: ${shoppingList}">
-							<td th:text="${item.key.name}" />
+							<td>
+								<a th:href="@{'/products/' + ${item.getKey().getId()}}"
+								   th:text="${item.key.name}" />
+							</td>
+							<!--<td th:text="${item.key.name}" />-->
 							<td th:text="${item.value}" />
 							<td th:text="${item.value*item.key.price}+'€'" />
 							<td>
 								<form method="POST">
-									<input type="submit" name="remove" value="X">
+									<button class="btn btn-danger">
+										<span aria-hidden="true">&times;</span>
+									</button>
 									<input type="hidden" name="id" th:value=${item.key.id}>
 								</form>
 							</td>
@@ -53,8 +59,8 @@
 					</tbody>
 				</table>
 				<form method="GET" th:if="${!shoppingList.empty}">
-					<button formaction="/checkout">Checkout</button>
-					<button formaction="/products">Cancel</button>
+					<button class="btn btn-primary" formaction="/checkout">Checkout</button>
+					<button class="btn btn-secondary" formaction="/products">Cancel</button>
 				</form>
 			</div>
 		</div>

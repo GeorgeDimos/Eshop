@@ -18,47 +18,15 @@
 	<title>Products page</title>
 </head>
 
-<body style="background-color: peachpuff">
+<body>
 	<div th:insert="navbar.html" />
-	<div class="container" style="background-color: white;">
-		<div class="row">
-			<div class="col"></div>
-			<div class="col col-lg-2">
-				<form method="GET" class="form-inline">
-					<label class="my-1 mr-2" for="inlineFormCustomSelectPref">View</label>
-					<select name="size" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-						<option selected>Choose...</option>
-						<option value="5">5</option>
-						<option value="10">10</option>
-						<option value="20">20</option>
-					</select>
-
-					<button type="submit" class="btn btn-primary my-1">Submit</button>
-				</form>
-			</div>
-			<div class="col col-lg-2">
-				<form method="GET" class="form-inline">
-					<label class="my-1 mr-2" for="inlineFormCustomSelectPref">Sort By</label>
-					<select name="sort" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-						<option selected>Choose...</option>
-						<option value="id">Default</option>
-						<option value="price,asc">Price Ascending</option>
-						<option value="price,desc">Price Descending</option>
-						<option value="stock,asc">Stock Ascending</option>
-						<option value="stock,desc">Stock Descending</option>
-						<option value="name,asc">Name Ascending</option>
-						<option value="name,desc">Name Descending</option>
-					</select>
-
-					<button type="submit" class="btn btn-primary my-1">Submit</button>
-				</form>
-			</div>
-		</div>
-
+	<div class="container">
+		<div th:insert="sorting.html" />
 		<div class="row">
 			<div class="col">
+				<br>
 				<table th:if="${!products.empty}" class="table table-hover">
-					<thead>
+					<thead class="thead-dark">
 						<tr>
 							<th scope="col">Categories</th>
 							<th scope="col">Product</th>
@@ -81,6 +49,7 @@
 						</tr>
 					</tbody>
 				</table>
+				<div th:insert="pagination.html::frag (${products},'products')"/>
 
 				<p th:if="${products.empty}">No products found.</p>
 			</div>

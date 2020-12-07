@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +9,12 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <title>Eshop made with Spring</title>
 </head>
-<body style="background-color: peachpuff;">
+<body>
 	<div th:insert="navbar.html"/>
-	<div class="container" style="max-width: inherit;margin-top: 0;">
+	<div class="container" style="max-width: inherit;margin-top: 0;text-align: center">
 		<div class="row">
 			<div class="col">
-				<p>An Eshop made with Java Spring.</p>
+				<h2>An Eshop made with Java Spring.</h2>
 			</div>
 		</div>
 	</div>
