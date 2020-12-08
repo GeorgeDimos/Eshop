@@ -1,6 +1,6 @@
 package com.spring.eshop.service.implementations;
 
-import com.spring.eshop.dao.AuthGroupdDAO;
+import com.spring.eshop.dao.AuthGroupDAO;
 import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
@@ -16,11 +16,11 @@ import java.util.List;
 public class MyUserDetailsService implements UserDetailsService {
 
 	private final UserDAO userDAO;
-	private final AuthGroupdDAO authGroupdDAO;
+	private final AuthGroupDAO authGroupDAO;
 
-	public MyUserDetailsService(UserDAO userDAO, AuthGroupdDAO authGroupdDAO) {
+	public MyUserDetailsService(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
 		this.userDAO = userDAO;
-		this.authGroupdDAO = authGroupdDAO;
+		this.authGroupDAO = authGroupDAO;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class MyUserDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Can not find user with username: " + username);
 		}
-		List<AuthGroup> authGroups = authGroupdDAO.findByUsername(username);
+		List<AuthGroup> authGroups = authGroupDAO.findByUsername(username);
 		return new UserPrinciple(user, authGroups);
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -35,9 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
 				.and()
 				.formLogin()
-					.loginPage("/login")
-					.permitAll()
-					.and()
+				.loginPage("/login")
+				.permitAll()
+				.and()
 				.logout().permitAll();
 	}
 
@@ -50,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
-		provider.setPasswordEncoder(new BCryptPasswordEncoder(4));
+		provider.setPasswordEncoder(passwordEncoder());
 		provider.setAuthoritiesMapper(authoritiesMapper());
 		return provider;
 	}
@@ -61,5 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		authorityMapper.setConvertToUpperCase(true);
 		authorityMapper.setDefaultAuthority("USER");
 		return authorityMapper;
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(4);
 	}
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 
@@ -28,5 +28,8 @@ public class User {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "customer_id")
-	List<Order> orders;
+	private List<Order> orders;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	private UserDetails userDetails;
 }

@@ -11,34 +11,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
-
 @Controller
-@RequestMapping("profiles/{pid}/orders")
-public class OrdersController {
+@RequestMapping("/profiles/{id}")
+public class ProfileController {
 
 	private final OrderDAO orderDAO;
 
 	private final UserDAO userDAO;
 
 	@Autowired
-	public OrdersController(OrderDAO orderDAO, UserDAO userDAO) {
+	public ProfileController(OrderDAO orderDAO, UserDAO userDAO) {
 		this.orderDAO = orderDAO;
 		this.userDAO = userDAO;
 	}
 
 	@GetMapping
-	public String getOrdersList(@PathVariable int pid,
+	public String profile(@PathVariable String id, Model model) {
+		User user = userDAO.findById(Integer.valueOf(id)).orElseThrow();
+		model.addAttribute("user", user);
+		return "profile";
+	}
+
+	@GetMapping("/orders")
+	public String getOrdersList(@PathVariable int id,
 								Model model) {
-		Optional<User> user = userDAO.findById(pid);
-		model.addAttribute("user", user.orElseThrow(null));
+		User user = userDAO.findById(id).orElseThrow(null);
+		model.addAttribute("user", user);
 		return "orders";
 	}
 
-	@GetMapping("/{oid}")
+	@GetMapping("/orders/{oid}")
 	public String getOrderDetails(@PathVariable int oid, Model model) {
-		Optional<Order> order = orderDAO.findById(oid);
-		model.addAttribute("order", order.orElseThrow(null));
+		Order order = orderDAO.findById(oid).orElseThrow(null);
+		model.addAttribute("order", order);
 		return "order";
 	}
 }
