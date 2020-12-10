@@ -1,4 +1,4 @@
-package com.spring.eshop.service;
+package com.spring.eshop.service.implementations;
 
 import javax.servlet.*;
 import java.io.IOException;

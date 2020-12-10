@@ -1,4 +1,4 @@
-package com.spring.eshop.service;
+package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.AuthGroupDAO;
 import com.spring.eshop.dao.UserDAO;

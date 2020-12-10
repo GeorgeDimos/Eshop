@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Getter
@@ -17,9 +18,11 @@ public class User {
 	@Column(name = "id")
 	private int id;
 
+	@NotBlank(message = "{username.blank}")
 	@Column(name = "username")
 	private String username;
 
+	@NotBlank(message = "{password.blank}")
 	@Column(name = "password")
 	private String password;
 
@@ -30,6 +33,6 @@ public class User {
 	@JoinColumn(name = "customer_id")
 	private List<Order> orders;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 	private UserDetails userDetails;
 }

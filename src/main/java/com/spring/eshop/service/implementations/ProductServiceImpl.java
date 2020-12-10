@@ -9,7 +9,6 @@ import com.spring.eshop.entity.Product;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.securingweb.UserPrinciple;
 import com.spring.eshop.service.ProductService;
-import com.spring.eshop.service.SortingFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
