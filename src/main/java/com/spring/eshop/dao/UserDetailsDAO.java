@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDetailsDAO extends CrudRepository<UserDetails, Integer> {
+	UserDetails findByEmail(String email);
 }

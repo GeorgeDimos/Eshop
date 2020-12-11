@@ -31,15 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.csrf().disable()
-				.authorizeRequests().antMatchers("/checkout").authenticated()
+				.authorizeRequests()
+				.antMatchers("/checkout").authenticated()
+				.antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserIdOrRole(authentication,#userId)")
 				.and()
-				.authorizeRequests().antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserId(authentication,#userId)")
+				.formLogin().loginPage("/login")
 				.and()
-				.formLogin()
-				.loginPage("/login")
-				.permitAll()
-				.and()
-				.logout().permitAll();
+				.logout().permitAll()
+				.and().exceptionHandling().accessDeniedPage("/access-denied");
 	}
 
 	@Override

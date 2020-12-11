@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,7 @@
     <div th:insert="navbar.html"></div>
     <div class="container">
         <div class="alert alert-danger" role="alert" th:if="${param.error}">Invalid Username or Password</div>
+        <div class="alert alert-success" role="alert" th:if="${param.logout}">You have been successfully logged out.</div>
         <div class="row">
             <div class="col col-4"></div>
             <div class="col col-4">
@@ -27,7 +28,7 @@
                         <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
                     </p>
                     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-                </form>
+                </form:fo>
                 <br>
                 <br>
                 <a href="/register">Don't have an account? Sign up right now!</a>
