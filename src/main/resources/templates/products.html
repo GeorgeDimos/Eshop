@@ -19,9 +19,9 @@
 </head>
 
 <body>
-	<div th:insert="navbar.html" />
+	<div th:insert="navbar.html"></div>
 	<div class="container">
-		<div th:insert="sorting.html" />
+		<div th:insert="sorting.html"></div>
 		<div class="row">
 			<div class="col">
 				<br>
@@ -39,17 +39,17 @@
 						<tr th:each="product: ${products}">
 							<td>
 								<a th:href="@{'/categories/' + ${product.category.id}}"
-									th:text="${product.category.name}" />
+									th:text="${product.category.name}"></a>
 							</td>
 							<td>
-								<a th:href="@{'/products/' + ${product.id}}" th:text="${product.name}" />
+								<a th:href="@{'/products/' + ${product.id}}" th:text="${product.name}"></a>
 							</td>
-							<td th:text="${product.stock}+' available'" />
-							<td th:text="${product.price}+'€'" />
+							<td th:text="${product.stock}+' available'"></td>
+							<td th:text="${product.price}+'€'"></td>
 						</tr>
 					</tbody>
 				</table>
-				<div th:insert="pagination.html::frag (${products},'products')"/>
+				<div th:insert="pagination.html::frag (${products},'products')"></div>
 
 				<p th:if="${products.empty}">No products found.</p>
 			</div>

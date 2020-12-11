@@ -14,14 +14,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <title th:text="'Order '+${order.getId()}"/>
+    <title th:text="'Order '+${order.getId()}"></title>
 </head>
 <body>
-    <div th:insert="navbar.html" />
+    <div th:insert="navbar.html"></div>
     <div class="container">
         <div class="row">
             <div class="col">
-                <h2 th:text="'Order #' + ${order.getId()}"/>
+                <h2 th:text="'Order #' + ${order.getId()}"></h2>
                 <table th:if="${!order.getItems().empty}" class="table table-hover">
                     <thead class="thead-dark">
                     <tr>
@@ -34,11 +34,11 @@
                     <tbody>
 
                     <tr th:each="item: ${order.getItems()}">
-                        <td th:text="${itemStat.count}"/>
+                        <td th:text="${itemStat.count}"></td>
                         <td>
-                             <a th:href="@{'/products/' + ${item.getProduct().getId()}}" th:text="${item.getProduct().getName()}" />
+                             <a th:href="@{'/products/' + ${item.getProduct().getId()}}" th:text="${item.getProduct().getName()}"></a>
                         </td>
-                        <td th:text="${item.quantity}+' ordered'" />
+                        <td th:text="${item.quantity}+' ordered'"></td>
                     </tr>
                     </tbody>
                 </table>

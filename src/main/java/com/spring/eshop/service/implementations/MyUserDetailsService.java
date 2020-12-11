@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -25,11 +26,11 @@ public class MyUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		User user = userDAO.findByUsername(username);
-		if (user == null) {
+		Optional<User> user = userDAO.findByUsername(username);
+		if (!user.isPresent()) {
 			throw new UsernameNotFoundException("Can not find user with username: " + username);
 		}
 		List<AuthGroup> authGroups = authGroupDAO.findByUsername(username);
-		return new UserPrinciple(user, authGroups);
+		return new UserPrinciple(user.get(), authGroups);
 	}
 }

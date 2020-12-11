@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 
-	private UserDetailsDAO userDetailsDAO;
+	private final UserDetailsDAO userDetailsDAO;
 
 	@Autowired
 	public EmailValidator(UserDetailsDAO userDetailsDAO) {
@@ -18,6 +18,6 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
 	@Override
 	public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
 
-		return userDetailsDAO.findByEmail(email) == null;
+		return !userDetailsDAO.findByEmail(email).isPresent();
 	}
 }

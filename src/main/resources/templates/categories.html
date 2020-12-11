@@ -19,7 +19,7 @@
 </head>
 
 <body>
-	<div th:insert="navbar.html" />
+	<div th:insert="navbar.html"></div>
 	<div class="container">
 		<table th:if="${!categories.empty}" class="table table-hover">
 			<thead class="thead-dark">
@@ -32,10 +32,10 @@
 			<tbody>
 				<tr th:each="category: ${categories}" th:if="${!category.products.empty}">
 					<td>
-						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.name}" />
+						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.name}"></a>
 					</td>
 					<td>
-						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.products.size()}" />
+						<a th:href="@{'/categories/' + ${category.id}}" th:text="${category.products.size()}"></a>
 					</td>
 				</tr>
 			</tbody>

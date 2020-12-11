@@ -18,7 +18,7 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegisterController {
 
-	private RegisterUserService registerUserService;
+	private final RegisterUserService registerUserService;
 
 	@Autowired
 	public RegisterController(RegisterUserService registerUserService) {

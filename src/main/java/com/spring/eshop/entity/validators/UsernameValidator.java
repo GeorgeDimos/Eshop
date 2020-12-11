@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class UsernameValidator implements ConstraintValidator<ValidUsername, String> {
 
-	private UserDAO userDAO;
+	private final UserDAO userDAO;
 
 	@Autowired
 	public UsernameValidator(UserDAO userDAO) {
@@ -18,6 +18,6 @@ public class UsernameValidator implements ConstraintValidator<ValidUsername, Str
 	@Override
 	public boolean isValid(String name, ConstraintValidatorContext constraintValidatorContext) {
 
-		return userDAO.findByUsername(name) == null;
+		return !userDAO.findByUsername(name).isPresent();
 	}
 }

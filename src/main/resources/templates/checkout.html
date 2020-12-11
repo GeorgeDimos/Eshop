@@ -19,7 +19,7 @@
 </head>
 
 <body>
-	<div th:insert="navbar.html" />
+	<div th:insert="navbar.html"></div>
 	<div class="container">
 		<div class="row">
 			<div class="col">
@@ -36,9 +36,9 @@
 
 					<tbody>
 						<tr th:each="item: ${shoppingList}">
-							<td th:text="${item.key.name}" />
-							<td th:text="${item.value}" />
-							<td th:text="${item.value*item.key.price}+'€'" />
+							<td th:text="${item.key.name}"></td>
+							<td th:text="${item.value}"></td>
+							<td th:text="${item.value*item.key.price}+'€'"></td>
 						</tr>
 					</tbody>
 				</table>
