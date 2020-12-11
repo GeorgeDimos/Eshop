@@ -6,6 +6,7 @@ import com.spring.eshop.dao.UserDetailsDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserDetails;
+import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,15 @@ public class RegisterUserService {
 	}
 
 	public void registerNewUser(User user, UserDetails userDetails) {
+
+		if(userDAO.findByUsername(user.getUsername()).isPresent()){
+			throw new UserAlreadyExistsException("Username "+ user.getUsername() + " already exists");
+		}
+
+		if(userDetailsDAO.findByEmail(userDetails.getEmail()).isPresent()){
+			throw new UserAlreadyExistsException("Email "+ userDetails.getEmail() + " already exists");
+		}
+
 		user.setEnabled(true);
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		userDAO.save(user);
@@ -42,4 +52,5 @@ public class RegisterUserService {
 		userDetails.setUser(user);
 		userDetailsDAO.save(userDetails);
 	}
+
 }

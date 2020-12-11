@@ -1,6 +1,5 @@
 package com.spring.eshop.entity;
 
-import com.spring.eshop.entity.validators.ValidEmail;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,7 +27,6 @@ public class UserDetails {
 	private String lastName;
 
 	@Pattern(regexp = "^(.+)@(.+)", message = "{email.invalid}")
-	@ValidEmail
 	@Column(name = "email")
 	private String email;
 

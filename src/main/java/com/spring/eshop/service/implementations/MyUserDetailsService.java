@@ -27,7 +27,7 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		Optional<User> user = userDAO.findByUsername(username);
-		if (!user.isPresent()) {
+		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("Can not find user with username: " + username);
 		}
 		List<AuthGroup> authGroups = authGroupDAO.findByUsername(username);

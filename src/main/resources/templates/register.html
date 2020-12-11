@@ -15,6 +15,7 @@
     <div class="container">
         <h2>Register new User</h2>
         <br>
+        <div class="alert alert-danger" role="alert" th:if="${userAlreadyExists}" th:text="${userAlreadyExists}"></div>
         <div class="row">
             <div class="col">
                 <form method="post" th:action="@{/register}">

@@ -1,6 +1,5 @@
 package com.spring.eshop.entity;
 
-import com.spring.eshop.entity.validators.ValidUsername;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +19,6 @@ public class User {
 	private int id;
 
 	@NotBlank(message = "{username.blank}")
-	@ValidUsername
 	@Column(name = "username")
 	private String username;
 
