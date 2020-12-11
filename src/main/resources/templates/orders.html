@@ -35,7 +35,7 @@
                     <tr th:each="order: ${user.getOrders()}">
                         <td th:text="${orderStat.count}"></td>
                         <td>
-                            <a th:href="@{'/profiles/' + ${user.getId()} + '/orders/'+ ${order.getId()}}" th:text="${order.id}"></a>
+                            <a th:href="@{'/users/' + ${user.getId()} + '/orders/'+ ${order.getId()}}" th:text="${order.id}"></a>
                         </td>
                         <td th:text="${order.getItems().size()}+' items'"></td>
                     </tr>

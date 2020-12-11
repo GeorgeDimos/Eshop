@@ -16,7 +16,7 @@ public class GlobalDefaultExceptionHandler {
 	}
 
 	@ExceptionHandler(UserAlreadyExistsException.class)
-	private String userAlreadyExists(UserAlreadyExistsException ex, RedirectAttributes redirectAttributes){
+	private String userAlreadyExists(UserAlreadyExistsException ex, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("userAlreadyExists", ex.getMessage());
 		return "redirect:/register";
 	}

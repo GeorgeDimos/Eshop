@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/checkout").authenticated()
-				.antMatchers("/profiles/{userId}/**").access("@webSecurity.checkUserIdOrRole(authentication,#userId)")
+				.antMatchers("/users/{userId}/**").access("@webSecurity.checkUserIdOrRole(authentication,#userId)")
 				.and()
 				.formLogin().loginPage("/login")
 				.and()

@@ -34,5 +34,5 @@ public class User {
 	private List<Order> orders;
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-	private UserDetails userDetails;
+	private UserInfo userInfo;
 }

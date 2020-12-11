@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/profiles/{id}")
-public class ProfileController {
+@RequestMapping("/users/{id}")
+public class UsersController {
 
 	private final OrderDAO orderDAO;
 
 	private final UserDAO userDAO;
 
 	@Autowired
-	public ProfileController(OrderDAO orderDAO, UserDAO userDAO) {
+	public UsersController(OrderDAO orderDAO, UserDAO userDAO) {
 		this.orderDAO = orderDAO;
 		this.userDAO = userDAO;
 	}

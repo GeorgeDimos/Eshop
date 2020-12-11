@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Entity
 @Table(name = "user_details")
-public class UserDetails {
+public class UserInfo {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

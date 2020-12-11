@@ -1,7 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
-import com.spring.eshop.entity.UserDetails;
+import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.service.implementations.RegisterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,20 +28,20 @@ public class RegisterController {
 	@GetMapping
 	public String register(Model model) {
 		model.addAttribute("user", new User());
-		model.addAttribute("userdetails", new UserDetails());
+		model.addAttribute("userinfo", new UserInfo());
 		return "register";
 	}
 
 	@PostMapping
 	public String registerNewUser(@Valid @ModelAttribute("user") User user,
 								  BindingResult bindingResultUser,
-								  @Valid @ModelAttribute("userdetails") UserDetails userDetails,
+								  @Valid @ModelAttribute("userdetails") UserInfo userInfo,
 								  BindingResult bindingResultUserDetails) {
 
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "/register";
 		}
-		registerUserService.registerNewUser(user, userDetails);
+		registerUserService.registerNewUser(user, userInfo);
 		return "redirect:/products";
 	}
 }
