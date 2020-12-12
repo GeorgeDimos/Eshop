@@ -7,7 +7,7 @@ import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.securingweb.UserPrinciple;
+import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

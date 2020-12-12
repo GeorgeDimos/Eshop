@@ -31,7 +31,7 @@
                             <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                         </div>
                     </div>
-                    <div class="form-row" th:object="${userinfo}">
+                    <div class="form-row" th:object="${userInfo}">
                         <div class="form-group col-md-4">
                             <label for="inputFirstName">First Name</label>
                             <input type="text" class="form-control" id="inputFirstName" th:field="*{firstName}" placeholder="First name">

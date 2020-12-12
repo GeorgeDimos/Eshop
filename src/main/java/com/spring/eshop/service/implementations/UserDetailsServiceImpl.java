@@ -4,7 +4,7 @@ import com.spring.eshop.dao.AuthGroupDAO;
 import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
-import com.spring.eshop.securingweb.UserPrinciple;
+import com.spring.eshop.security.UserPrinciple;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
 	private final UserDAO userDAO;
 	private final AuthGroupDAO authGroupDAO;
 
-	public MyUserDetailsService(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
+	public UserDetailsServiceImpl(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
 		this.userDAO = userDAO;
 		this.authGroupDAO = authGroupDAO;
 	}

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class GlobalDefaultExceptionHandler {
 
@@ -19,5 +21,10 @@ public class GlobalDefaultExceptionHandler {
 	private String userAlreadyExists(UserAlreadyExistsException ex, RedirectAttributes redirectAttributes) {
 		redirectAttributes.addFlashAttribute("userAlreadyExists", ex.getMessage());
 		return "redirect:/register";
+	}
+
+	@ExceptionHandler(NoSuchElementException.class)
+	private String invalidURL(NoSuchElementException ex) {
+		return "redirect:/error";
 	}
 }

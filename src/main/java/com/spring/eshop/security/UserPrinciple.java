@@ -1,4 +1,4 @@
-package com.spring.eshop.securingweb;
+package com.spring.eshop.security;
 
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
@@ -66,6 +66,6 @@ public class UserPrinciple implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return user.getEnabled();
 	}
 }

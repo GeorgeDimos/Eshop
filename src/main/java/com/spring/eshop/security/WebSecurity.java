@@ -1,4 +1,4 @@
-package com.spring.eshop.securingweb;
+package com.spring.eshop.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
