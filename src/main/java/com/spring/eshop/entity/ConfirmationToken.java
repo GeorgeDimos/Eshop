@@ -2,8 +2,10 @@ package com.spring.eshop.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -18,6 +20,11 @@ public class ConfirmationToken {
 
 	@Column(name = "token")
 	private String token;
+
+	@CreationTimestamp
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "create_date")
+	private Date createDate;
 
 	@OneToOne
 	@JoinColumn(name = "user_id")
