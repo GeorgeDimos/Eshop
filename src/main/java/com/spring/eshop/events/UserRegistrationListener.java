@@ -27,11 +27,26 @@ public class UserRegistrationListener {
 		mailSender.send(simpleMailMessage);
 	}
 
+	@EventListener
+	public void sentPasswordRecoveryEmail(PasswordRecoveryEvent event) {
+		String token = confirmationTokenService.createAndReturnConfirmationToken(event.getUser());
+		SimpleMailMessage simpleMailMessage = createPasswordRecoveryEmail(event.getUserInfo().getEmail(), token);
+		mailSender.send(simpleMailMessage);
+	}
+
 	private SimpleMailMessage createRegistrationEmail(String email, String token) {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("Confirm User Registration for Spring Eshop");
 		simpleMailMessage.setTo(email);
-		simpleMailMessage.setText("Click the following link to confirm your account\nhttp://localhost:8080/register/" + token);
+		simpleMailMessage.setText("Click the following link to confirm your account\n\nhttp://localhost:8080/register/" + token);
+		return simpleMailMessage;
+	}
+
+	private SimpleMailMessage createPasswordRecoveryEmail(String email, String token) {
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setSubject("Password Recovery for Spring Eshop");
+		simpleMailMessage.setTo(email);
+		simpleMailMessage.setText("Click the following link to recover your password\n\nhttp://localhost:8080/recover/" + token);
 		return simpleMailMessage;
 	}
 }

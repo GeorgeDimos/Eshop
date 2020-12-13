@@ -14,10 +14,11 @@
     <div class="container">
         <div class="alert alert-danger" role="alert" th:if="${param.error}">Invalid credentials or user is not enabled</div>
         <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
+        <div class="alert alert-success" role="alert" th:if="${recovery}" th:text="${recovery}"></div>
         <div class="alert alert-success" role="alert" th:if="${param.logout}">You have been successfully logged out.</div>
         <div class="row">
-            <div class="col col-4"></div>
-            <div class="col col-4">
+            <div class="col col-md-4"></div>
+            <div class="col col-md-4">
                 <form class="form-signin" method="post" action="/login">
                     <h2 class="form-signin-heading">Please sign in</h2>
                     <p>
@@ -32,8 +33,12 @@
                 </form>
                 <br>
                 <br>
-                <a href="/register">Don't have an account? Sign up right now!</a>
             </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-4"></div>
+            <div class="col col-md-3"><a href="/recover/password/">Recover password</a></div>
+            <div class="col col-md-3"><a href="/register">New user</a></div>
         </div>
     </div>
 </body>
