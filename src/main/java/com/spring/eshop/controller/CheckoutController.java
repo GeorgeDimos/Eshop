@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CheckoutController {
 
 	private final IProductService productService;
-
 	private final ShoppingCart shoppingCart;
 
 	@Autowired

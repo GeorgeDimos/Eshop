@@ -47,6 +47,10 @@ public class UserService {
 		userInfoDAO.save(userInfo);
 	}
 
+	public User getUserById(int id) throws NoSuchElementException {
+		return userDAO.findById(id).orElseThrow(NoSuchElementException::new);
+	}
+
 	@Transactional
 	public void changePassword(User user, String password) {
 		user.setPassword(passwordEncoder.encode(password));
@@ -59,11 +63,7 @@ public class UserService {
 		userDAO.save(user);
 	}
 
-	public User getUserById(int id) throws NoSuchElementException {
-		return userDAO.findById(id).orElseThrow(NoSuchElementException::new);
-	}
-
-	public User getUserByUsernameAndEmail(String username, String email) {
+	public User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException {
 		User user = userDAO.findByUsername(username).orElseThrow(() -> new InvalidUserInfoException("Can't find username"));
 
 		if (!user.getUserInfo().getEmail().equals(email)) {

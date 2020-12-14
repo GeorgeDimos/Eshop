@@ -17,10 +17,10 @@ public class Order {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "customer_id")
-	private int customerId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id")
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
 	private List<OrderItem> items;
 }

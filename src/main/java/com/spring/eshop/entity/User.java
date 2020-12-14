@@ -29,8 +29,7 @@ public class User {
 	@Column(name = "enabled")
 	private Boolean enabled;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "customer_id")
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Order> orders;
 
 	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class ProductsController {
 
 	private final IProductService productService;
-
 	private final ShoppingCart shoppingCart;
 
 	@Autowired

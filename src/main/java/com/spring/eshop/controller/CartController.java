@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CartController {
 
 	private final IProductService productService;
-
 	private final ShoppingCart shoppingCart;
 
 	@Autowired
