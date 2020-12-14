@@ -1,5 +1,6 @@
 package com.spring.eshop.controller;
 
+import com.spring.eshop.dao.ConfirmationTokenDAO;
 import com.spring.eshop.service.implementations.RegisterUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,23 +9,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("recover")
+@RequestMapping("/recover")
 public class RecoveryController {
 
 	private final RegisterUserService registerUserService;
+	private final ConfirmationTokenDAO confirmationTokenDAO;
 
 	@Autowired
-	public RecoveryController(RegisterUserService registerUserService) {
+	public RecoveryController(RegisterUserService registerUserService, ConfirmationTokenDAO confirmationTokenDAO) {
 		this.registerUserService = registerUserService;
+		this.confirmationTokenDAO = confirmationTokenDAO;
 	}
 
 	@GetMapping("/password")
-	public String recoverPassword() {
+	public String getPasswordRecovery() {
 		return "recover-password";
 	}
 
 	@PostMapping("/password")
-	public String recoverPasswordPost(@RequestParam String username,
+	public String recoverPassword(@RequestParam String username,
 									  @RequestParam String email,
 									  Model model,
 									  RedirectAttributes redirectAttributes) {
@@ -39,13 +42,15 @@ public class RecoveryController {
 		return "redirect:/login";
 	}
 
-	@GetMapping("{token}")
-	public String newPasswordInput(@PathVariable("token") String token, Model model) {
-		model.addAttribute("user", registerUserService.getUserFromToken(token));
+	@GetMapping("/{token}")
+	public String getChangePasswordInputPage(@PathVariable String token) {
+		if(confirmationTokenDAO.findByToken(token).isEmpty()){
+			return "error";
+		}
 		return "new-password";
 	}
 
-	@PostMapping("{token}")
+	@PostMapping("/{token}")
 	public String changePassword(@PathVariable("token") String token,
 								 @RequestParam("password") String password,
 								 RedirectAttributes redirectAttributes) {

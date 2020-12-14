@@ -13,6 +13,7 @@ import com.spring.eshop.events.UserRegistrationEvent;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +63,7 @@ public class RegisterUserService {
 
 		userInfo.setUser(user);
 		userInfoDAO.save(userInfo);
+
 		publisher.publishEvent(new UserRegistrationEvent(user, userInfo));
 	}
 
@@ -79,7 +81,7 @@ public class RegisterUserService {
 	}
 
 	public void recoverPassword(String username, String email) {
-		User user = userDAO.findByUsername(username).orElseThrow(() -> new RuntimeException("Can't find username"));
+		User user = userDAO.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("Can't find username"));
 
 		if (!user.getEnabled()) {
 			throw new RuntimeException("You need to confirm your account first.");
@@ -92,17 +94,14 @@ public class RegisterUserService {
 		publisher.publishEvent(new PasswordRecoveryEvent(user, user.getUserInfo()));
 	}
 
-	public User getUserFromToken(String token) {
-		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
-		return confirmationToken.getUser();
-	}
-
 	@Transactional
 	public void changePassword(String token, String password) {
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		User user = confirmationToken.getUser();
+
 		user.setPassword(passwordEncoder.encode(password));
 		userDAO.save(user);
+
 		confirmationTokenDAO.delete(confirmationToken);
 	}
 }

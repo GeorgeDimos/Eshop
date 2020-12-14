@@ -49,7 +49,8 @@ public class RegisterController {
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
 		User user = registerUserService.confirmUserRegistration(token);
-		model.addAttribute("user", user);
-		return "confirm-registration";
+		model.addAttribute("success",
+				"Account "+user.getUsername()+" is confirmed. You can now login.");
+		return "login";
 	}
 }
