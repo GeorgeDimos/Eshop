@@ -14,7 +14,7 @@ import java.util.Date;
 @Transactional
 public class PurgeConfirmationTokens {
 
-	ConfirmationTokenDAO confirmationTokenDAO;
+	private final ConfirmationTokenDAO confirmationTokenDAO;
 
 	@Autowired
 	public PurgeConfirmationTokens(ConfirmationTokenDAO confirmationTokenDAO) {

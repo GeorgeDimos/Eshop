@@ -1,7 +1,7 @@
 package com.spring.eshop.controller;
 
-import com.spring.eshop.service.CategoryService;
-import com.spring.eshop.service.ProductService;
+import com.spring.eshop.service.interfaces.ICategoryService;
+import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/categories")
 public class CategoriesController {
 
-	private final CategoryService categoryService;
+	private final ICategoryService ICategoryService;
 
-	private final ProductService productService;
+	private final IProductService productService;
 
 	@Autowired
-	public CategoriesController(CategoryService categoryService, ProductService productService) {
-		this.categoryService = categoryService;
+	public CategoriesController(ICategoryService ICategoryService, IProductService productService) {
+		this.ICategoryService = ICategoryService;
 		this.productService = productService;
 	}
 
 	@GetMapping
 	public String getCategories(Pageable pageable, Model model) {
-		model.addAttribute("categories", categoryService.getItems(pageable));
+		model.addAttribute("categories", ICategoryService.getItems(pageable));
 		return "categories";
 	}
 

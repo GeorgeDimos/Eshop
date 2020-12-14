@@ -1,7 +1,7 @@
 package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.ItemDAO;
-import com.spring.eshop.service.BasicServices;
+import com.spring.eshop.service.interfaces.IBasicServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import javax.transaction.Transactional;
 import java.util.Optional;
 
-public abstract class BasicServicesImpl<T, ID> implements BasicServices<T, ID> {
+public abstract class BasicServices<T, ID> implements IBasicServices<T, ID> {
 
 	@Autowired
 	private ItemDAO<T, ID> itemDAO;

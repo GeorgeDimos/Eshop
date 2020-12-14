@@ -10,4 +10,6 @@ public interface ConfirmationTokenDAO extends CrudRepository<ConfirmationToken, 
 	Optional<ConfirmationToken> findByToken(String token);
 
 	void deleteAllByCreateDateIsLessThan(Date expireDate);
+
+	void deleteByToken(String token);
 }

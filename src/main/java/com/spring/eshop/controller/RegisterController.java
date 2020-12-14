@@ -2,7 +2,8 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
-import com.spring.eshop.service.implementations.RegisterUserService;
+import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import com.spring.eshop.service.implementations.UserConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,11 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegisterController {
 
-	private final RegisterUserService registerUserService;
+	private final UserConfirmationService userConfirmationService;
 
 	@Autowired
-	public RegisterController(RegisterUserService registerUserService) {
-		this.registerUserService = registerUserService;
+	public RegisterController(UserConfirmationService userConfirmationService) {
+		this.userConfirmationService = userConfirmationService;
 	}
 
 	@GetMapping
@@ -40,7 +41,7 @@ public class RegisterController {
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "/register";
 		}
-		registerUserService.registerNewUser(user, userInfo);
+		userConfirmationService.registerNewUser(user, userInfo);
 		redirectAttributes.addFlashAttribute("success",
 				"User registration successful. Please check your email and confirm your account.");
 		return "redirect:/login";
@@ -48,9 +49,15 @@ public class RegisterController {
 
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
-		User user = registerUserService.confirmUserRegistration(token);
+		User user = userConfirmationService.confirmUserRegistration(token);
 		model.addAttribute("success",
-				"Account "+user.getUsername()+" is confirmed. You can now login.");
+				"Account " + user.getUsername() + " is confirmed. You can now login.");
 		return "login";
+	}
+
+	@ExceptionHandler(UserAlreadyExistsException.class)
+	private String userAlreadyExists(UserAlreadyExistsException ex, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("userAlreadyExists", ex.getMessage());
+		return "redirect:/register";
 	}
 }

@@ -1,6 +1,6 @@
 package com.spring.eshop.security;
 
-import com.spring.eshop.service.implementations.UserDetailsServiceImpl;
+import com.spring.eshop.service.implementations.AuthGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	final UserDetailsServiceImpl userDetailsService;
+	final AuthGroupService userDetailsService;
 
 	@Autowired
-	public WebSecurityConfig(UserDetailsServiceImpl userDetailsService) {
+	public WebSecurityConfig(AuthGroupService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 

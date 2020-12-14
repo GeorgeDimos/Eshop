@@ -1,9 +1,9 @@
-package com.spring.eshop.service;
+package com.spring.eshop.service.interfaces;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface BasicServices<T, ID> {
+public interface IBasicServices<T, ID> {
 
 	Page<T> getItems(Pageable pageable);
 

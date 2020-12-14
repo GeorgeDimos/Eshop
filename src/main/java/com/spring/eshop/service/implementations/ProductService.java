@@ -8,7 +8,7 @@ import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.security.UserPrinciple;
-import com.spring.eshop.service.ProductService;
+import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> implements ProductService {
+public class ProductService extends BasicServices<Product, Integer> implements IProductService {
 
 	private static final Set<String> invalidSortingFields = Set.of("images", "category", "description");
 
@@ -34,7 +34,7 @@ public class ProductServiceImpl extends BasicServicesImpl<Product, Integer> impl
 	private final OrderItemDAO orderItemDAO;
 
 	@Autowired
-	public ProductServiceImpl(ProductDAO productDAO, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
+	public ProductService(ProductDAO productDAO, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
 		this.productDAO = productDAO;
 		this.orderDAO = orderDAO;
 		this.orderItemDAO = orderItemDAO;

@@ -1,7 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.service.ProductService;
+import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/cart")
 public class CartController {
 
-	private final ProductService productService;
+	private final IProductService productService;
 
 	private final ShoppingCart shoppingCart;
 
 	@Autowired
-	public CartController(ProductService productService, ShoppingCart shoppingCart) {
+	public CartController(IProductService productService, ShoppingCart shoppingCart) {
 		this.productService = productService;
 		this.shoppingCart = shoppingCart;
 	}

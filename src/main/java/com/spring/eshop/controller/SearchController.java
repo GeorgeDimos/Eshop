@@ -1,6 +1,6 @@
 package com.spring.eshop.controller;
 
-import com.spring.eshop.service.ProductService;
+import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class SearchController {
 
-	private final ProductService productService;
+	private final IProductService productService;
 
 	@Autowired
-	public SearchController(ProductService productService) {
+	public SearchController(IProductService productService) {
 		this.productService = productService;
 	}
 

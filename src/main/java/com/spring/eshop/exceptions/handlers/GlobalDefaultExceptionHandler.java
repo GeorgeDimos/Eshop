@@ -1,30 +1,19 @@
 package com.spring.eshop.exceptions.handlers;
 
-import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
 public class GlobalDefaultExceptionHandler {
-
-	@ExceptionHandler(NotEnoughStockException.class)
-	public String notEnoughStockInOrder(NotEnoughStockException ex, RedirectAttributes redirectAttrs) {
-		redirectAttrs.addFlashAttribute("notEnoughStockError", ex.getProductName());
-		return "redirect:/cart";
-	}
-
-	@ExceptionHandler(UserAlreadyExistsException.class)
-	private String userAlreadyExists(UserAlreadyExistsException ex, RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("userAlreadyExists", ex.getMessage());
-		return "redirect:/register";
-	}
+	private final Logger logger = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 
 	@ExceptionHandler(NoSuchElementException.class)
 	private String invalidURL(NoSuchElementException ex) {
+		logger.info(ex.getMessage());
 		return "redirect:/error";
 	}
 }

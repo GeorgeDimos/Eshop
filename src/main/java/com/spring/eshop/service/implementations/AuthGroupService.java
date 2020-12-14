@@ -10,18 +10,27 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class AuthGroupService implements UserDetailsService {
 
 	private final UserDAO userDAO;
 	private final AuthGroupDAO authGroupDAO;
 
-	public UserDetailsServiceImpl(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
+	public AuthGroupService(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
 		this.userDAO = userDAO;
 		this.authGroupDAO = authGroupDAO;
+	}
+
+	@Transactional
+	public void createAuthGroupForUser(String username) {
+		AuthGroup authGroup = new AuthGroup();
+		authGroup.setUsername(username);
+		authGroup.setAuthority("user");
+		authGroupDAO.save(authGroup);
 	}
 
 	@Override
