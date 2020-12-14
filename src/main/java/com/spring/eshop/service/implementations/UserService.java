@@ -6,6 +6,7 @@ import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import javax.transaction.Transactional;
 import java.util.NoSuchElementException;
 
 @Service
-public class UserService {
+public class UserService implements IUserService {
 	private final UserDAO userDAO;
 	private final UserInfoDAO userInfoDAO;
 	private final AuthGroupService authGroupService;
@@ -28,6 +29,7 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	@Override
 	@Transactional
 	public void createUser(User user, UserInfo userInfo) throws UserAlreadyExistsException {
 		if (userDAO.findByUsername(user.getUsername()).isPresent()) {
@@ -47,24 +49,29 @@ public class UserService {
 		userInfoDAO.save(userInfo);
 	}
 
+	@Override
 	public User getUserById(int id) throws NoSuchElementException {
 		return userDAO.findById(id).orElseThrow(NoSuchElementException::new);
 	}
 
+	@Override
 	@Transactional
 	public void changePassword(User user, String password) {
 		user.setPassword(passwordEncoder.encode(password));
 		userDAO.save(user);
 	}
 
+	@Override
 	@Transactional
 	public void enableUser(User user) {
 		user.setEnabled(true);
 		userDAO.save(user);
 	}
 
+	@Override
 	public User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException {
-		User user = userDAO.findByUsername(username).orElseThrow(() -> new InvalidUserInfoException("Can't find username"));
+		User user = userDAO.findByUsername(username).
+				orElseThrow(() -> new InvalidUserInfoException("Can't find username"));
 
 		if (!user.getUserInfo().getEmail().equals(email)) {
 			throw new InvalidUserInfoException("Wrong email");

@@ -1,5 +1,6 @@
 package com.spring.eshop.service.implementations;
 
+import com.spring.eshop.service.interfaces.IMailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -7,7 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
-public class MailService {
+public class MailService implements IMailService {
 
 	@Value("spring.mail.host")
 	private String host;
@@ -30,6 +31,7 @@ public class MailService {
 	@Value("spring.mail.properties.mail.smtp.starttls.enable")
 	private String starttls;
 
+	@Override
 	@Bean
 	public JavaMailSender getJavaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

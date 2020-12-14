@@ -1,8 +1,8 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.implementations.ConfirmationTokenService;
-import com.spring.eshop.service.implementations.UserConfirmationService;
+import com.spring.eshop.service.interfaces.IConfirmationTokenService;
+import com.spring.eshop.service.interfaces.IUserConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +13,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/recover")
 public class RecoveryController {
 
-	private final UserConfirmationService userConfirmationService;
-	private final ConfirmationTokenService confirmationTokenService;
+	private final IUserConfirmationService userConfirmationService;
+	private final IConfirmationTokenService confirmationTokenService;
 
 	@Autowired
-	public RecoveryController(UserConfirmationService userConfirmationService, ConfirmationTokenService confirmationTokenService) {
+	public RecoveryController(IUserConfirmationService userConfirmationService, IConfirmationTokenService confirmationTokenService) {
 		this.userConfirmationService = userConfirmationService;
 		this.confirmationTokenService = confirmationTokenService;
 	}
@@ -33,7 +33,7 @@ public class RecoveryController {
 								  Model model,
 								  RedirectAttributes redirectAttributes) {
 
-		userConfirmationService.sentPasswordRecoveryEmail(username, email);
+		userConfirmationService.sendPasswordRecoveryEmail(username, email);
 		redirectAttributes.addFlashAttribute("recovery",
 				"Check your email for password recovery instructions");
 		return "redirect:/login";
@@ -41,7 +41,7 @@ public class RecoveryController {
 
 	@GetMapping("/{token}")
 	public String getPasswordInputPage(@PathVariable String token) {
-		confirmationTokenService.getByToken(token);
+		confirmationTokenService.getConfirmationTokenByToken(token);
 		return "new-password";
 	}
 
@@ -55,7 +55,7 @@ public class RecoveryController {
 	}
 
 	@ExceptionHandler(InvalidUserInfoException.class)
-	private String testException(RuntimeException ex, Model model) {
+	private String InvalidUserInfoExceptionHandler(RuntimeException ex, Model model) {
 		model.addAttribute("error", ex.getMessage());
 		return "recover-password";
 	}

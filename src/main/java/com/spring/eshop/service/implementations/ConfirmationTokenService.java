@@ -3,6 +3,7 @@ package com.spring.eshop.service.implementations;
 import com.spring.eshop.dao.ConfirmationTokenDAO;
 import com.spring.eshop.entity.ConfirmationToken;
 import com.spring.eshop.entity.User;
+import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +12,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
-public class ConfirmationTokenService {
+public class ConfirmationTokenService implements IConfirmationTokenService {
 
 	private final ConfirmationTokenDAO confirmationTokenDAO;
 
@@ -20,8 +21,9 @@ public class ConfirmationTokenService {
 		this.confirmationTokenDAO = confirmationTokenDAO;
 	}
 
+	@Override
 	@Transactional
-	public String createAndReturnConfirmationToken(User user) {
+	public String createConfirmationToken(User user) {
 		ConfirmationToken token = new ConfirmationToken();
 		token.setToken(UUID.randomUUID().toString());
 		token.setUser(user);
@@ -29,15 +31,18 @@ public class ConfirmationTokenService {
 		return token.getToken();
 	}
 
-	public ConfirmationToken getByToken(String token) throws NoSuchElementException {
+	@Override
+	public ConfirmationToken getConfirmationTokenByToken(String token) throws NoSuchElementException {
 		return confirmationTokenDAO.findByToken(token).orElseThrow(NoSuchElementException::new);
 	}
 
-	public User getUserFromToken(String token) throws NoSuchElementException {
+	@Override
+	public User getUserByToken(String token) throws NoSuchElementException {
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow(NoSuchElementException::new);
 		return confirmationToken.getUser();
 	}
 
+	@Override
 	public void deleteByToken(String token) {
 		confirmationTokenDAO.deleteByToken(token);
 	}

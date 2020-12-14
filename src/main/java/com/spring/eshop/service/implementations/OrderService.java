@@ -7,8 +7,9 @@ import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.security.UserPrinciple;
+import com.spring.eshop.service.interfaces.IOrderService;
+import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -17,24 +18,24 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
-public class OrderService {
+public class OrderService implements IOrderService {
 
-	private final UserService userService;
+	private final IUserService userService;
 	private final OrderDAO orderDAO;
 	private final OrderItemDAO orderItemDAO;
 
 	@Autowired
-	public OrderService(UserService userService, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
+	public OrderService(IUserService userService, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
 		this.userService = userService;
 		this.orderDAO = orderDAO;
 		this.orderItemDAO = orderItemDAO;
 	}
 
+	@Override
 	@Transactional
-	public void createNewOrder(Map<Product, Integer> list) throws NoSuchElementException {
+	public void createOrder(Map<Product, Integer> list) throws NoSuchElementException {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		UserPrinciple currentUserPrinciple = (UserPrinciple) authentication.getPrincipal();
+		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		User user = userService.getUserById(currentUserPrinciple.getUserId());
 
 		Order order = new Order();
@@ -47,12 +48,12 @@ public class OrderService {
 		});
 	}
 
-	public Order getOrderByUserAndId(int userId, int orderId) throws NoSuchElementException {
+	@Override
+	public Order getOrder(int userId, int orderId) throws NoSuchElementException {
 		User user = userService.getUserById(userId);
-		Order order = orderDAO.findById(orderId).orElseThrow(NoSuchElementException::new);
-		if (order.getUser() != user) {
-			throw new NoSuchElementException();
+		if (orderId > user.getOrders().size() - 1 || orderId < 0) {
+			return null;
 		}
-		return order;
+		return user.getOrders().get(orderId);
 	}
 }
