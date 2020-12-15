@@ -6,10 +6,12 @@ import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.User;
+import com.spring.eshop.events.OrderReceivedEvent;
 import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +27,14 @@ public class OrderService implements IOrderService {
 	private final IUserService userService;
 	private final OrderDAO orderDAO;
 	private final OrderItemDAO orderItemDAO;
+	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	public OrderService(IUserService userService, OrderDAO orderDAO, OrderItemDAO orderItemDAO) {
+	public OrderService(IUserService userService, OrderDAO orderDAO, OrderItemDAO orderItemDAO, ApplicationEventPublisher publisher) {
 		this.userService = userService;
 		this.orderDAO = orderDAO;
 		this.orderItemDAO = orderItemDAO;
+		this.publisher = publisher;
 	}
 
 	@Override
@@ -49,6 +53,8 @@ public class OrderService implements IOrderService {
 			OrderItem item = new OrderItem(order, product, quantity);
 			orderItemDAO.save(item);
 		});
+
+		publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
 	}
 
 	@Override
