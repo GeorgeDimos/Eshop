@@ -20,4 +20,9 @@ public class HomeController {
 	public String accessDenied() {
 		return "accessDenied";
 	}
+
+	@GetMapping("/error")
+	public String getError() {
+		return "error";
+	}
 }

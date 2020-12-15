@@ -5,7 +5,7 @@
         </li>
         <li th:if="${items.hasPrevious()}" class="page-item">
             <a class="page-link" th:href="@{'/'+${link}(size=${items.pageable.pageSize},
-								sort=${items.pageable.sort.toString().replace(': ',',')},
+								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
 								page=${items.pageable.pageNumber}-1)}">Previous</a>
         </li>
 
@@ -15,7 +15,7 @@
         </li>
         <li th:if="${items.hasNext()}" class="page-item">
             <a class="page-link" th:href="@{'/'+${link}(size=${items.pageable.pageSize},
-								sort=${items.pageable.sort.toString().replace(': ',',')},
+								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
 								page=${items.pageable.pageNumber}+1)}">Next</a>
         </li>
     </ul>

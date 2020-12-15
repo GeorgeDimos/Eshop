@@ -51,7 +51,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public User getUserById(int id) throws NoSuchElementException {
-		return userDAO.findById(id).orElseThrow(NoSuchElementException::new);
+		return userDAO.findById(id).orElseThrow();
 	}
 
 	@Override

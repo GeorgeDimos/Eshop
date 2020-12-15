@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 public abstract class BasicServices<T, ID> implements IBasicServices<T, ID> {
 
@@ -17,8 +16,7 @@ public abstract class BasicServices<T, ID> implements IBasicServices<T, ID> {
 	@Transactional
 	@Override
 	public T getItem(ID id) {
-		Optional<T> item = itemDAO.findById(id);
-		return item.orElse(null);
+		return itemDAO.findById(id).orElseThrow();
 	}
 
 	@Override

@@ -14,5 +14,5 @@ public interface IConfirmationTokenService {
 
 	User getUserByToken(String token) throws NoSuchElementException;
 
-	void deleteByToken(String token);
+	void deleteToken(String token);
 }

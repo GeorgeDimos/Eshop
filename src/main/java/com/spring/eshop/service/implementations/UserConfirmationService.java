@@ -42,7 +42,7 @@ public class UserConfirmationService implements IUserConfirmationService {
 	public User confirmUserRegistration(String token) throws NoSuchElementException {
 		User user = confirmationTokenService.getUserByToken(token);
 		userService.enableUser(user);
-		confirmationTokenService.deleteByToken(token);
+		confirmationTokenService.deleteToken(token);
 		return user;
 	}
 
@@ -57,6 +57,6 @@ public class UserConfirmationService implements IUserConfirmationService {
 	public void changePassword(String token, String password) throws NoSuchElementException {
 		User user = confirmationTokenService.getUserByToken(token);
 		userService.changePassword(user, password);
-		confirmationTokenService.deleteByToken(token);
+		confirmationTokenService.deleteToken(token);
 	}
 }

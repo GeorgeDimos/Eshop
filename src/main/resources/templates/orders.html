@@ -14,7 +14,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <title th:text="'Orders of '+${user.getUsername()}"></title>
+    <title th:text="'Orders of '+ ${user.username}"></title>
 </head>
 <body>
     <div th:insert="navbar.html"></div>
@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col">
                 <h2>Orders</h2>
-                <table th:if="${!user.getOrders().isEmpty()}" class="table table-hover">
+                <table th:if="${!orders.empty}" class="table table-hover">
                     <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
@@ -32,17 +32,18 @@
                     </thead>
 
                     <tbody>
-                    <tr th:each="order: ${user.getOrders()}">
-                        <td th:text="${orderStat.count}"></td>
-                        <td>
-                            <a th:href="@{'/users/' + ${user.getId()} + '/orders/'+ ${orderStat.index}}" th:text="${order.id}"></a>
-                        </td>
-                        <td th:text="${order.getItems().size()}+' items'"></td>
-                    </tr>
+                        <tr th:each="order: ${orders}">
+                            <td th:text="${orderStat.count}"></td>
+                            <td>
+                                <a th:href="@{'/users/' + ${order.user.id} + '/orders/'+ ${orderStat.index}}" th:text="${order.id}"></a>
+                            </td>
+                            <td th:text="${order.items.size()}+' items'"></td>
+                        </tr>
                     </tbody>
                 </table>
+                <div th:insert="pagination.html::frag (${orders},'users/'+${user.id}+'/orders')"></div>
 
-                <p th:if="${user.getOrders().isEmpty()}">No orders found.</p>
+                <p th:if="${orders.empty}">No orders found.</p>
             </div>
         </div>
     </div>

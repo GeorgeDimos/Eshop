@@ -10,6 +10,8 @@ import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,8 @@ public class OrderService implements IOrderService {
 	@Transactional
 	public void createOrder(Map<Product, Integer> list) throws NoSuchElementException {
 
-		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
 		User user = userService.getUserById(currentUserPrinciple.getUserId());
 
 		Order order = new Order();
@@ -49,10 +52,15 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
+	public Page<Order> getOrdersByUserId(int id, Pageable pageable) {
+		return orderDAO.getOrdersByUserId(id, pageable);
+	}
+
+	@Override
 	public Order getOrder(int userId, int orderId) throws NoSuchElementException {
 		User user = userService.getUserById(userId);
 		if (orderId > user.getOrders().size() - 1 || orderId < 0) {
-			return null;
+			throw new NoSuchElementException();
 		}
 		return user.getOrders().get(orderId);
 	}

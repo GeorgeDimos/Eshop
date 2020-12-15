@@ -33,17 +33,17 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 
 	@Override
 	public ConfirmationToken getConfirmationTokenByToken(String token) throws NoSuchElementException {
-		return confirmationTokenDAO.findByToken(token).orElseThrow(NoSuchElementException::new);
+		return confirmationTokenDAO.findByToken(token).orElseThrow();
 	}
 
 	@Override
 	public User getUserByToken(String token) throws NoSuchElementException {
-		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow(NoSuchElementException::new);
+		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		return confirmationToken.getUser();
 	}
 
 	@Override
-	public void deleteByToken(String token) {
+	public void deleteToken(String token) {
 		confirmationTokenDAO.deleteByToken(token);
 	}
 }
