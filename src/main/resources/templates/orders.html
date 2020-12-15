@@ -1,51 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
+<head th:replace="headers :: common_header(~{::title})">
     <title th:text="'Orders of '+ ${user.username}"></title>
 </head>
 <body>
-    <div th:insert="navbar.html"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h2>Orders</h2>
-                <table th:if="${!orders.empty}" class="table table-hover">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Order</th>
-                        <th scope="col">Items</th>
-                    </tr>
-                    </thead>
+<div th:insert="navbar.html"></div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>Orders</h2>
+            <table th:if="${!orders.empty}" class="table table-hover">
 
-                    <tbody>
-                        <tr th:each="order: ${orders}">
-                            <td th:text="${orderStat.count}"></td>
-                            <td>
-                                <a th:href="@{'/users/' + ${order.user.id} + '/orders/'+ ${orderStat.index}}" th:text="${order.id}"></a>
-                            </td>
-                            <td th:text="${order.items.size()}+' items'"></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div th:insert="pagination.html::frag (${orders},'users/'+${user.id}+'/orders')"></div>
+                <div th:replace="table_head :: head('#','Order','Items',~{})"></div>
+                <tbody>
+                <tr th:each="order: ${orders}">
+                    <td th:text="${orderStat.count}"></td>
+                    <td>
+                        <a th:href="@{'/users/' + ${user.id} + '/orders/'+ ${orderStat.index}}"
+                           th:text="${order.id}"></a>
+                    </td>
+                    <td th:text="${order.items.size()}+' items'"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:insert="pagination.html::frag (${orders},'users/'+${user.id}+'/orders')"></div>
 
-                <p th:if="${orders.empty}">No orders found.</p>
-            </div>
+            <p th:if="${orders.empty}">No orders found.</p>
         </div>
     </div>
+</div>
 </body>
 </html>

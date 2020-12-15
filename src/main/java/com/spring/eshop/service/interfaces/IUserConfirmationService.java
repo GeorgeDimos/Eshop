@@ -14,8 +14,10 @@ public interface IUserConfirmationService {
 	@Transactional
 	User confirmUserRegistration(String token) throws NoSuchElementException;
 
+	void resendActivationEmail(String username, String email);
+
 	void sendPasswordRecoveryEmail(String username, String email);
 
 	@Transactional
-	void changePassword(String token, String password) throws NoSuchElementException;
+	void confirmPasswordChange(String token, String password) throws NoSuchElementException;
 }

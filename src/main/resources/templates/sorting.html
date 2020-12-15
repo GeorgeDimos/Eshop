@@ -1,32 +1,43 @@
 <div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col"></div>
-        <form method="GET">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label class="my-1 mr-2" for="inlineFormSelectView">View</label>
-                    <select name="size" class="custom-select my-1 mr-sm-2" id="inlineFormSelectView">
-                        <option value="15">Default</option>
-                        <option th:selected="${#request.getParameter('size')=='5'}" value="5">5</option>
-                        <option th:selected="${#request.getParameter('size')=='10'}" value="10">10</option>
-                        <option th:selected="${#request.getParameter('size')=='20'}" value="20">20</option>
-                    </select>
-                </div>
+    <form method="GET">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label class="my-1 mr-2" for="inlineFormSelectView">View</label>
+                <select name="size" class="custom-select my-1 mr-sm-2" id="inlineFormSelectView">
+                    <option value="15">Default</option>
+                    <option th:selected="${#request.getParameter('size')=='5'}" value="5">5</option>
+                    <option th:selected="${#request.getParameter('size')=='10'}" value="10">10</option>
+                    <option th:selected="${#request.getParameter('size')=='20'}" value="20">20</option>
+                </select>
+            </div>
 
-                <div class="form-group col-md-6">
-                    <label class="my-1 mr-2" for="inlineFormSelectSort">Sort By</label>
-                    <select name="sort" class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort">
-                        <option value="id">Default</option>
-                        <option th:selected="${#request.getParameter('sort')=='price,ASC'}" value="price,ASC">Price Ascending</option>
-                        <option th:selected="${#request.getParameter('sort')=='price,DESC'}" value="price,DESC">Price Descending</option>
-                        <option th:selected="${#request.getParameter('sort')=='stock,ASC'}" value="stock,ASC">Stock Ascending</option>
-                        <option th:selected="${#request.getParameter('sort')=='stock,DESC'}" value="stock,DESC">Stock Descending</option>
-                        <option th:selected="${#request.getParameter('sort')=='name,ASC'}" value="name,ASC">Name Ascending</option>
-                        <option th:selected="${#request.getParameter('sort')=='name,DESC'}" value="name,DESC">Name Descending</option>
-                    </select>
-                </div>
+            <div class="form-group col-md-6">
+                <label class="my-1 mr-2" for="inlineFormSelectSort">Sort By</label>
+                <select name="sort" class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort">
+                    <option value="id">Default</option>
+                    <option th:selected="${#request.getParameter('sort')=='price,ASC'}" value="price,ASC">Price
+                        Ascending
+                    </option>
+                    <option th:selected="${#request.getParameter('sort')=='price,DESC'}" value="price,DESC">Price
+                        Descending
+                    </option>
+                    <option th:selected="${#request.getParameter('sort')=='stock,ASC'}" value="stock,ASC">Stock
+                        Ascending
+                    </option>
+                    <option th:selected="${#request.getParameter('sort')=='stock,DESC'}" value="stock,DESC">Stock
+                        Descending
+                    </option>
+                    <option th:selected="${#request.getParameter('sort')=='name,ASC'}" value="name,ASC">Name Ascending
+                    </option>
+                    <option th:selected="${#request.getParameter('sort')=='name,DESC'}" value="name,DESC">Name
+                        Descending
+                    </option>
+                </select>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary my-1">Submit</button>
-            </div>
-        </form>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary my-1">Submit</button>
+        </div>
+    </form>
 </div>

@@ -22,8 +22,33 @@ public class RecoveryController {
 		this.confirmationTokenService = confirmationTokenService;
 	}
 
+	@GetMapping("/activationEmail")
+	public String getActivationEmail(Model model) {
+		model.addAttribute("title", "Resend Activation Email");
+		return "recover-password";
+	}
+
+	@PostMapping("/activationEmail")
+	public String resendActivationEmail(@RequestParam String username,
+										@RequestParam String email,
+										Model model,
+										RedirectAttributes redirectAttributes) {
+
+		try {
+			userConfirmationService.resendActivationEmail(username, email);
+			redirectAttributes.addFlashAttribute("recovery",
+					"Check your email for the activation link");
+			return "redirect:/login";
+		} catch (InvalidUserInfoException ex) {
+			model.addAttribute("title", "Resend Activation Email");
+			model.addAttribute("error", ex.getMessage());
+			return "recover-password";
+		}
+	}
+
 	@GetMapping("/password")
-	public String getPasswordRecovery() {
+	public String getPasswordRecovery(Model model) {
+		model.addAttribute("title", "Recover Password");
 		return "recover-password";
 	}
 
@@ -33,10 +58,16 @@ public class RecoveryController {
 								  Model model,
 								  RedirectAttributes redirectAttributes) {
 
-		userConfirmationService.sendPasswordRecoveryEmail(username, email);
-		redirectAttributes.addFlashAttribute("recovery",
-				"Check your email for password recovery instructions");
-		return "redirect:/login";
+		try {
+			userConfirmationService.sendPasswordRecoveryEmail(username, email);
+			redirectAttributes.addFlashAttribute("recovery",
+					"Check your email for password recovery instructions");
+			return "redirect:/login";
+		} catch (InvalidUserInfoException ex) {
+			model.addAttribute("title", "Recover Password");
+			model.addAttribute("error", ex.getMessage());
+			return "recover-password";
+		}
 	}
 
 	@GetMapping("/{token}")
@@ -49,14 +80,8 @@ public class RecoveryController {
 	public String changePassword(@PathVariable("token") String token,
 								 @RequestParam("password") String password,
 								 RedirectAttributes redirectAttributes) {
-		userConfirmationService.changePassword(token, password);
+		userConfirmationService.confirmPasswordChange(token, password);
 		redirectAttributes.addFlashAttribute("recovery", "Password successfully changed");
 		return "redirect:/login";
-	}
-
-	@ExceptionHandler(InvalidUserInfoException.class)
-	private String InvalidUserInfoExceptionHandler(RuntimeException ex, Model model) {
-		model.addAttribute("error", ex.getMessage());
-		return "recover-password";
 	}
 }

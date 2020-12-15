@@ -24,6 +24,10 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 	@Override
 	@Transactional
 	public String createConfirmationToken(User user) {
+
+		//clear out previous token
+		confirmationTokenDAO.deleteByUser(user);
+
 		ConfirmationToken token = new ConfirmationToken();
 		token.setToken(UUID.randomUUID().toString());
 		token.setUser(user);

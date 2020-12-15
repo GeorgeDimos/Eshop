@@ -1,6 +1,7 @@
 package com.spring.eshop.dao;
 
 import com.spring.eshop.entity.ConfirmationToken;
+import com.spring.eshop.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
@@ -12,4 +13,6 @@ public interface ConfirmationTokenDAO extends CrudRepository<ConfirmationToken, 
 	void deleteAllByCreateDateIsLessThan(Date expireDate);
 
 	void deleteByToken(String token);
+
+	void deleteByUser(User user);
 }

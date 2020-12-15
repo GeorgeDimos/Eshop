@@ -77,10 +77,6 @@ public class UserService implements IUserService {
 			throw new InvalidUserInfoException("Wrong email");
 		}
 
-		if (!user.getEnabled()) {
-			throw new InvalidUserInfoException("You need to confirm your account first.");
-		}
-
 		return user;
 	}
 }

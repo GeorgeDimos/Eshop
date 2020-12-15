@@ -22,14 +22,14 @@ public class UserRegistrationListener {
 	@EventListener
 	public void sentUserRegistrationEmail(UserRegistrationEvent event) {
 		String token = confirmationTokenService.createConfirmationToken(event.getUser());
-		SimpleMailMessage simpleMailMessage = createRegistrationEmail(event.getUserInfo().getEmail(), token);
+		SimpleMailMessage simpleMailMessage = createRegistrationEmail(event.getEmail(), token);
 		mailSender.send(simpleMailMessage);
 	}
 
 	@EventListener
 	public void sentPasswordRecoveryEmail(PasswordRecoveryEvent event) {
 		String token = confirmationTokenService.createConfirmationToken(event.getUser());
-		SimpleMailMessage simpleMailMessage = createPasswordRecoveryEmail(event.getUserInfo().getEmail(), token);
+		SimpleMailMessage simpleMailMessage = createPasswordRecoveryEmail(event.getEmail(), token);
 		mailSender.send(simpleMailMessage);
 	}
 

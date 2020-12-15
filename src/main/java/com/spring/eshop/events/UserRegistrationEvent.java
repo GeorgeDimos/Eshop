@@ -1,23 +1,22 @@
 package com.spring.eshop.events;
 
 import com.spring.eshop.entity.User;
-import com.spring.eshop.entity.UserInfo;
 
 public class UserRegistrationEvent {
 
 	private final User user;
-	private final UserInfo userInfo;
+	private final String email;
 
-	public UserRegistrationEvent(User user, UserInfo userInfo) {
+	public UserRegistrationEvent(User user, String email) {
 		this.user = user;
-		this.userInfo = userInfo;
+		this.email = email;
 	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
+	public String getEmail() {
+		return email;
 	}
 }
