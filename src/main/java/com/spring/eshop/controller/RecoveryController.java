@@ -1,7 +1,6 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import com.spring.eshop.service.interfaces.IUserConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +13,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class RecoveryController {
 
 	private final IUserConfirmationService userConfirmationService;
-	private final IConfirmationTokenService confirmationTokenService;
 
 	@Autowired
-	public RecoveryController(IUserConfirmationService userConfirmationService, IConfirmationTokenService confirmationTokenService) {
+	public RecoveryController(IUserConfirmationService userConfirmationService) {
 		this.userConfirmationService = userConfirmationService;
-		this.confirmationTokenService = confirmationTokenService;
 	}
 
 	@GetMapping("/activationEmail")
@@ -72,7 +69,9 @@ public class RecoveryController {
 
 	@GetMapping("/{token}")
 	public String getPasswordInputPage(@PathVariable String token) {
-		confirmationTokenService.getConfirmationTokenByToken(token);
+		if (!userConfirmationService.isTokenValid(token)) {
+			return "redirect:/error";
+		}
 		return "new-password";
 	}
 

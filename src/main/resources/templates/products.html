@@ -14,7 +14,7 @@
             <br>
             <table th:if="${!products.empty}" class="table table-hover">
 
-                <div th:replace="table_head :: head('Categories','Product','Quantity','Price')"></div>
+                <thead th:replace="table_head :: head('Categories','Product','Quantity','Price')"></thead>
                 <tbody>
                 <tr th:each="product: ${products}">
                     <td>

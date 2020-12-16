@@ -3,21 +3,24 @@ package com.spring.eshop.service.interfaces;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.exceptions.UserAlreadyExistsException;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 public interface IUserService {
-	@Transactional
-	void createUser(User user, UserInfo userInfo) throws UserAlreadyExistsException;
 
-	User getUserById(int id) throws NoSuchElementException;
+	User getUserById(int id);
+
+	User getUserByUsername(String username);
 
 	User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException;
 
+	UserInfo getUserInfoByEmail(String email);
+
 	@Transactional
-	void changePassword(User user, String password);
+	void createUser(User user, UserInfo userInfo);
+
+	@Transactional
+	void encodePassword(User user, String password);
 
 	@Transactional
 	void enableUser(User user);

@@ -2,7 +2,7 @@ package com.spring.eshop.events;
 
 import com.spring.eshop.entity.Order;
 
-public class OrderReceivedEvent{
+public class OrderReceivedEvent {
 
 	private final Order order;
 	private final String email;

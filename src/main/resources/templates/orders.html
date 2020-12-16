@@ -11,7 +11,7 @@
             <h2>Orders</h2>
             <table th:if="${!orders.empty}" class="table table-hover">
 
-                <div th:replace="table_head :: head('#','Order','Items',~{})"></div>
+                <thead th:replace="table_head :: head('#','Order','Items',~{})"></thead>
                 <tbody>
                 <tr th:each="order: ${orders}">
                     <td th:text="${orderStat.count}"></td>

@@ -5,14 +5,12 @@ import com.spring.eshop.dao.UserInfoDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserService implements IUserService {
@@ -31,17 +29,10 @@ public class UserService implements IUserService {
 
 	@Override
 	@Transactional
-	public void createUser(User user, UserInfo userInfo) throws UserAlreadyExistsException {
-		if (userDAO.findByUsername(user.getUsername()).isPresent()) {
-			throw new UserAlreadyExistsException("Username " + user.getUsername() + " already exists");
-		}
-
-		if (userInfoDAO.findByEmail(userInfo.getEmail()).isPresent()) {
-			throw new UserAlreadyExistsException("Email " + userInfo.getEmail() + " already exists");
-		}
+	public void createUser(User user, UserInfo userInfo) {
 
 		user.setEnabled(false);
-		this.changePassword(user, user.getPassword());
+		encodePassword(user, user.getPassword());
 
 		authGroupService.createAuthGroupForUser(user.getUsername());
 
@@ -50,13 +41,23 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User getUserById(int id) throws NoSuchElementException {
+	public User getUserById(int id) {
 		return userDAO.findById(id).orElseThrow();
 	}
 
 	@Override
+	public User getUserByUsername(String username) {
+		return userDAO.findByUsername(username).orElseThrow();
+	}
+
+	@Override
+	public UserInfo getUserInfoByEmail(String email) {
+		return userInfoDAO.findByEmail(email).orElseThrow();
+	}
+
+	@Override
 	@Transactional
-	public void changePassword(User user, String password) {
+	public void encodePassword(User user, String password) {
 		user.setPassword(passwordEncoder.encode(password));
 		userDAO.save(user);
 	}

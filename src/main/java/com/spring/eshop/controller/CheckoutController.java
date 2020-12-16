@@ -39,7 +39,8 @@ public class CheckoutController {
 
 	@ExceptionHandler(NotEnoughStockException.class)
 	public String notEnoughStockInOrder(NotEnoughStockException ex, RedirectAttributes redirectAttrs) {
-		redirectAttrs.addFlashAttribute("notEnoughStockError", ex.getProductName());
+		redirectAttrs.addFlashAttribute("notEnoughStockError",
+				"We don't have enough stock of "+ex.getProductName()+" anymore. Please reduce the quantity or remove it.");
 		return "redirect:/cart";
 	}
 }

@@ -44,7 +44,7 @@ public class UserActionListener {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("New Order - Spring Eshop");
 		simpleMailMessage.setTo(email);
-		simpleMailMessage.setText("Hello " +order.getUser().getUsername()+"!\n\n" +
+		simpleMailMessage.setText("Hello " + order.getUser().getUsername() + "!\n\n" +
 				"Thank you for your order!");
 		return simpleMailMessage;
 	}

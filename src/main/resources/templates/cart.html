@@ -13,9 +13,9 @@
             <h3>Cart</h3>
             <br>
             <div class="alert alert-warning" role="alert" th:if="${notEnoughStockError}"
-                 th:text="${notEnoughStockError}+' is not in stock anymore. Please remove it.'"></div>
+                 th:text="${notEnoughStockError}"></div>
             <table th:if="${!shoppingList.empty}" class="table table-hover">
-                <div th:replace="table_head :: head('Product','Quantity of Products','Price','Remove')"></div>
+                <thead th:replace="table_head :: head('Product','Quantity of Products','Price','Remove')">
                 <tbody>
                 <tr th:each="item: ${shoppingList}">
                     <td>

@@ -5,19 +5,20 @@ import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 public interface IUserConfirmationService {
 	@Transactional
 	void registerUser(User user, UserInfo userInfo) throws UserAlreadyExistsException;
-
-	@Transactional
-	User confirmUserRegistration(String token) throws NoSuchElementException;
 
 	void resendActivationEmail(String username, String email);
 
 	void sendPasswordRecoveryEmail(String username, String email);
 
 	@Transactional
-	void confirmPasswordChange(String token, String password) throws NoSuchElementException;
+	void confirmPasswordChange(String token, String password);
+
+	@Transactional
+	void confirmUserRegistration(String token);
+
+	boolean isTokenValid(String token);
 }

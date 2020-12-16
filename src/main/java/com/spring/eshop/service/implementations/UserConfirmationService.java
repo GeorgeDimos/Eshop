@@ -14,7 +14,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserConfirmationService implements IUserConfirmationService {
@@ -34,17 +33,16 @@ public class UserConfirmationService implements IUserConfirmationService {
 	@Override
 	@Transactional
 	public void registerUser(User user, UserInfo userInfo) throws UserAlreadyExistsException {
+		if (userService.getUserByUsername(user.getUsername()) != null) {
+			throw new UserAlreadyExistsException("Username " + user.getUsername() + " already exists");
+		}
+
+		if (userService.getUserInfoByEmail(userInfo.getEmail()) != null) {
+			throw new UserAlreadyExistsException("Email " + userInfo.getEmail() + " already exists");
+		}
+
 		userService.createUser(user, userInfo);
 		publisher.publishEvent(new UserRegistrationEvent(user, userInfo.getEmail()));
-	}
-
-	@Override
-	@Transactional
-	public User confirmUserRegistration(String token) throws NoSuchElementException {
-		User user = confirmationTokenService.getUserByToken(token);
-		userService.enableUser(user);
-		confirmationTokenService.deleteToken(token);
-		return user;
 	}
 
 	@Override
@@ -67,9 +65,21 @@ public class UserConfirmationService implements IUserConfirmationService {
 
 	@Override
 	@Transactional
-	public void confirmPasswordChange(String token, String password) throws NoSuchElementException {
-		User user = confirmationTokenService.getUserByToken(token);
-		userService.changePassword(user, password);
+	public void confirmPasswordChange(String token, String password) {
+		User user = confirmationTokenService.getUserFromToken(token);
+		userService.encodePassword(user, password);
 		confirmationTokenService.deleteToken(token);
+	}
+
+	@Override
+	@Transactional
+	public void confirmUserRegistration(String token) {
+		User user = confirmationTokenService.getUserFromToken(token);
+		userService.enableUser(user);
+		confirmationTokenService.deleteToken(token);
+	}
+
+	public boolean isTokenValid(String token) {
+		return confirmationTokenService.isValid(token);
 	}
 }

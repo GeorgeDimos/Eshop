@@ -9,7 +9,7 @@
 <div th:insert="navbar.html"></div>
 <div class="container">
     <table th:if="${!categories.empty}" class="table table-hover">
-        <div th:replace="table_head :: head('Category','Number of Products',~{},~{})"></div>
+        <thead th:replace="table_head :: head('Category','Number of Products',~{},~{})"></thead>
         <tbody>
         <tr th:each="category: ${categories}" th:if="${!category.products.empty}">
             <td>

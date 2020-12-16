@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -36,17 +35,18 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 	}
 
 	@Override
-	public ConfirmationToken getConfirmationTokenByToken(String token) throws NoSuchElementException {
-		return confirmationTokenDAO.findByToken(token).orElseThrow();
+	public boolean isValid(String token) {
+		return confirmationTokenDAO.findByToken(token).isPresent();
 	}
 
 	@Override
-	public User getUserByToken(String token) throws NoSuchElementException {
+	public User getUserFromToken(String token) {
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		return confirmationToken.getUser();
 	}
 
 	@Override
+	@Transactional
 	public void deleteToken(String token) {
 		confirmationTokenDAO.deleteByToken(token);
 	}

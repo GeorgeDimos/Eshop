@@ -10,7 +10,7 @@
         <div class="col">
             <h2 th:text="'Order #' + ${order.id}"></h2>
             <table th:if="${!order.items.empty}" class="table table-hover">
-                <div th:replace="table_head :: head('#','Item','Quantity',~{})"></div>
+                <thead th:replace="table_head :: head('#','Item','Quantity',~{})"></thead>
                 <tbody>
                 <tr th:each="item: ${order.items}">
                     <td th:text="${itemStat.count}"></td>
