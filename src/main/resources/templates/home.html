@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="headers :: common_header(~{::title})">
+<head th:replace="fragments/headers :: common_header(~{::title})">
     <title>Eshop made with Spring</title>
 </head>
-<body th:replace="simpleTemplate :: simple_page(~{::h2},~{})">
+<body th:replace="fragments/simpleTemplate :: simple_page(~{::h2},~{})">
 <h2>An Eshop made with Java Spring.</h2>
 </body>
 </html>

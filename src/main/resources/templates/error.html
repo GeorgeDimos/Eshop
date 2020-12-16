@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="headers :: common_header(~{::title})">
+<head th:replace="fragments/headers :: common_header(~{::title})">
     <title>Error</title>
 </head>
-<body th:replace="simpleTemplate :: simple_page(~{::h2}, ~{::a})">
+<body th:replace="fragments/simpleTemplate :: simple_page(~{::h2}, ~{::a})">
 <h2>Something went wrong!</h2>
 <a th:href="@{/}">Go Home</a>
 </body>
