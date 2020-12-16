@@ -9,4 +9,9 @@ $ mysql -u root -p
 > create database eshop;
 ```
 
-Login with "admin" as username and password or create a new user with your email.
+Run with 
+```
+./mvnw spring-boot:run
+```
+
+Use http://localhost:8080/ and login with "admin" as username and password or create a new user with your email.
