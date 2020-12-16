@@ -8,3 +8,5 @@ $ mysql -u root -p
 
 > create database eshop;
 ```
+
+Login with "admin" as username and password or create a new user with your email.
