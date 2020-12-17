@@ -38,4 +38,8 @@ public class ShoppingCart {
 	public String toString() {
 		return "{" + " itemsList='" + itemsList + "'" + "}";
 	}
+
+	public void clear() {
+		itemsList.clear();
+	}
 }

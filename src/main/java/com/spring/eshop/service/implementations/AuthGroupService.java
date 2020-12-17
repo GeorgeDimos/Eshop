@@ -5,6 +5,7 @@ import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.security.UserPrinciple;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,5 +42,12 @@ public class AuthGroupService implements UserDetailsService {
 		}
 		List<AuthGroup> authGroups = authGroupDAO.findByUsername(username);
 		return new UserPrinciple(user.get(), authGroups);
+	}
+
+	public User getCurrentUser() {
+		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext()
+				.getAuthentication().getPrincipal();
+		User user = userDAO.findById(currentUserPrinciple.getUserId()).orElseThrow();
+		return user;
 	}
 }

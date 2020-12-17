@@ -8,10 +8,5 @@ public interface IConfirmationTokenService {
 	@Transactional
 	String createConfirmationToken(User user);
 
-	User getUserFromToken(String token);
-
 	boolean isValid(String token);
-
-	@Transactional
-	void deleteToken(String token);
 }

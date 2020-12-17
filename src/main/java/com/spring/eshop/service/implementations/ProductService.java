@@ -1,9 +1,9 @@
 package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.ProductDAO;
+import com.spring.eshop.entity.Category;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -22,12 +22,10 @@ public class ProductService extends BasicServices<Product, Integer> implements I
 	private static final Set<String> invalidSortingFields = Set.of("images", "category", "description");
 
 	private final ProductDAO productDAO;
-	private final IOrderService orderService;
 
 	@Autowired
-	public ProductService(ProductDAO productDAO, IOrderService orderService) {
+	public ProductService(ProductDAO productDAO) {
 		this.productDAO = productDAO;
-		this.orderService = orderService;
 	}
 
 	@Transactional
@@ -41,15 +39,12 @@ public class ProductService extends BasicServices<Product, Integer> implements I
 			product.setStock(product.getStock() - quantity);
 		});
 
-		orderService.createOrder(list);
-
 		productDAO.saveAll(list.keySet());
-		list.clear();
 	}
 
 	@Override
-	public Page<Product> getProductsByCategory(Integer id, Pageable pageable) {
-		return productDAO.findByCategoryId(id, pageable);
+	public Page<Product> getProductsByCategory(Category category, Pageable pageable) {
+		return productDAO.findByCategory(category, pageable);
 	}
 
 	@Bean

@@ -2,6 +2,7 @@ package com.spring.eshop.service.interfaces;
 
 import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.Product;
+import com.spring.eshop.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,9 +12,9 @@ import java.util.NoSuchElementException;
 
 public interface IOrderService {
 	@Transactional
-	void createOrder(Map<Product, Integer> list) throws NoSuchElementException;
+	void createOrder(User user, Map<Product, Integer> list);
 
-	Order getOrder(int userId, int orderId) throws NoSuchElementException;
+	Order getOrder(User user, int orderId) throws NoSuchElementException;
 
-	Page<Order> getOrdersByUserId(int id, Pageable pageable);
+	Page<Order> getOrdersByUser(User user, Pageable pageable);
 }

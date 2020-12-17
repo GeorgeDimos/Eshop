@@ -7,31 +7,27 @@ import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.events.OrderReceivedEvent;
-import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
 public class OrderService implements IOrderService {
 
-	private final IUserService userService;
 	private final OrderDAO orderDAO;
 	private final OrderItemDAO orderItemDAO;
 	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	public OrderService(IUserService userService, OrderDAO orderDAO, OrderItemDAO orderItemDAO, ApplicationEventPublisher publisher) {
-		this.userService = userService;
+	public OrderService(OrderDAO orderDAO, OrderItemDAO orderItemDAO, ApplicationEventPublisher publisher) {
 		this.orderDAO = orderDAO;
 		this.orderItemDAO = orderItemDAO;
 		this.publisher = publisher;
@@ -39,11 +35,7 @@ public class OrderService implements IOrderService {
 
 	@Override
 	@Transactional
-	public void createOrder(Map<Product, Integer> list) throws NoSuchElementException {
-
-		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		User user = userService.getUserById(currentUserPrinciple.getUserId());
+	public void createOrder(User user, Map<Product, Integer> list) {
 
 		Order order = new Order();
 		order.setUser(user);
@@ -58,16 +50,16 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public Page<Order> getOrdersByUserId(int id, Pageable pageable) {
-		return orderDAO.getOrdersByUserId(id, pageable);
+	public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+		return orderDAO.getOrdersByUser(user, pageable);
 	}
 
 	@Override
-	public Order getOrder(int userId, int orderId) throws NoSuchElementException {
-		User user = userService.getUserById(userId);
-		if (orderId > user.getOrders().size() - 1 || orderId < 0) {
+	public Order getOrder(User user, int orderId) throws NoSuchElementException {
+		List<Order> orders = user.getOrders();
+		if (orderId > orders.size() - 1 || orderId < 0) {
 			throw new NoSuchElementException();
 		}
-		return user.getOrders().get(orderId);
+		return orders.get(orderId);
 	}
 }

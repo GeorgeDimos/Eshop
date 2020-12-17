@@ -2,6 +2,8 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.exceptions.NotEnoughStockException;
+import com.spring.eshop.service.implementations.AuthGroupService;
+import com.spring.eshop.service.implementations.OrderService;
 import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,12 +16,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CheckoutController {
 
 	private final IProductService productService;
+	private final OrderService orderService;
 	private final ShoppingCart shoppingCart;
+	private final AuthGroupService authGroupService;
 
 	@Autowired
-	public CheckoutController(IProductService productService, ShoppingCart shoppingCart) {
+	public CheckoutController(IProductService productService, OrderService orderService, ShoppingCart shoppingCart, AuthGroupService authGroupService) {
 		this.productService = productService;
+		this.orderService = orderService;
 		this.shoppingCart = shoppingCart;
+		this.authGroupService = authGroupService;
 	}
 
 	@GetMapping
@@ -32,6 +38,8 @@ public class CheckoutController {
 	public String buyProducts(@RequestParam(required = false) String confirm) {
 		if (confirm != null && confirm.equals("Purchase")) {
 			productService.buyItems(shoppingCart.getShoppingCart());
+			orderService.createOrder(authGroupService.getCurrentUser(), shoppingCart.getShoppingCart());
+			shoppingCart.clear();
 		}
 
 		return "redirect:/products";
@@ -40,7 +48,7 @@ public class CheckoutController {
 	@ExceptionHandler(NotEnoughStockException.class)
 	public String notEnoughStockInOrder(NotEnoughStockException ex, RedirectAttributes redirectAttrs) {
 		redirectAttrs.addFlashAttribute("notEnoughStockError",
-				"We don't have enough stock of "+ex.getProductName()+" anymore. Please reduce the quantity or remove it.");
+				"We don't have enough stock of " + ex.getProductName() + " anymore. Please reduce the quantity or remove it.");
 		return "redirect:/cart";
 	}
 }

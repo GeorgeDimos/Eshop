@@ -2,6 +2,7 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
+import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import com.spring.eshop.service.interfaces.IUserConfirmationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,17 +12,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 
 @Controller
 @RequestMapping("/recover")
 public class RecoveryController {
 
 	private final IUserConfirmationService userConfirmationService;
+	private final IConfirmationTokenService confirmationTokenService;
 
 	@Autowired
-	public RecoveryController(IUserConfirmationService userConfirmationService) {
+	public RecoveryController(IUserConfirmationService userConfirmationService, IConfirmationTokenService confirmationTokenService) {
 		this.userConfirmationService = userConfirmationService;
+		this.confirmationTokenService = confirmationTokenService;
 	}
 
 	@GetMapping("/activationEmail")
@@ -74,7 +76,7 @@ public class RecoveryController {
 
 	@GetMapping("/{token}")
 	public String getPasswordInputPage(@PathVariable String token, Model model) {
-		if (!userConfirmationService.isTokenValid(token)) {
+		if (!confirmationTokenService.isValid(token)) {
 			return "redirect:/error";
 		}
 		model.addAttribute("user", new User());
@@ -87,7 +89,7 @@ public class RecoveryController {
 								 BindingResult bindingResultUser,
 								 RedirectAttributes redirectAttributes) {
 
-		if(bindingResultUser.hasFieldErrors("password")){
+		if (bindingResultUser.hasFieldErrors("password")) {
 			return "/new-password";
 		}
 		userConfirmationService.confirmPasswordChange(token, user.getPassword());

@@ -14,24 +14,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/categories")
 public class CategoriesController {
 
-	private final ICategoryService ICategoryService;
+	private final ICategoryService categoryService;
 	private final IProductService productService;
 
 	@Autowired
-	public CategoriesController(ICategoryService ICategoryService, IProductService productService) {
-		this.ICategoryService = ICategoryService;
+	public CategoriesController(ICategoryService categoryService, IProductService productService) {
+		this.categoryService = categoryService;
 		this.productService = productService;
 	}
 
 	@GetMapping
 	public String getCategories(Pageable pageable, Model model) {
-		model.addAttribute("categories", ICategoryService.getItems(pageable));
+		model.addAttribute("categories", categoryService.getItems(pageable));
+
 		return "categories";
 	}
 
 	@GetMapping("/{id}")
 	public String getProductByCategories(@PathVariable int id, Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getProductsByCategory(id, pageable));
+		model.addAttribute("products", productService.getProductsByCategory(categoryService.getItem(id), pageable));
 		return "products";
 	}
 }

@@ -1,5 +1,6 @@
 package com.spring.eshop.controller;
 
+import com.spring.eshop.entity.User;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,14 +34,16 @@ public class UsersController {
 	public String getOrdersList(@PathVariable int id,
 								Model model,
 								Pageable pageable) {
-		model.addAttribute("user", userService.getUserById(id));
-		model.addAttribute("orders", orderService.getOrdersByUserId(id, pageable));
+		User user = userService.getUserById(id);
+		model.addAttribute("user", user);
+		model.addAttribute("orders", orderService.getOrdersByUser(user, pageable));
 		return "orders";
 	}
 
 	@GetMapping("/orders/{oid}")
 	public String getOrderDetails(@PathVariable int id, @PathVariable int oid, Model model) {
-		model.addAttribute("order", orderService.getOrder(id, oid));
+		User user = userService.getUserById(id);
+		model.addAttribute("order", orderService.getOrder(user, oid));
 		return "order";
 	}
 }

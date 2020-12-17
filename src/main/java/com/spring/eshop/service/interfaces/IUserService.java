@@ -10,11 +10,11 @@ public interface IUserService {
 
 	User getUserById(int id);
 
-	User getUserByUsername(String username);
-
 	User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException;
 
-	UserInfo getUserInfoByEmail(String email);
+	boolean usernameInUse(String username);
+
+	boolean emailInUse(String email);
 
 	@Transactional
 	void createUser(User user, UserInfo userInfo);

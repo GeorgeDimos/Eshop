@@ -19,6 +19,4 @@ public interface IUserConfirmationService {
 
 	@Transactional
 	void confirmUserRegistration(String token);
-
-	boolean isTokenValid(String token);
 }

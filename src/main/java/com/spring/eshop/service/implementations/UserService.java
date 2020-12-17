@@ -16,14 +16,12 @@ import javax.transaction.Transactional;
 public class UserService implements IUserService {
 	private final UserDAO userDAO;
 	private final UserInfoDAO userInfoDAO;
-	private final AuthGroupService authGroupService;
 	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public UserService(UserDAO userDAO, UserInfoDAO userInfoDAO, AuthGroupService authGroupService, PasswordEncoder passwordEncoder) {
+	public UserService(UserDAO userDAO, UserInfoDAO userInfoDAO, PasswordEncoder passwordEncoder) {
 		this.userDAO = userDAO;
 		this.userInfoDAO = userInfoDAO;
-		this.authGroupService = authGroupService;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -33,8 +31,6 @@ public class UserService implements IUserService {
 
 		user.setEnabled(false);
 		encodePassword(user, user.getPassword());
-
-		authGroupService.createAuthGroupForUser(user.getUsername());
 
 		userInfo.setUser(user);
 		userInfoDAO.save(userInfo);
@@ -46,13 +42,13 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User getUserByUsername(String username) {
-		return userDAO.findByUsername(username).orElseThrow();
+	public boolean usernameInUse(String username) {
+		return userDAO.existsByUsername(username);
 	}
 
 	@Override
-	public UserInfo getUserInfoByEmail(String email) {
-		return userInfoDAO.findByEmail(email).orElseThrow();
+	public boolean emailInUse(String email) {
+		return userInfoDAO.existsByEmail(email);
 	}
 
 	@Override

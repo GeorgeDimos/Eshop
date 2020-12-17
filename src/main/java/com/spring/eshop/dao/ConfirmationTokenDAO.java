@@ -15,4 +15,6 @@ public interface ConfirmationTokenDAO extends CrudRepository<ConfirmationToken, 
 	void deleteByToken(String token);
 
 	void deleteByUser(User user);
+
+	boolean existsByToken(String token);
 }

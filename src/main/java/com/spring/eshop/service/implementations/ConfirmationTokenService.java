@@ -36,18 +36,6 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 
 	@Override
 	public boolean isValid(String token) {
-		return confirmationTokenDAO.findByToken(token).isPresent();
-	}
-
-	@Override
-	public User getUserFromToken(String token) {
-		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
-		return confirmationToken.getUser();
-	}
-
-	@Override
-	@Transactional
-	public void deleteToken(String token) {
-		confirmationTokenDAO.deleteByToken(token);
+		return confirmationTokenDAO.existsByToken(token);
 	}
 }
