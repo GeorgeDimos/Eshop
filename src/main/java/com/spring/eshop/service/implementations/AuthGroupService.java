@@ -47,7 +47,6 @@ public class AuthGroupService implements UserDetailsService {
 	public User getCurrentUser() {
 		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext()
 				.getAuthentication().getPrincipal();
-		User user = userDAO.findById(currentUserPrinciple.getUserId()).orElseThrow();
-		return user;
+		return userDAO.findById(currentUserPrinciple.getUserId()).orElseThrow();
 	}
 }

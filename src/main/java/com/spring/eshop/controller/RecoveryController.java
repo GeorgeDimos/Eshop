@@ -3,7 +3,7 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
-import com.spring.eshop.service.interfaces.IUserConfirmationService;
+import com.spring.eshop.service.interfaces.IUserRequests;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +17,13 @@ import javax.validation.Valid;
 @RequestMapping("/recover")
 public class RecoveryController {
 
-	private final IUserConfirmationService userConfirmationService;
 	private final IConfirmationTokenService confirmationTokenService;
+	private final IUserRequests userRequests;
 
 	@Autowired
-	public RecoveryController(IUserConfirmationService userConfirmationService, IConfirmationTokenService confirmationTokenService) {
-		this.userConfirmationService = userConfirmationService;
+	public RecoveryController(IConfirmationTokenService confirmationTokenService, IUserRequests userRequests) {
 		this.confirmationTokenService = confirmationTokenService;
+		this.userRequests = userRequests;
 	}
 
 	@GetMapping("/activationEmail")
@@ -39,7 +39,7 @@ public class RecoveryController {
 										RedirectAttributes redirectAttributes) {
 
 		try {
-			userConfirmationService.resendActivationEmail(username, email);
+			userRequests.resendActivationEmail(username, email);
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for the activation link");
 			return "redirect:/login";
@@ -63,7 +63,7 @@ public class RecoveryController {
 								  RedirectAttributes redirectAttributes) {
 
 		try {
-			userConfirmationService.sendPasswordRecoveryEmail(username, email);
+			userRequests.passwordRecoveryEmail(username, email);
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for password recovery instructions");
 			return "redirect:/login";
@@ -92,7 +92,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "/new-password";
 		}
-		userConfirmationService.confirmPasswordChange(token, user.getPassword());
+		userRequests.confirmPasswordChange(token, user.getPassword());
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

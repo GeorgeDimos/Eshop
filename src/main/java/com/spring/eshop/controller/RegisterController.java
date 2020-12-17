@@ -3,7 +3,7 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
-import com.spring.eshop.service.interfaces.IUserConfirmationService;
+import com.spring.eshop.service.interfaces.IUserRequests;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,11 +17,11 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegisterController {
 
-	private final IUserConfirmationService userConfirmationService;
+	private final IUserRequests userRequests;
 
 	@Autowired
-	public RegisterController(IUserConfirmationService userConfirmationService) {
-		this.userConfirmationService = userConfirmationService;
+	public RegisterController(IUserRequests userRequests) {
+		this.userRequests = userRequests;
 	}
 
 	@GetMapping
@@ -41,7 +41,7 @@ public class RegisterController {
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "/register";
 		}
-		userConfirmationService.registerUser(user, userInfo);
+		userRequests.register(user, userInfo);
 		redirectAttributes.addFlashAttribute("success",
 				"User registration successful. Please check your email and confirm your account.");
 		return "redirect:/login";
@@ -49,7 +49,7 @@ public class RegisterController {
 
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
-		userConfirmationService.confirmUserRegistration(token);
+		userRequests.confirmRegistration(token);
 		model.addAttribute("success",
 				"Your account is confirmed. You can now login.");
 		return "login";
