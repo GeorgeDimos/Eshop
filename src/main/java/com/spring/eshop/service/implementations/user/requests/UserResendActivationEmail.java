@@ -4,24 +4,30 @@ import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.events.UserRegistrationEvent;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
+import com.spring.eshop.service.implementations.AuthGroupService;
+import com.spring.eshop.service.interfaces.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
 
 public class UserResendActivationEmail extends UserRequestTemplate {
 
-	public UserResendActivationEmail(ApplicationEventPublisher publisher) {
-		super(publisher);
+	@Autowired
+	public UserResendActivationEmail(User user, UserInfo userInfo) {
+		super(user, userInfo);
 	}
 
 	@Override
-	protected void isValid(User user, UserInfo userInfo) {
-		if (user.getEnabled()) {
-			throw new InvalidUserInfoException("Your account is already confirmed.");
-		}
+	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
+		return user.getEnabled();
 	}
 
 	@Override
-	protected void action(User user, UserInfo userInfo) {
+	protected RuntimeException error() {
+		return new InvalidUserInfoException("Your account is already confirmed.");
+	}
+
+	@Override
+	protected void action(IUserService userService, AuthGroupService authGroupService, User user, UserInfo userInfo) {
 
 	}
 

@@ -2,8 +2,12 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
+import com.spring.eshop.service.implementations.user.actions.ConfirmChangePassword;
+import com.spring.eshop.service.implementations.user.requests.UserPasswordRecoveryEmail;
+import com.spring.eshop.service.implementations.user.requests.UserResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import com.spring.eshop.service.interfaces.IUserRequests;
+import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +23,13 @@ public class RecoveryController {
 
 	private final IConfirmationTokenService confirmationTokenService;
 	private final IUserRequests userRequests;
+	private final IUserService userService;
 
 	@Autowired
-	public RecoveryController(IConfirmationTokenService confirmationTokenService, IUserRequests userRequests) {
+	public RecoveryController(IConfirmationTokenService confirmationTokenService, IUserRequests userRequests, IUserService userService) {
 		this.confirmationTokenService = confirmationTokenService;
 		this.userRequests = userRequests;
+		this.userService = userService;
 	}
 
 	@GetMapping("/activationEmail")
@@ -39,7 +45,8 @@ public class RecoveryController {
 										RedirectAttributes redirectAttributes) {
 
 		try {
-			userRequests.resendActivationEmail(username, email);
+			User user = userService.getUserByUsernameAndEmail(username, email);
+			userRequests.request(new UserResendActivationEmail(user, user.getUserInfo()));
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for the activation link");
 			return "redirect:/login";
@@ -63,7 +70,8 @@ public class RecoveryController {
 								  RedirectAttributes redirectAttributes) {
 
 		try {
-			userRequests.passwordRecoveryEmail(username, email);
+			User user = userService.getUserByUsernameAndEmail(username, email);
+			userRequests.request(new UserPasswordRecoveryEmail(user, user.getUserInfo()));
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for password recovery instructions");
 			return "redirect:/login";
@@ -92,7 +100,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "/new-password";
 		}
-		userRequests.confirmPasswordChange(token, user.getPassword());
+		userRequests.action(new ConfirmChangePassword(token, user.getPassword()));
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

@@ -3,6 +3,8 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import com.spring.eshop.service.implementations.user.actions.ConfirmUserRegistration;
+import com.spring.eshop.service.implementations.user.requests.UserRegistration;
 import com.spring.eshop.service.interfaces.IUserRequests;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +43,7 @@ public class RegisterController {
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "/register";
 		}
-		userRequests.register(user, userInfo);
+		userRequests.request(new UserRegistration(user, userInfo));
 		redirectAttributes.addFlashAttribute("success",
 				"User registration successful. Please check your email and confirm your account.");
 		return "redirect:/login";
@@ -49,7 +51,7 @@ public class RegisterController {
 
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
-		userRequests.confirmRegistration(token);
+		userRequests.action(new ConfirmUserRegistration(token, null));
 		model.addAttribute("success",
 				"Your account is confirmed. You can now login.");
 		return "login";

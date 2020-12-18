@@ -1,14 +1,10 @@
 package com.spring.eshop.service.implementations.user;
 
 import com.spring.eshop.dao.ConfirmationTokenDAO;
-import com.spring.eshop.entity.User;
-import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.service.implementations.AuthGroupService;
-import com.spring.eshop.service.implementations.user.actions.ConfirmChangePassword;
-import com.spring.eshop.service.implementations.user.actions.ConfirmUserRegistration;
-import com.spring.eshop.service.implementations.user.requests.UserPasswordRecoveryEmail;
-import com.spring.eshop.service.implementations.user.requests.UserRegistration;
-import com.spring.eshop.service.implementations.user.requests.UserResendActivationEmail;
+import com.spring.eshop.service.implementations.user.actions.UserConfirmTemplate;
+import com.spring.eshop.service.implementations.user.requests.UserRequestTemplate;
+import com.spring.eshop.service.interfaces.IUserRequests;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -17,7 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 
 @Service
-public class UserRequests implements com.spring.eshop.service.interfaces.IUserRequests {
+public class UserRequests implements IUserRequests {
 
 	private final ConfirmationTokenDAO confirmationTokenDAO;
 	private final IUserService userService;
@@ -32,37 +28,12 @@ public class UserRequests implements com.spring.eshop.service.interfaces.IUserRe
 		this.publisher = publisher;
 	}
 
-	@Override
-	public void register(User user, UserInfo userInfo) {
-		UserRegistration userRegistration = new UserRegistration(publisher, userService, authGroupService);
-		userRegistration.execute(user, userInfo);
+	public void request(UserRequestTemplate request) {
+		request.execute(publisher, userService, authGroupService);
 	}
 
-	@Override
 	@Transactional
-	public void confirmRegistration(String token) {
-		ConfirmUserRegistration confirmUserRegistration = new ConfirmUserRegistration(confirmationTokenDAO, userService);
-		confirmUserRegistration.execute(token, null);
-	}
-
-	@Override
-	public void resendActivationEmail(String username, String email) {
-		UserResendActivationEmail resendActivationEmail = new UserResendActivationEmail(publisher);
-		User user = userService.getUserByUsernameAndEmail(username, email);
-		resendActivationEmail.execute(user, user.getUserInfo());
-	}
-
-	@Override
-	public void passwordRecoveryEmail(String username, String email) {
-		UserPasswordRecoveryEmail passwordRecoveryEmail = new UserPasswordRecoveryEmail(publisher);
-		User user = userService.getUserByUsernameAndEmail(username, email);
-		passwordRecoveryEmail.execute(user, user.getUserInfo());
-	}
-
-	@Override
-	@Transactional
-	public void confirmPasswordChange(String token, String password) {
-		ConfirmChangePassword changePassword = new ConfirmChangePassword(confirmationTokenDAO, userService);
-		changePassword.execute(token, password);
+	public void action(UserConfirmTemplate action) {
+		action.execute(confirmationTokenDAO, userService);
 	}
 }

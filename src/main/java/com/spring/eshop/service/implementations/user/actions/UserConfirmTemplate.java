@@ -7,28 +7,28 @@ import com.spring.eshop.service.interfaces.IUserService;
 
 public abstract class UserConfirmTemplate {
 
-	private final ConfirmationTokenDAO confirmationTokenDAO;
-	protected final IUserService userService;
+	private final String token;
+	protected final String password;
 
-	public UserConfirmTemplate(ConfirmationTokenDAO confirmationTokenDAO, IUserService userService) {
-		this.confirmationTokenDAO = confirmationTokenDAO;
-		this.userService = userService;
+	public UserConfirmTemplate(String token, String password) {
+		this.token = token;
+		this.password = password;
 	}
 
-	public void execute(String token, String password) {
-		User user = getUser(token);
-		action(user, password);
-		deleteToken(token);
+	public void execute(ConfirmationTokenDAO confirmationTokenDAO, IUserService userService) {
+		User user = getUser(confirmationTokenDAO, token);
+		action(userService, user, password);
+		deleteToken(confirmationTokenDAO, token);
 	}
 
-	protected User getUser(String token) {
+	protected User getUser(ConfirmationTokenDAO confirmationTokenDAO, String token) {
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		return confirmationToken.getUser();
 	}
 
-	protected abstract void action(User user, String password);
+	protected abstract void action(IUserService userService, User user, String password);
 
-	protected void deleteToken(String token) {
+	protected void deleteToken(ConfirmationTokenDAO confirmationTokenDAO, String token) {
 		confirmationTokenDAO.deleteByToken(token);
 	}
 }

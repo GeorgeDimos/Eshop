@@ -7,32 +7,25 @@ import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.AuthGroupService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.context.ApplicationEvent;
-import org.springframework.context.ApplicationEventPublisher;
 
 public class UserRegistration extends UserRequestTemplate {
 
-	private final IUserService userService;
-	private final AuthGroupService authGroupService;
-
-	public UserRegistration(ApplicationEventPublisher publisher, IUserService userService, AuthGroupService authGroupService) {
-		super(publisher);
-		this.userService = userService;
-		this.authGroupService = authGroupService;
+	public UserRegistration(User user, UserInfo userInfo) {
+		super(user, userInfo);
 	}
 
 	@Override
-	protected void isValid(User user, UserInfo userInfo) {
-		if (userService.usernameInUse(user.getUsername())) {
-			throw new UserAlreadyExistsException("Username " + user.getUsername() + " already exists");
-		}
-
-		if (userService.emailInUse(userInfo.getEmail())) {
-			throw new UserAlreadyExistsException("Email " + userInfo.getEmail() + " already exists");
-		}
+	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
+		return (userService.usernameInUse(user.getUsername()) || userService.emailInUse(userInfo.getEmail()));
 	}
 
 	@Override
-	protected void action(User user, UserInfo userInfo) {
+	protected RuntimeException error() {
+		return new UserAlreadyExistsException("User already exists");
+	}
+
+	@Override
+	protected void action(IUserService userService, AuthGroupService authGroupService, User user, UserInfo userInfo) {
 		userService.createUser(user, userInfo);
 
 		authGroupService.createAuthGroupForUser(user.getUsername());
