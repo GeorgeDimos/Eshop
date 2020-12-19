@@ -1,7 +1,6 @@
 package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.dao.UserDAO;
-import com.spring.eshop.dao.UserInfoDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.service.implementations.AuthGroupService;
@@ -18,11 +17,11 @@ public abstract class RequestAction {
 		this.userInfo = userInfo;
 	}
 
-	public final ApplicationEvent execute(UserDAO userDAO, UserInfoDAO userInfoDAO, AuthGroupService authGroupService, PasswordEncoder encoder) {
+	public final ApplicationEvent execute(UserDAO userDAO, AuthGroupService authGroupService, PasswordEncoder encoder) {
 		if (isInvalid(userDAO, user, userInfo)) {
 			throw error();
 		}
-		register(user, userInfo, userDAO, userInfoDAO, authGroupService, encoder);
+		register(user, userInfo, userDAO, authGroupService, encoder);
 		return response(user, userInfo.getEmail());
 	}
 
@@ -30,7 +29,7 @@ public abstract class RequestAction {
 
 	protected abstract RuntimeException error();
 
-	protected void register(User user, UserInfo userInfo, UserDAO userDAO, UserInfoDAO userInfoDAO, AuthGroupService authGroupService, PasswordEncoder passwordEncoder) {
+	protected void register(User user, UserInfo userInfo, UserDAO userDAO, AuthGroupService authGroupService, PasswordEncoder passwordEncoder) {
 	}
 
 	protected abstract ApplicationEvent response(User user, String email);

@@ -11,6 +11,6 @@ public class PasswordRecoveryConfirmation extends ConfirmAction {
 
 	@Override
 	protected void action(PasswordEncoder passwordEncoder, User user, String password) {
-		user.setPassword(passwordEncoder.encode(password));
+		user.setPassword(password);
 	}
 }

@@ -2,7 +2,6 @@ package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.ConfirmationTokenDAO;
 import com.spring.eshop.dao.UserDAO;
-import com.spring.eshop.dao.UserInfoDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.implementations.actions.confirm.ConfirmAction;
@@ -18,20 +17,18 @@ import javax.transaction.Transactional;
 @Service
 public class UserService implements IUserService {
 	private final UserDAO userDAO;
-	private final UserInfoDAO userInfoDAO;
 	private final PasswordEncoder passwordEncoder;
 	private final ConfirmationTokenDAO confirmationTokenDAO;
-	private final AuthGroupService authGroupService;
 	private final ApplicationEventPublisher publisher;
+	private final AuthGroupService authGroupService;
 
 	@Autowired
-	public UserService(UserDAO userDAO, UserInfoDAO userInfoDAO, PasswordEncoder passwordEncoder, ConfirmationTokenDAO confirmationTokenDAO, AuthGroupService authGroupService, ApplicationEventPublisher publisher) {
+	public UserService(UserDAO userDAO, PasswordEncoder passwordEncoder, ConfirmationTokenDAO confirmationTokenDAO, ApplicationEventPublisher publisher, AuthGroupService authGroupService) {
 		this.userDAO = userDAO;
-		this.userInfoDAO = userInfoDAO;
 		this.passwordEncoder = passwordEncoder;
 		this.confirmationTokenDAO = confirmationTokenDAO;
-		this.authGroupService = authGroupService;
 		this.publisher = publisher;
+		this.authGroupService = authGroupService;
 	}
 
 	@Override
@@ -48,7 +45,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public void request(RequestAction request) {
-		publisher.publishEvent(request.execute(userDAO, userInfoDAO, authGroupService, passwordEncoder));
+		publisher.publishEvent(request.execute(userDAO, authGroupService, passwordEncoder));
 	}
 
 	@Override

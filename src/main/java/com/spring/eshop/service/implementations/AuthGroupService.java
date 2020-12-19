@@ -40,7 +40,7 @@ public class AuthGroupService implements UserDetailsService {
 		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("Can not find user with username: " + username);
 		}
-		List<AuthGroup> authGroups = authGroupDAO.findByUsername(username);
+		List<AuthGroup> authGroups = authGroupDAO.findByUsername(user.get().getUsername());
 		return new UserPrinciple(user.get(), authGroups);
 	}
 

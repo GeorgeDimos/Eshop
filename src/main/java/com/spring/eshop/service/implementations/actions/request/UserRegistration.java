@@ -1,7 +1,6 @@
 package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.dao.UserDAO;
-import com.spring.eshop.dao.UserInfoDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.events.ActivationRequiredEvent;
@@ -30,13 +29,12 @@ public class UserRegistration extends RequestAction {
 
 	@Override
 	@Transactional
-	protected void register(User user, UserInfo userInfo, UserDAO userDAO, UserInfoDAO userInfoDAO, AuthGroupService authGroupService, PasswordEncoder passwordEncoder) {
+	protected void register(User user, UserInfo userInfo, UserDAO userDAO, AuthGroupService authGroupService, PasswordEncoder passwordEncoder) {
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userDAO.save(user);
-
+		user.setUserInfo(userInfo);
 		userInfo.setUser(user);
-		userInfoDAO.save(userInfo);
+		userDAO.save(user);
 
 		authGroupService.createAuthGroupForUser(user.getUsername());
 	}
