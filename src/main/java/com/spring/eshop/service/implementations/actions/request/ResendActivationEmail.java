@@ -1,21 +1,20 @@
 package com.spring.eshop.service.implementations.actions.request;
 
+import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
-import com.spring.eshop.events.UserRegistrationEvent;
+import com.spring.eshop.events.ActivationRequiredEvent;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.implementations.AuthGroupService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.context.ApplicationEvent;
 
-public class ResendActivationEmail extends RequestTemplate {
+public class ResendActivationEmail extends RequestAction {
 
 	public ResendActivationEmail(User user, UserInfo userInfo) {
 		super(user, userInfo);
 	}
 
 	@Override
-	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
+	protected boolean isInvalid(UserDAO userDAO, User user, UserInfo userInfo) {
 		return user.getEnabled();
 	}
 
@@ -25,12 +24,7 @@ public class ResendActivationEmail extends RequestTemplate {
 	}
 
 	@Override
-	protected void action(IUserService userService, AuthGroupService authGroupService, User user, UserInfo userInfo) {
-
-	}
-
-	@Override
 	protected ApplicationEvent response(User user, String email) {
-		return new UserRegistrationEvent(user, email);
+		return new ActivationRequiredEvent(user, email);
 	}
 }

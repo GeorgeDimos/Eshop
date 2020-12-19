@@ -31,7 +31,7 @@ public class CheckoutController {
 	@GetMapping
 	public String checkout(Model model) {
 		model.addAttribute("shoppingList", shoppingCart.getShoppingCart());
-		return "/checkout";
+		return "checkout";
 	}
 
 	@PostMapping

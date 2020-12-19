@@ -27,7 +27,6 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 		confirmationTokenDAO.deleteByUser(user);
 
 		ConfirmationToken token = new ConfirmationToken();
-		//token.setToken(UUID.randomUUID().toString());
 		token.setUser(user);
 		confirmationTokenDAO.save(token);
 		return token.getToken();

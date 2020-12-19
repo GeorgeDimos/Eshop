@@ -20,8 +20,8 @@ public class UserActionListener {
 		this.mailSender = mailSender;
 	}
 
-	@EventListener(classes = UserRegistrationEvent.class)
-	public void sendUserRegistrationEmail(UserRegistrationEvent event) {
+	@EventListener(classes = ActivationRequiredEvent.class)
+	public void sendUserRegistrationEmail(ActivationRequiredEvent event) {
 		String token = confirmationTokenService.createConfirmationToken(event.getUser());
 		SimpleMailMessage simpleMailMessage = createRegistrationEmail(event.getEmail(), token);
 		mailSender.send(simpleMailMessage);
@@ -36,11 +36,11 @@ public class UserActionListener {
 
 	@EventListener(classes = OrderReceivedEvent.class)
 	public void sendOrderDetailsEmail(OrderReceivedEvent event) {
-		SimpleMailMessage simpleMailMessage = createOrderDetailsEmail(event.getOrder(), event.getEmail());
+		SimpleMailMessage simpleMailMessage = createOrderDetailsEmail(event.getEmail(), event.getOrder());
 		mailSender.send(simpleMailMessage);
 	}
 
-	private SimpleMailMessage createOrderDetailsEmail(Order order, String email) {
+	private SimpleMailMessage createOrderDetailsEmail(String email, Order order) {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("New Order - Spring Eshop");
 		simpleMailMessage.setTo(email);

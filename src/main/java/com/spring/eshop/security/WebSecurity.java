@@ -8,7 +8,13 @@ import org.springframework.stereotype.Component;
 public class WebSecurity {
 
 	public boolean checkUserIdOrRole(Authentication authentication, int id) {
-		UserPrinciple user = (UserPrinciple) authentication.getPrincipal();
+
+		UserPrinciple user;
+		try {
+			user = (UserPrinciple) authentication.getPrincipal();
+		} catch (ClassCastException ex) {
+			return false;
+		}
 
 		for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
 			if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {

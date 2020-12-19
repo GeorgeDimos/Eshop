@@ -11,15 +11,9 @@ import java.util.NoSuchElementException;
 public class GlobalDefaultExceptionHandler {
 	private final Logger logger = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 
-	@ExceptionHandler({Exception.class, RuntimeException.class})
-	private String invalidURL(Exception ex) {
-		logger.info(ex.getMessage());
-		return "redirect:/error";
-	}
-
 	@ExceptionHandler({NoSuchElementException.class})
 	private String invalidURL(NoSuchElementException ex) {
-		logger.info(ex.getMessage());
+		logger.error(ex.getMessage());
 		return "redirect:/error";
 	}
 }

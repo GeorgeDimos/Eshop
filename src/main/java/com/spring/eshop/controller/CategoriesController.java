@@ -26,7 +26,6 @@ public class CategoriesController {
 	@GetMapping
 	public String getCategories(Pageable pageable, Model model) {
 		model.addAttribute("categories", categoryService.getItems(pageable));
-
 		return "categories";
 	}
 
