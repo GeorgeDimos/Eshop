@@ -1,29 +1,27 @@
-package com.spring.eshop.service.implementations.user.requests;
+package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
-import com.spring.eshop.events.UserRegistrationEvent;
+import com.spring.eshop.events.PasswordRecoveryEvent;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.implementations.AuthGroupService;
 import com.spring.eshop.service.interfaces.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 
-public class UserResendActivationEmail extends UserRequestTemplate {
+public class PasswordRecoveryEmail extends RequestTemplate {
 
-	@Autowired
-	public UserResendActivationEmail(User user, UserInfo userInfo) {
+	public PasswordRecoveryEmail(User user, UserInfo userInfo) {
 		super(user, userInfo);
 	}
 
 	@Override
 	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
-		return user.getEnabled();
+		return !user.getEnabled();
 	}
 
 	@Override
 	protected RuntimeException error() {
-		return new InvalidUserInfoException("Your account is already confirmed.");
+		return new InvalidUserInfoException("You need to confirm your account first.");
 	}
 
 	@Override
@@ -33,6 +31,6 @@ public class UserResendActivationEmail extends UserRequestTemplate {
 
 	@Override
 	protected ApplicationEvent response(User user, String email) {
-		return new UserRegistrationEvent(user, email);
+		return new PasswordRecoveryEvent(user, email);
 	}
 }

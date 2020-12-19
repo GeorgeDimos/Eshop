@@ -27,7 +27,7 @@ public class User {
 	private String password;
 
 	@Column(name = "enabled")
-	private Boolean enabled;
+	private Boolean enabled = false;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	private List<Order> orders;

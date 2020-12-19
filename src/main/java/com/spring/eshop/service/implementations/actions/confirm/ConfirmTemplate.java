@@ -1,16 +1,16 @@
-package com.spring.eshop.service.implementations.user.actions;
+package com.spring.eshop.service.implementations.actions.confirm;
 
 import com.spring.eshop.dao.ConfirmationTokenDAO;
 import com.spring.eshop.entity.ConfirmationToken;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.service.interfaces.IUserService;
 
-public abstract class UserConfirmTemplate {
+public abstract class ConfirmTemplate {
 
 	private final String token;
 	protected final String password;
 
-	public UserConfirmTemplate(String token, String password) {
+	public ConfirmTemplate(String token, String password) {
 		this.token = token;
 		this.password = password;
 	}

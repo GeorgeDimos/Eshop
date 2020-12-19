@@ -1,34 +1,32 @@
-package com.spring.eshop.service.implementations.user.requests;
+package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.events.UserRegistrationEvent;
-import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.implementations.AuthGroupService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.context.ApplicationEvent;
 
-public class UserRegistration extends UserRequestTemplate {
+public class ResendActivationEmail extends RequestTemplate {
 
-	public UserRegistration(User user, UserInfo userInfo) {
+	public ResendActivationEmail(User user, UserInfo userInfo) {
 		super(user, userInfo);
 	}
 
 	@Override
 	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
-		return (userService.usernameInUse(user.getUsername()) || userService.emailInUse(userInfo.getEmail()));
+		return user.getEnabled();
 	}
 
 	@Override
 	protected RuntimeException error() {
-		return new UserAlreadyExistsException("User already exists");
+		return new InvalidUserInfoException("Your account is already confirmed.");
 	}
 
 	@Override
 	protected void action(IUserService userService, AuthGroupService authGroupService, User user, UserInfo userInfo) {
-		userService.createUser(user, userInfo);
 
-		authGroupService.createAuthGroupForUser(user.getUsername());
 	}
 
 	@Override

@@ -1,11 +1,11 @@
-package com.spring.eshop.service.implementations.user.actions;
+package com.spring.eshop.service.implementations.actions.confirm;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.service.interfaces.IUserService;
 
-public class ConfirmChangePassword extends UserConfirmTemplate {
+public class ChangePassword extends ConfirmTemplate {
 
-	public ConfirmChangePassword(String token, String password) {
+	public ChangePassword(String token, String password) {
 		super(token, password);
 	}
 

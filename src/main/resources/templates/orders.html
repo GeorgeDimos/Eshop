@@ -16,7 +16,7 @@
                 <tr th:each="order: ${orders}">
                     <td th:text="${orderStat.count}"></td>
                     <td>
-                        <a th:href="@{'/users/' + ${user.id} + '/orders/'+ ${orderStat.index}}"
+                        <a th:href="@{'/users/' + ${user.id} + '/orders/'+ ${order.id}}"
                            th:text="${order.id}"></a>
                     </td>
                     <td th:text="${order.items.size()}+' items'"></td>

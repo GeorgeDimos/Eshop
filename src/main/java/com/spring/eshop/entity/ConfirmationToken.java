@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -19,7 +20,7 @@ public class ConfirmationToken {
 	private int id;
 
 	@Column(name = "token")
-	private String token;
+	private String token = UUID.randomUUID().toString();
 
 	@CreationTimestamp
 	@Temporal(TemporalType.TIMESTAMP)

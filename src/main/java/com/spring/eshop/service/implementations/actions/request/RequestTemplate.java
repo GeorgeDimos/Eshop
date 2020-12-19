@@ -1,4 +1,4 @@
-package com.spring.eshop.service.implementations.user.requests;
+package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
@@ -7,12 +7,12 @@ import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 
-public abstract class UserRequestTemplate {
+public abstract class RequestTemplate {
 
 	private final User user;
 	private final UserInfo userInfo;
 
-	protected UserRequestTemplate(User user, UserInfo userInfo) {
+	protected RequestTemplate(User user, UserInfo userInfo) {
 		this.user = user;
 		this.userInfo = userInfo;
 	}

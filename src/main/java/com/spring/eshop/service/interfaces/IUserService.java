@@ -12,9 +12,7 @@ public interface IUserService {
 
 	User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException;
 
-	boolean usernameInUse(String username);
-
-	boolean emailInUse(String email);
+	boolean userExists(String username, String email);
 
 	@Transactional
 	void createUser(User user, UserInfo userInfo);

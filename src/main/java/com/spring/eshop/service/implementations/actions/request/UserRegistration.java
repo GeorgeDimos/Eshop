@@ -1,36 +1,38 @@
-package com.spring.eshop.service.implementations.user.requests;
+package com.spring.eshop.service.implementations.actions.request;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
-import com.spring.eshop.events.PasswordRecoveryEvent;
-import com.spring.eshop.exceptions.InvalidUserInfoException;
+import com.spring.eshop.events.UserRegistrationEvent;
+import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.AuthGroupService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.context.ApplicationEvent;
 
-public class UserPasswordRecoveryEmail extends UserRequestTemplate {
+public class UserRegistration extends RequestTemplate {
 
-	public UserPasswordRecoveryEmail(User user, UserInfo userInfo) {
+	public UserRegistration(User user, UserInfo userInfo) {
 		super(user, userInfo);
 	}
 
 	@Override
 	protected boolean isInvalid(IUserService userService, User user, UserInfo userInfo) {
-		return !user.getEnabled();
+		return userService.userExists(user.getUsername(), userInfo.getEmail());
 	}
 
 	@Override
 	protected RuntimeException error() {
-		return new InvalidUserInfoException("You need to confirm your account first.");
+		return new UserAlreadyExistsException("User already exists");
 	}
 
 	@Override
 	protected void action(IUserService userService, AuthGroupService authGroupService, User user, UserInfo userInfo) {
+		userService.createUser(user, userInfo);
 
+		authGroupService.createAuthGroupForUser(user.getUsername());
 	}
 
 	@Override
 	protected ApplicationEvent response(User user, String email) {
-		return new PasswordRecoveryEvent(user, email);
+		return new UserRegistrationEvent(user, email);
 	}
 }

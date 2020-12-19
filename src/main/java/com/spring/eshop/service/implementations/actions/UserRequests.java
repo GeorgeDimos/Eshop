@@ -1,9 +1,9 @@
-package com.spring.eshop.service.implementations.user;
+package com.spring.eshop.service.implementations.actions;
 
 import com.spring.eshop.dao.ConfirmationTokenDAO;
 import com.spring.eshop.service.implementations.AuthGroupService;
-import com.spring.eshop.service.implementations.user.actions.UserConfirmTemplate;
-import com.spring.eshop.service.implementations.user.requests.UserRequestTemplate;
+import com.spring.eshop.service.implementations.actions.confirm.ConfirmTemplate;
+import com.spring.eshop.service.implementations.actions.request.RequestTemplate;
 import com.spring.eshop.service.interfaces.IUserRequests;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,12 @@ public class UserRequests implements IUserRequests {
 		this.publisher = publisher;
 	}
 
-	public void request(UserRequestTemplate request) {
+	public void request(RequestTemplate request) {
 		request.execute(publisher, userService, authGroupService);
 	}
 
 	@Transactional
-	public void action(UserConfirmTemplate action) {
+	public void confirm(ConfirmTemplate action) {
 		action.execute(confirmationTokenDAO, userService);
 	}
 }

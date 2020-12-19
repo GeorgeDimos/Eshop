@@ -2,9 +2,9 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.implementations.user.actions.ConfirmChangePassword;
-import com.spring.eshop.service.implementations.user.requests.UserPasswordRecoveryEmail;
-import com.spring.eshop.service.implementations.user.requests.UserResendActivationEmail;
+import com.spring.eshop.service.implementations.actions.confirm.ChangePassword;
+import com.spring.eshop.service.implementations.actions.request.PasswordRecoveryEmail;
+import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import com.spring.eshop.service.interfaces.IUserRequests;
 import com.spring.eshop.service.interfaces.IUserService;
@@ -46,7 +46,7 @@ public class RecoveryController {
 
 		try {
 			User user = userService.getUserByUsernameAndEmail(username, email);
-			userRequests.request(new UserResendActivationEmail(user, user.getUserInfo()));
+			userRequests.request(new ResendActivationEmail(user, user.getUserInfo()));
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for the activation link");
 			return "redirect:/login";
@@ -71,7 +71,7 @@ public class RecoveryController {
 
 		try {
 			User user = userService.getUserByUsernameAndEmail(username, email);
-			userRequests.request(new UserPasswordRecoveryEmail(user, user.getUserInfo()));
+			userRequests.request(new PasswordRecoveryEmail(user, user.getUserInfo()));
 			redirectAttributes.addFlashAttribute("success",
 					"Check your email for password recovery instructions");
 			return "redirect:/login";
@@ -100,7 +100,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "/new-password";
 		}
-		userRequests.action(new ConfirmChangePassword(token, user.getPassword()));
+		userRequests.confirm(new ChangePassword(token, user.getPassword()));
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

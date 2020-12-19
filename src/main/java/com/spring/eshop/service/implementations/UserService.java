@@ -29,7 +29,6 @@ public class UserService implements IUserService {
 	@Transactional
 	public void createUser(User user, UserInfo userInfo) {
 
-		user.setEnabled(false);
 		encodePassword(user, user.getPassword());
 
 		userInfo.setUser(user);
@@ -42,13 +41,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public boolean usernameInUse(String username) {
-		return userDAO.existsByUsername(username);
-	}
-
-	@Override
-	public boolean emailInUse(String email) {
-		return userInfoDAO.existsByEmail(email);
+	public boolean userExists(String username, String email) {
+		return userDAO.existsByUsernameAndUserInfoEmail(username, email);
 	}
 
 	@Override
@@ -67,13 +61,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public User getUserByUsernameAndEmail(String username, String email) throws InvalidUserInfoException {
-		User user = userDAO.findByUsername(username).
-				orElseThrow(() -> new InvalidUserInfoException("Can't find username"));
 
-		if (!user.getUserInfo().getEmail().equals(email)) {
-			throw new InvalidUserInfoException("Wrong email");
-		}
-
-		return user;
+		return userDAO.findByUsernameAndUserInfoEmail(username, email).
+				orElseThrow(() -> new InvalidUserInfoException("Invalid user info"));
 	}
 }

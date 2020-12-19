@@ -1,11 +1,11 @@
 package com.spring.eshop.service.interfaces;
 
-import com.spring.eshop.service.implementations.user.actions.UserConfirmTemplate;
-import com.spring.eshop.service.implementations.user.requests.UserRequestTemplate;
+import com.spring.eshop.service.implementations.actions.confirm.ConfirmTemplate;
+import com.spring.eshop.service.implementations.actions.request.RequestTemplate;
 
 public interface IUserRequests {
 
-	void request(UserRequestTemplate template);
+	void request(RequestTemplate template);
 
-	void action(UserConfirmTemplate template);
+	void confirm(ConfirmTemplate template);
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -51,15 +50,13 @@ public class OrderService implements IOrderService {
 
 	@Override
 	public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+
 		return orderDAO.getOrdersByUser(user, pageable);
 	}
 
 	@Override
 	public Order getOrder(User user, int orderId) throws NoSuchElementException {
-		List<Order> orders = user.getOrders();
-		if (orderId > orders.size() - 1 || orderId < 0) {
-			throw new NoSuchElementException();
-		}
-		return orders.get(orderId);
+
+		return orderDAO.getOrderByIdAndUser(orderId, user).orElseThrow();
 	}
 }

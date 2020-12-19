@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.UUID;
 
 @Service
 public class ConfirmationTokenService implements IConfirmationTokenService {
@@ -28,7 +27,7 @@ public class ConfirmationTokenService implements IConfirmationTokenService {
 		confirmationTokenDAO.deleteByUser(user);
 
 		ConfirmationToken token = new ConfirmationToken();
-		token.setToken(UUID.randomUUID().toString());
+		//token.setToken(UUID.randomUUID().toString());
 		token.setUser(user);
 		confirmationTokenDAO.save(token);
 		return token.getToken();

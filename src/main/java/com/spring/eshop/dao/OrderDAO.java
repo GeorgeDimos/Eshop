@@ -7,7 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface OrderDAO extends CrudRepository<Order, Integer> {
 	Page<Order> getOrdersByUser(User user, Pageable pageable);
+
+	Optional<Order> getOrderByIdAndUser(int id, User user);
 }
