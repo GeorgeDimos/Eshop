@@ -13,14 +13,17 @@ INSERT INTO `product` VALUES (1,'Intel Core I5-10400F Box','10th Gen Intel Core 
 UNLOCK TABLES;
 
 LOCK TABLES `users` WRITE;
-INSERT INTO `users` VALUES (1,'admin','$2a$04$QtDywltFkExfswHqKZmZtePwAIDUhIFiAOmaHvE0YYdE48pZnSlUy',1);
+INSERT INTO `users`
+VALUES (1, 'admin', '$2a$04$QtDywltFkExfswHqKZmZtePwAIDUhIFiAOmaHvE0YYdE48pZnSlUy', 1);
 UNLOCK TABLES;
 
 LOCK TABLES `user_details` WRITE;
-INSERT INTO `user_details` VALUES (1,'admin','admin','admin@a',1);
+INSERT INTO `user_details`
+VALUES (1, 'admin', 'admin', 'admin@a', 1);
 UNLOCK TABLES;
 
 
 LOCK TABLES `authorities` WRITE;
-INSERT INTO `authorities` VALUES (1,'admin','admin');
+INSERT INTO `authorities`
+VALUES (1, 'admin', 1);
 UNLOCK TABLES;

@@ -20,15 +20,13 @@ public class UserService implements IUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final ConfirmationTokenDAO confirmationTokenDAO;
 	private final ApplicationEventPublisher publisher;
-	private final AuthGroupService authGroupService;
 
 	@Autowired
-	public UserService(UserDAO userDAO, PasswordEncoder passwordEncoder, ConfirmationTokenDAO confirmationTokenDAO, ApplicationEventPublisher publisher, AuthGroupService authGroupService) {
+	public UserService(UserDAO userDAO, PasswordEncoder passwordEncoder, ConfirmationTokenDAO confirmationTokenDAO, ApplicationEventPublisher publisher) {
 		this.userDAO = userDAO;
 		this.passwordEncoder = passwordEncoder;
 		this.confirmationTokenDAO = confirmationTokenDAO;
 		this.publisher = publisher;
-		this.authGroupService = authGroupService;
 	}
 
 	@Override
@@ -45,7 +43,7 @@ public class UserService implements IUserService {
 
 	@Override
 	public void request(RequestAction request) {
-		publisher.publishEvent(request.execute(userDAO, authGroupService, passwordEncoder));
+		publisher.publishEvent(request.execute(userDAO, passwordEncoder));
 	}
 
 	@Override

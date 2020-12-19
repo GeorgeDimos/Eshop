@@ -55,26 +55,26 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 
 CREATE TABLE IF NOT EXISTS `user_details` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(45) DEFAULT NULL,
-  `last_name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_f4pdcamta635qqbhgcyqvrg7f` (`user_id`),
-  KEY `id_idx` (`user_id`),
-  CONSTRAINT `` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+                                              `id` int NOT NULL AUTO_INCREMENT,
+                                              `first_name` varchar(45) DEFAULT NULL,
+                                              `last_name` varchar(45) DEFAULT NULL,
+                                              `email` varchar(45) DEFAULT NULL,
+                                              `user_id` int DEFAULT NULL,
+                                              PRIMARY KEY (`id`),
+                                              UNIQUE KEY `UK_f4pdcamta635qqbhgcyqvrg7f` (`user_id`),
+                                              KEY `id_idx` (`user_id`),
+                                              CONSTRAINT `fk_userdetails_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
 
-CREATE TABLE IF NOT EXISTS `authorities` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `authority` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ix_auth_username` (`username`,`authority`),
-  CONSTRAINT `fk_authorities_users` FOREIGN KEY (`username`) REFERENCES `users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE IF NOT EXISTS `authorities`
+(
+    `id`        int         NOT NULL AUTO_INCREMENT,
+    `authority` varchar(50) NOT NULL,
+    `user_id`   int DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_authorities_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

@@ -15,9 +15,10 @@ public class AuthGroup {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name = "username")
-	private String username;
-
 	@Column(name = "authority")
-	private String authority;
+	private String authority = "user";
+
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id")
+	private User user;
 }
