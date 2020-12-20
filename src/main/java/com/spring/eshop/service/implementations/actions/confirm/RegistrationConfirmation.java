@@ -5,12 +5,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RegistrationConfirmation extends ConfirmAction {
 
-	public RegistrationConfirmation(String token, String password) {
-		super(token, password);
+	public RegistrationConfirmation(String token) {
+		super(token);
 	}
 
 	@Override
-	protected void action(PasswordEncoder passwordEncoder, User user, String password) {
+	protected void action(User user, PasswordEncoder passwordEncoder) {
 		user.setEnabled(true);
 	}
 }

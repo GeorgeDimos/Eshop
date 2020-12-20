@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,16 +32,21 @@ public class ProductService extends BasicServices<Product, Integer> implements I
 
 	@Transactional
 	@Override
-	public void buyItems(Map<Product, Integer> list) {
-		list.forEach((product, quantity) -> {
-			Product currentProduct = productDAO.findById(product.getId()).orElseThrow();
-			if (currentProduct.getStock() < quantity) {
+	public void buyItems(Map<Product, Integer> map) {
+
+		List<Integer> productsIds = new LinkedList<>();
+		map.keySet().forEach(product -> productsIds.add(product.getId()));
+
+		List<Product> products = productDAO.findAllByIdIsIn(productsIds);
+		products.forEach(product -> {
+			int remainingQuantity = product.getStock() - map.get(product);
+			if (remainingQuantity < 0) {
 				throw new NotEnoughStockException(product.getName());
 			}
-			product.setStock(product.getStock() - quantity);
+			product.setStock(remainingQuantity);
 		});
 
-		productDAO.saveAll(list.keySet());
+		productDAO.saveAll(products);
 	}
 
 	@Override

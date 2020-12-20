@@ -1,7 +1,6 @@
 package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.OrderDAO;
-import com.spring.eshop.dao.OrderItemDAO;
 import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
@@ -15,35 +14,38 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class OrderService implements IOrderService {
 
 	private final OrderDAO orderDAO;
-	private final OrderItemDAO orderItemDAO;
 	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	public OrderService(OrderDAO orderDAO, OrderItemDAO orderItemDAO, ApplicationEventPublisher publisher) {
+	public OrderService(OrderDAO orderDAO, ApplicationEventPublisher publisher) {
 		this.orderDAO = orderDAO;
-		this.orderItemDAO = orderItemDAO;
 		this.publisher = publisher;
 	}
 
 	@Override
 	@Transactional
-	public void createOrder(User user, Map<Product, Integer> list) {
+	public void createOrder(User user, Map<Product, Integer> map) {
 
 		Order order = new Order();
 		order.setUser(user);
-		orderDAO.save(order);
 
-		list.forEach((product, quantity) -> {
-			OrderItem item = new OrderItem(order, product, quantity);
-			orderItemDAO.save(item);
+		Set<OrderItem> items = new HashSet<>();
+
+		map.forEach((product, quantity) -> {
+			items.add(new OrderItem(order, product, quantity));
 		});
+
+		order.setItems(items);
+		orderDAO.save(order);
 
 		publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
 	}

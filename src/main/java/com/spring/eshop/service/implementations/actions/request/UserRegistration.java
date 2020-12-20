@@ -13,12 +13,16 @@ import javax.transaction.Transactional;
 
 public class UserRegistration extends RequestAction {
 
+	private final UserInfo userInfo;
+
 	public UserRegistration(User user, UserInfo userInfo) {
-		super(user, userInfo);
+
+		super(user);
+		this.userInfo = userInfo;
 	}
 
 	@Override
-	protected boolean isInvalid(UserDAO userDAO, User user, UserInfo userInfo) {
+	protected boolean isInvalid(UserDAO userDAO) {
 		return userDAO.existsByUsernameOrUserInfoEmail(user.getUsername(), userInfo.getEmail());
 	}
 
@@ -29,7 +33,7 @@ public class UserRegistration extends RequestAction {
 
 	@Override
 	@Transactional
-	protected void register(User user, UserInfo userInfo, UserDAO userDAO, PasswordEncoder passwordEncoder) {
+	protected void register(UserDAO userDAO, PasswordEncoder passwordEncoder) {
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
@@ -44,7 +48,7 @@ public class UserRegistration extends RequestAction {
 	}
 
 	@Override
-	protected ApplicationEvent response(User user, String email) {
-		return new ActivationRequiredEvent(user, email);
+	protected ApplicationEvent response() {
+		return new ActivationRequiredEvent(user, userInfo.getEmail());
 	}
 }

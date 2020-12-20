@@ -5,12 +5,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class PasswordRecoveryConfirmation extends ConfirmAction {
 
+	private final String password;
+
 	public PasswordRecoveryConfirmation(String token, String password) {
-		super(token, password);
+		super(token);
+		this.password = password;
 	}
 
 	@Override
-	protected void action(PasswordEncoder passwordEncoder, User user, String password) {
+	protected void action(User user, PasswordEncoder passwordEncoder) {
 		user.setPassword(passwordEncoder.encode(password));
 	}
 }

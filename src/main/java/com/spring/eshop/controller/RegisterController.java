@@ -51,7 +51,7 @@ public class RegisterController {
 
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
-		userService.confirm(new RegistrationConfirmation(token, null));
+		userService.confirm(new RegistrationConfirmation(token));
 		model.addAttribute("success",
 				"Your account is confirmed. You can now login.");
 		return "login";

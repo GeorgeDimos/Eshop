@@ -44,7 +44,7 @@ public class RecoveryController {
 		try {
 
 			User user = userService.getUserByUsernameAndEmail(username, email);
-			userService.request(new ResendActivationEmail(user, user.getUserInfo()));
+			userService.request(new ResendActivationEmail(user));
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("title", "Resend Activation Email");
 			model.addAttribute("error", ex.getMessage());
@@ -70,7 +70,7 @@ public class RecoveryController {
 		try {
 
 			User user = userService.getUserByUsernameAndEmail(username, email);
-			userService.request(new PasswordRecoveryEmail(user, user.getUserInfo()));
+			userService.request(new PasswordRecoveryEmail(user));
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("title", "Recover Password");
 			model.addAttribute("error", ex.getMessage());

@@ -8,12 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public abstract class ConfirmAction {
 
-	private final String token;
-	protected final String password;
+	protected final String token;
 
-	public ConfirmAction(String token, String password) {
+	public ConfirmAction(String token) {
 		this.token = token;
-		this.password = password;
 	}
 
 	public void execute(UserDAO userDAO, ConfirmationTokenDAO confirmationTokenDAO, PasswordEncoder passwordEncoder) {
@@ -21,11 +19,11 @@ public abstract class ConfirmAction {
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		User user = confirmationToken.getUser();
 
-		action(passwordEncoder, user, password);
+		action(user, passwordEncoder);
 
 		userDAO.save(user);
 		confirmationTokenDAO.deleteByToken(token);
 	}
 
-	protected abstract void action(PasswordEncoder passwordEncoder, User user, String password);
+	protected abstract void action(User user, PasswordEncoder passwordEncoder);
 }
