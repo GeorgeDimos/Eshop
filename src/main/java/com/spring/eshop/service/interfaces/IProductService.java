@@ -5,13 +5,13 @@ import com.spring.eshop.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import javax.transaction.Transactional;
-import java.util.Map;
+public interface IProductService {
 
-public interface IProductService extends IBasicServices<Product, Integer> {
+	Page<Product> getProducts(Pageable pageable);
 
-	@Transactional
-	void buyItems(Map<Product, Integer> list);
+	Product getProduct(int id);
+
+	Page<Product> getProductsByName(String name, Pageable pageable);
 
 	Page<Product> getProductsByCategory(Category category, Pageable pageable);
 }

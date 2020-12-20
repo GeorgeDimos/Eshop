@@ -4,7 +4,6 @@ import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.implementations.AuthGroupService;
 import com.spring.eshop.service.interfaces.IOrderService;
-import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +14,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/checkout")
 public class CheckoutController {
 
-	private final IProductService productService;
 	private final IOrderService orderService;
 	private final ShoppingCart shoppingCart;
 	private final AuthGroupService authGroupService;
 
 	@Autowired
-	public CheckoutController(IProductService productService, IOrderService orderService, ShoppingCart shoppingCart, AuthGroupService authGroupService) {
-		this.productService = productService;
+	public CheckoutController(IOrderService orderService, ShoppingCart shoppingCart, AuthGroupService authGroupService) {
 		this.orderService = orderService;
 		this.shoppingCart = shoppingCart;
 		this.authGroupService = authGroupService;
@@ -37,7 +34,6 @@ public class CheckoutController {
 	@PostMapping
 	public String buyProducts(@RequestParam(required = false) String confirm) {
 		if (confirm != null && confirm.equals("Purchase")) {
-			productService.buyItems(shoppingCart.getShoppingCart());
 			orderService.createOrder(authGroupService.getCurrentUser(), shoppingCart.getShoppingCart());
 			shoppingCart.clear();
 		}

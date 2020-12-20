@@ -23,19 +23,19 @@ public class ProductsController {
 
 	@GetMapping
 	public String getProductsTest(Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getItems(pageable));
+		model.addAttribute("products", productService.getProducts(pageable));
 		return "products";
 	}
 
 	@GetMapping("/{id}")
 	public String getProduct(@PathVariable int id, Model model) {
-		model.addAttribute("product", productService.getItem(id));
+		model.addAttribute("product", productService.getProduct(id));
 		return "productPage";
 	}
 
 	@PostMapping("/{id}")
 	public String addProductToCart(@PathVariable int id, @RequestParam int quantity) {
-		shoppingCart.add(productService.getItem(id), quantity);
+		shoppingCart.add(productService.getProduct(id), quantity);
 		return "redirect:/products";
 	}
 }

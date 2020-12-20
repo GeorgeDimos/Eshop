@@ -20,7 +20,7 @@ public class SearchController {
 
 	@GetMapping("/search")
 	public String searchProductByName(@RequestParam("name") String name, Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getItemsByName(name, pageable));
+		model.addAttribute("products", productService.getProductsByName(name, pageable));
 		return "products";
 	}
 }

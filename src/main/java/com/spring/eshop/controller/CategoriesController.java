@@ -25,13 +25,13 @@ public class CategoriesController {
 
 	@GetMapping
 	public String getCategories(Pageable pageable, Model model) {
-		model.addAttribute("categories", categoryService.getItems(pageable));
+		model.addAttribute("categories", categoryService.getCategories(pageable));
 		return "categories";
 	}
 
 	@GetMapping("/{id}")
 	public String getProductByCategories(@PathVariable int id, Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getProductsByCategory(categoryService.getItem(id), pageable));
+		model.addAttribute("products", productService.getProductsByCategory(categoryService.getCategory(id), pageable));
 		return "products";
 	}
 }

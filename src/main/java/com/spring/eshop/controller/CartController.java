@@ -31,7 +31,7 @@ public class CartController {
 
 	@PostMapping
 	public String editCart(@RequestParam int id) {
-		shoppingCart.remove(productService.getItem(id));
+		shoppingCart.remove(productService.getProduct(id));
 		return "redirect:/cart";
 	}
 }

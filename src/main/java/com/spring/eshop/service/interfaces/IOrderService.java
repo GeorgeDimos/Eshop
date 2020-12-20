@@ -8,13 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 import javax.transaction.Transactional;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public interface IOrderService {
 	@Transactional
 	void createOrder(User user, Map<Product, Integer> list);
 
-	Order getOrder(User user, int orderId) throws NoSuchElementException;
+	Order getOrder(User user, int orderId);
 
 	Page<Order> getOrdersByUser(User user, Pageable pageable);
 }

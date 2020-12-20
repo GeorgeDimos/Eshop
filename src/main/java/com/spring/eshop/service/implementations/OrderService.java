@@ -1,11 +1,13 @@
 package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.OrderDAO;
+import com.spring.eshop.dao.ProductDAO;
 import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.events.OrderReceivedEvent;
+import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.interfaces.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -24,27 +26,35 @@ public class OrderService implements IOrderService {
 
 	private final OrderDAO orderDAO;
 	private final ApplicationEventPublisher publisher;
+	private final ProductDAO productDAO;
 
 	@Autowired
-	public OrderService(OrderDAO orderDAO, ApplicationEventPublisher publisher) {
+	public OrderService(OrderDAO orderDAO, ApplicationEventPublisher publisher, ProductDAO productDAO) {
 		this.orderDAO = orderDAO;
 		this.publisher = publisher;
+		this.productDAO = productDAO;
 	}
 
 	@Override
 	@Transactional
-	public void createOrder(User user, Map<Product, Integer> map) {
+	public void createOrder(User user, Map<Product, Integer> shoppingList) {
 
 		Order order = new Order();
 		order.setUser(user);
 
-		Set<OrderItem> items = new HashSet<>();
+		Set<OrderItem> orderItems = new HashSet<>();
 
-		map.forEach((product, quantity) -> {
-			items.add(new OrderItem(order, product, quantity));
+		shoppingList.forEach((product, quantity) -> {
+
+			Product cur = productDAO.findByIdAndStockGreaterThanEqual(product.getId(), quantity)
+					.orElseThrow(() -> new NotEnoughStockException(product.getName()));
+
+			cur.setStock(cur.getStock() - quantity);
+
+			orderItems.add(new OrderItem(order, cur, quantity));
 		});
 
-		order.setItems(items);
+		order.setItems(orderItems);
 		orderDAO.save(order);
 
 		publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
