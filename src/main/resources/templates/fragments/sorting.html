@@ -4,7 +4,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label class="my-1 mr-2" for="inlineFormSelectView">View</label>
-                <select name="size" class="custom-select my-1 mr-sm-2" id="inlineFormSelectView">
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size">
                     <option value="15">Default</option>
                     <option th:selected="${#request.getParameter('size')=='5'}" value="5">5</option>
                     <option th:selected="${#request.getParameter('size')=='10'}" value="10">10</option>
@@ -14,7 +14,7 @@
 
             <div class="form-group col-md-6">
                 <label class="my-1 mr-2" for="inlineFormSelectSort">Sort By</label>
-                <select name="sort" class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort">
+                <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort" name="sort">
                     <option value="id">Default</option>
                     <option th:selected="${#request.getParameter('sort')=='price,ASC'}" value="price,ASC">Price
                         Ascending
@@ -37,7 +37,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary my-1">Submit</button>
+            <button class="btn btn-primary my-1" type="submit">Submit</button>
         </div>
     </form>
 </div>

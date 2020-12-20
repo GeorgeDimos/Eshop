@@ -15,6 +15,7 @@ import java.util.Set;
 @Service
 public class CategoryService implements ICategoryService {
 
+	private static final Set<String> invalidSortingFields = Set.of("products");
 	private final CategoryDAO categoryDAO;
 
 	@Autowired
@@ -31,8 +32,6 @@ public class CategoryService implements ICategoryService {
 	public Page<Category> getCategories(Pageable pageable) {
 		return categoryDAO.findAll(pageable);
 	}
-
-	private static final Set<String> invalidSortingFields = Set.of("products");
 
 	@Bean
 	public FilterRegistrationBean<SortingFilter> categorySortingFilter() {
