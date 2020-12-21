@@ -1,13 +1,12 @@
 package com.spring.eshop.dao;
 
-import com.spring.eshop.entity.Category;
 import com.spring.eshop.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface ProductDAO extends JpaRepository<Product, Integer> {
@@ -16,7 +15,9 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 
 	Page<Product> findAll(Pageable pageable);
 
-	Page<Product> findByCategory(Category category, Pageable pageable);
+	Page<Product> findByCategoryId(int id, Pageable pageable);
 
-	Optional<Product> findByIdAndStockGreaterThanEqual(int id, int stock);
+	@Modifying
+	@Query(value = "update Product p set p.stock = (p.stock - ?2) where p.id = ?1 AND p.stock >= ?2", nativeQuery = true)
+	int order(int id, int quantity);
 }

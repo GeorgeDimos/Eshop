@@ -1,7 +1,6 @@
 package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.ProductDAO;
-import com.spring.eshop.entity.Category;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +40,8 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public Page<Product> getProductsByCategory(Category category, Pageable pageable) {
-		return productDAO.findByCategory(category, pageable);
+	public Page<Product> getProductsByCategory(int id, Pageable pageable) {
+		return productDAO.findByCategoryId(id, pageable);
 	}
 
 	@Bean

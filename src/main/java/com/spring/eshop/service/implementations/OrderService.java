@@ -46,12 +46,11 @@ public class OrderService implements IOrderService {
 
 		shoppingList.forEach((product, quantity) -> {
 
-			Product cur = productDAO.findByIdAndStockGreaterThanEqual(product.getId(), quantity)
-					.orElseThrow(() -> new NotEnoughStockException(product.getName()));
+			if (productDAO.order(product.getId(), quantity) == 0) {
+				throw new NotEnoughStockException(product.getName());
+			}
 
-			cur.setStock(cur.getStock() - quantity);
-
-			orderItems.add(new OrderItem(order, cur, quantity));
+			orderItems.add(new OrderItem(order, product, quantity));
 		});
 
 		order.setItems(orderItems);

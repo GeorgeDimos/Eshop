@@ -30,8 +30,8 @@ public class CategoriesController {
 	}
 
 	@GetMapping("/{id}")
-	public String getProductByCategories(@PathVariable int id, Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getProductsByCategory(categoryService.getCategory(id), pageable));
+	public String getProductsByCategory(@PathVariable int id, Pageable pageable, Model model) {
+		model.addAttribute("products", productService.getProductsByCategory(id, pageable));
 		return "products";
 	}
 }
