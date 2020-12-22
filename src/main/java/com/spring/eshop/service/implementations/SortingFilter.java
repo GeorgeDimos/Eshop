@@ -19,8 +19,10 @@ public class SortingFilter implements Filter {
 		String[] parameters = request.getParameterValues("sort");
 		if (parameters != null) {
 			for (String parameter : parameters) {
-				if (invalidFields.contains(parameter)) {
-					throw new IOException("Invalid sort");
+				for (String field : invalidFields) {
+					if (parameter.contains(field)) {
+						throw new IOException("Invalid sort");  // TODO: this is awkward
+					}
 				}
 			}
 		}
