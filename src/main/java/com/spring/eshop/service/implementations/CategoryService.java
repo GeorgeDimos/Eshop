@@ -24,11 +24,6 @@ public class CategoryService implements ICategoryService {
 	}
 
 	@Override
-	public Category getCategory(int id) {
-		return categoryDAO.findById(id).orElseThrow();
-	}
-
-	@Override
 	public Page<Category> getCategories(Pageable pageable) {
 		return categoryDAO.findAll(pageable);
 	}
