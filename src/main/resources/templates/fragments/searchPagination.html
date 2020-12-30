@@ -5,6 +5,7 @@
         </li>
         <li class="page-item" th:if="${items.hasPrevious()}">
             <a class="page-link" th:href="@{${#request.requestURI}(
+                                name=${#request.parameterMap.get('name')},
                                 size=${items.pageable.pageSize},
 								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
 								page=${items.pageable.pageNumber}-1)}">Previous</a>
@@ -16,6 +17,7 @@
         </li>
         <li class="page-item" th:if="${items.hasNext()}">
             <a class="page-link" th:href="@{${#request.requestURI}(
+                                name=${#request.parameterMap.get('name')},
                                 size=${items.pageable.pageSize},
 								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
 								page=${items.pageable.pageNumber}+1)}">Next</a>

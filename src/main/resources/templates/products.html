@@ -29,7 +29,11 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:insert="fragments/pagination.html::frag (${products})"></div>
+            <div th:if="${#request.getParameter('name')==null}"
+                 th:insert="fragments/pagination.html::frag (${products})"></div>
+            <!--pagination for searching results-->
+            <div th:unless="${#request.getParameter('name')==null}"
+                 th:insert="fragments/searchPagination.html::frag (${products})"></div>
 
             <p th:if="${products.empty}">No products found.</p>
         </div>

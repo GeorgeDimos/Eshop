@@ -1,7 +1,11 @@
 <div class="row" xmlns:th="http://www.thymeleaf.org">
     <div class="col"></div>
-    <form method="GET">
+    <form method="GET" th:action="@{${#request.requestURI}}">
         <div class="form-row">
+            <!-- Check if there is a search parameter and if it exists then restore it -->
+            <input th:if="${#request.getParameter('name')!=null}" type="hidden" name="name"
+                   th:value="${#request.getParameter('name')}">
+
             <div class="form-group col-md-6">
                 <label class="my-1 mr-2" for="inlineFormSelectView">View</label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size">
