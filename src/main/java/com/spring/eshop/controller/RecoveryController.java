@@ -31,8 +31,7 @@ public class RecoveryController {
 
 	@GetMapping("/activationEmail")
 	public String getActivationEmail(Model model) {
-		model.addAttribute("title", "Resend Activation Email");
-		return "recover-password";
+		return "resendActivationEmail";
 	}
 
 	@PostMapping("/activationEmail")
@@ -46,9 +45,8 @@ public class RecoveryController {
 			User user = userService.getUserByUsernameAndEmail(username, email);
 			userService.request(new ResendActivationEmail(user));
 		} catch (InvalidUserInfoException ex) {
-			model.addAttribute("title", "Resend Activation Email");
 			model.addAttribute("error", ex.getMessage());
-			return "recover-password";
+			return "resendActivationEmail";
 		}
 		redirectAttributes.addFlashAttribute("success",
 				"Check your email for the activation link");
@@ -57,7 +55,6 @@ public class RecoveryController {
 
 	@GetMapping("/password")
 	public String getPasswordRecovery(Model model) {
-		model.addAttribute("title", "Recover Password");
 		return "recover-password";
 	}
 
@@ -72,7 +69,6 @@ public class RecoveryController {
 			User user = userService.getUserByUsernameAndEmail(username, email);
 			userService.request(new PasswordRecoveryEmail(user));
 		} catch (InvalidUserInfoException ex) {
-			model.addAttribute("title", "Recover Password");
 			model.addAttribute("error", ex.getMessage());
 			return "recover-password";
 		}
