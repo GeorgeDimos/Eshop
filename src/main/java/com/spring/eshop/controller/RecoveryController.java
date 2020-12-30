@@ -2,11 +2,11 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
+import com.spring.eshop.service.implementations.actions.ActionService;
 import com.spring.eshop.service.implementations.actions.confirm.PasswordRecoveryConfirmation;
 import com.spring.eshop.service.implementations.actions.request.PasswordRecoveryEmail;
 import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,16 +21,16 @@ import javax.validation.Valid;
 public class RecoveryController {
 
 	private final IConfirmationTokenService confirmationTokenService;
-	private final IUserService userService;
+	private final ActionService actionService;
 
 	@Autowired
-	public RecoveryController(IConfirmationTokenService confirmationTokenService, IUserService userService) {
+	public RecoveryController(IConfirmationTokenService confirmationTokenService, ActionService actionService) {
 		this.confirmationTokenService = confirmationTokenService;
-		this.userService = userService;
+		this.actionService = actionService;
 	}
 
 	@GetMapping("/activationEmail")
-	public String getActivationEmail(Model model) {
+	public String getActivationEmail() {
 		return "resendActivationEmail";
 	}
 
@@ -42,8 +42,7 @@ public class RecoveryController {
 
 		try {
 
-			User user = userService.getUserByUsernameAndEmail(username, email);
-			userService.request(new ResendActivationEmail(user));
+			actionService.request(new ResendActivationEmail(username, email));
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("error", ex.getMessage());
 			return "resendActivationEmail";
@@ -54,7 +53,7 @@ public class RecoveryController {
 	}
 
 	@GetMapping("/password")
-	public String getPasswordRecovery(Model model) {
+	public String getPasswordRecovery() {
 		return "recover-password";
 	}
 
@@ -66,8 +65,7 @@ public class RecoveryController {
 
 		try {
 
-			User user = userService.getUserByUsernameAndEmail(username, email);
-			userService.request(new PasswordRecoveryEmail(user));
+			actionService.request(new PasswordRecoveryEmail(username, email));
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("error", ex.getMessage());
 			return "recover-password";
@@ -95,7 +93,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "new-password";
 		}
-		userService.confirm(new PasswordRecoveryConfirmation(token, user.getPassword()));
+		actionService.confirm(new PasswordRecoveryConfirmation(token, user.getPassword()));
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

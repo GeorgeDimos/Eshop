@@ -18,6 +18,9 @@ public class SearchController {
 		this.productService = productService;
 	}
 
+	/*Todo: Paging and sorting doesn't work. Need to add a local variable in pagination.html
+	 * to check and restore previous parameters.
+	 */
 	@GetMapping("/search")
 	public String searchProductByName(@RequestParam("name") String name, Pageable pageable, Model model) {
 		model.addAttribute("products", productService.getProductsByName(name, pageable));

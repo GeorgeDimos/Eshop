@@ -1,5 +1,6 @@
 package com.spring.eshop.service.implementations.actions.request;
 
+import com.spring.eshop.dao.ProductDAO;
 import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
@@ -9,9 +10,7 @@ import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.transaction.Transactional;
-
-public class UserRegistration extends RequestAction {
+public class UserRegistration extends RequestRegistration {
 
 	private final UserInfo userInfo;
 
@@ -22,20 +21,11 @@ public class UserRegistration extends RequestAction {
 	}
 
 	@Override
-	protected boolean isInvalid(UserDAO userDAO) {
-		return userDAO.existsByUsernameOrUserInfoEmail(user.getUsername(), userInfo.getEmail());
-	}
-
-	@Override
-	protected RuntimeException error() {
-		return new UserAlreadyExistsException("User already exists");
-	}
-
-	@Override
-	@Transactional
-	protected void register(UserDAO userDAO, PasswordEncoder passwordEncoder) {
-
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+	protected void checkAndCreate(UserDAO userDAO, PasswordEncoder encoder, ProductDAO productDAO) {
+		if (userDAO.existsByUsernameOrUserInfoEmail(user.getUsername(), userInfo.getEmail())) {
+			throw new UserAlreadyExistsException("User already exists");
+		}
+		user.setPassword(encoder.encode(user.getPassword()));
 
 		user.setUserInfo(userInfo);
 		userInfo.setUser(user);
@@ -43,12 +33,11 @@ public class UserRegistration extends RequestAction {
 		AuthGroup authGroup = new AuthGroup();
 		authGroup.setUser(user);
 		user.setAuthGroup(authGroup);
-
-		userDAO.save(user);
 	}
 
 	@Override
 	protected ApplicationEvent response() {
+
 		return new ActivationRequiredEvent(user, userInfo.getEmail());
 	}
 }
