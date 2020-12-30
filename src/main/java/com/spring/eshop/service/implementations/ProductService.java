@@ -39,11 +39,6 @@ public class ProductService implements IProductService {
 		return productDAO.findByNameContaining(name, pageable);
 	}
 
-	@Override
-	public Page<Product> getProductsByCategory(int id, Pageable pageable) {
-		return productDAO.findByCategoryId(id, pageable);
-	}
-
 	@Bean
 	public FilterRegistrationBean<SortingFilter> productSortingFilter() {
 

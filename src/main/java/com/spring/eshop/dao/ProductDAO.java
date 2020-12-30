@@ -15,8 +15,6 @@ public interface ProductDAO extends JpaRepository<Product, Integer> {
 
 	Page<Product> findAll(Pageable pageable);
 
-	Page<Product> findByCategoryId(int id, Pageable pageable);
-
 	@Modifying
 	@Query(value = "update Product p set p.stock = (p.stock - ?2) where p.id = ?1 AND p.stock >= ?2", nativeQuery = true)
 	int order(int id, int quantity);

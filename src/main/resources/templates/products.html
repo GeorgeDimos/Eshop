@@ -29,7 +29,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:insert="fragments/pagination.html::frag (${products},'products')"></div>
+            <div th:insert="fragments/pagination.html::frag (${products})"></div>
 
             <p th:if="${products.empty}">No products found.</p>
         </div>

@@ -23,7 +23,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div th:insert="fragments/pagination.html::frag (${orders},'users/'+${user.id}+'/orders')"></div>
+            <div th:insert="fragments/pagination.html::frag (${orders})"></div>
 
             <p th:if="${orders.empty}">No orders found.</p>
         </div>

@@ -1,7 +1,6 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.service.interfaces.ICategoryService;
-import com.spring.eshop.service.interfaces.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -15,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CategoriesController {
 
 	private final ICategoryService categoryService;
-	private final IProductService productService;
 
 	@Autowired
-	public CategoriesController(ICategoryService categoryService, IProductService productService) {
+	public CategoriesController(ICategoryService categoryService) {
 		this.categoryService = categoryService;
-		this.productService = productService;
 	}
 
 	@GetMapping
@@ -31,7 +28,7 @@ public class CategoriesController {
 
 	@GetMapping("/{id}")
 	public String getProductsByCategory(@PathVariable int id, Pageable pageable, Model model) {
-		model.addAttribute("products", productService.getProductsByCategory(id, pageable));
+		model.addAttribute("products", categoryService.getProductsOfCategory(id, pageable));
 		return "products";
 	}
 }

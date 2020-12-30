@@ -11,6 +11,4 @@ public interface IProductService {
 	Product getProduct(int id);
 
 	Page<Product> getProductsByName(String name, Pageable pageable);
-
-	Page<Product> getProductsByCategory(int id, Pageable pageable);
 }
