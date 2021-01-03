@@ -31,12 +31,36 @@
         </div>
         <div class="col">
             <h3 th:text="${product.name}"></h3>
-            <p th:text="'Price: '+${product.price}+€"></p>
+            <p th:text="'Price: '+${product.price}+'€'"></p>
             <form method="POST" th:action="'/products/'+${product.id}">
                 <label>
                     <input min="1" name="quantity" th:max="${product.stock}" type="number" value="1"/>
                 </label>
-                <input type="submit" value="Add to Cart"/>
+                <br>
+
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addToCartModal">
+                    Add to Cart
+                </button>
+                <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Product added to cart!</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" th:text="${product.name} +' added to your cart.'">
+                            </div>
+                            <div class="modal-footer">
+                                <input class="btn btn-primary" type="submit" name="goToCart" value="See your cart">
+                                <br>
+                                <button class="btn btn-secondary">Continue shopping</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

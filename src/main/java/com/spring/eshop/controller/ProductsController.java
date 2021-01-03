@@ -34,8 +34,13 @@ public class ProductsController {
 	}
 
 	@PostMapping("/{id}")
-	public String addProductToCart(@PathVariable int id, @RequestParam int quantity) {
+	public String addProductToCart(@PathVariable int id,
+								   @RequestParam int quantity,
+								   @RequestParam(required = false) String goToCart) {
 		shoppingCart.add(productService.getProduct(id), quantity);
+		if (goToCart != null) {
+			return "redirect:/cart";
+		}
 		return "redirect:/products";
 	}
 }

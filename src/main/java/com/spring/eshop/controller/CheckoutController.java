@@ -35,7 +35,7 @@ public class CheckoutController {
 
 	@PostMapping
 	public String buyProducts(@RequestParam(required = false) String confirm) {
-		if (confirm != null && confirm.equals("Purchase")) {
+		if (confirm != null) {
 			actionService.register(new OrderRegistration(new Order(), authGroupService.getCurrentUser(), shoppingCart.getShoppingCart()));
 			shoppingCart.clear();
 		}
