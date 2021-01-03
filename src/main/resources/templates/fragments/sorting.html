@@ -1,25 +1,20 @@
-<div class="row" xmlns:th="http://www.thymeleaf.org">
-    <div class="col"></div>
-    <form method="GET" th:action="@{${#request.requestURI}}">
+<div class="row justify-content-end" xmlns:th="http://www.thymeleaf.org">
+    <form class="col-3" method="GET" th:action="@{${#request.requestURI}}" style="font-size:14px">
         <div class="form-row">
             <!-- Check if there is a search parameter and if it exists then restore it -->
             <input th:if="${#request.getParameter('name')!=null}" type="hidden" name="name"
                    th:value="${#request.getParameter('name')}">
 
-            <div class="form-group col-md-6">
-                <label class="my-1 mr-2" for="inlineFormSelectView">View</label>
+            <div class="form-group col">
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size">
-                    <option value="15">Default</option>
+                    <option value="15">View</option>
                     <option th:selected="${#request.getParameter('size')=='5'}" value="5">5</option>
                     <option th:selected="${#request.getParameter('size')=='10'}" value="10">10</option>
                     <option th:selected="${#request.getParameter('size')=='20'}" value="20">20</option>
                 </select>
-            </div>
 
-            <div class="form-group col-md-6">
-                <label class="my-1 mr-2" for="inlineFormSelectSort">Sort By</label>
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort" name="sort">
-                    <option value="id">Default</option>
+                    <option value="id">Sort By</option>
                     <option th:selected="${#request.getParameter('sort')=='price,ASC'}" value="price,ASC">Price
                         Ascending
                     </option>
@@ -39,9 +34,9 @@
                     </option>
                 </select>
             </div>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary my-1" type="submit">Submit</button>
+            <div class="col-sm" style="padding-top: 10%">
+                <button class="btn btn-primary my-1 mr-sm-2" type="submit">OK</button>
+            </div>
         </div>
     </form>
 </div>

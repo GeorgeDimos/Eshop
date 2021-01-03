@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping(path = "/images")
 public class ImagesController {
 
 	private final ImageDAO imageDAO;
@@ -21,9 +21,9 @@ public class ImagesController {
 		this.imageDAO = imageDAO;
 	}
 
-	@GetMapping("/images/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<byte[]> getImageAsResponseEntity(@PathVariable int id) {
-		Optional<Image> img = imageDAO.findById(id);
-		return img.map(image -> new ResponseEntity<>(image.getData(), null, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, null, HttpStatus.NOT_FOUND));
+		Image img = imageDAO.findById(id).orElseThrow();
+		return new ResponseEntity<>(img.getData(), null, HttpStatus.OK);
 	}
 }
