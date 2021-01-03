@@ -18,7 +18,4 @@ public class Image {
 
 	@Column(name = "name")
 	private String name;
-
-	@Column(name = "data")
-	private byte[] data;
 }

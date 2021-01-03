@@ -17,7 +17,7 @@
                          th:each="image : ${product.images}">
                         <img class="img-fluid embed-responsive-item" style="height: fit-content;width: auto"
                              th:alt="${image.name}"
-                             th:src="'/images/'+${image.id}"/>
+                             th:src="@{'/images/'+${image.name}}"/>
                     </div>
                 </div>
                 <a class="carousel-control-prev" data-slide="prev" href="#carouselControls" role="button">

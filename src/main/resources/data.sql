@@ -25,9 +25,26 @@ VALUES (1, 'Intel Core I5-10400F Box',
        (6, 'Corsair TX-M Series TX650M 650W',
         'The CORSAIR TX-M Series™ power supplies provide industrial build quality, 80 PLUS Gold efficiency, extremely tight voltages and a semi-modular cable set.',
         4, 100.00, 3);
-UNLOCK TABLES;
+UNLOCK
+TABLES;
 
-LOCK TABLES `users` WRITE;
+LOCK
+TABLES `image` WRITE;
+INSERT INTO `image`
+VALUES (1, 'MSI GTX 1660 Ti.png', 5),
+       (2, 'MSI GTX 1660 Ti 1.png', 5),
+       (3, 'SAPPHIRE RADEON RX 5600 XT.png', 4),
+       (4, 'SAPPHIRE RADEON RX 5600 XT 1.png', 4),
+       (5, 'AMD Ryzen.png', 2),
+       (6, 'AMD Ryzen 1.png', 2),
+       (7, 'Intel Core i5.png', 1),
+       (8, 'Intel Core i5 1.png', 1),
+       (9, 'Corsair TX-M Series TX650M.png', 6);
+UNLOCK
+TABLES;
+
+LOCK
+TABLES `users` WRITE;
 INSERT INTO `users`
 VALUES (1, 'admin', '$2a$04$QtDywltFkExfswHqKZmZtePwAIDUhIFiAOmaHvE0YYdE48pZnSlUy', 1);
 UNLOCK TABLES;

@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `image`
 (
     `id`         int NOT NULL AUTO_INCREMENT,
     `name`       varchar(45) DEFAULT NULL,
-    `data`       mediumblob,
     `product_id` int         DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FK_PRODUCT_idx` (`product_id`),
