@@ -22,7 +22,7 @@ public class ProductsController {
 	}
 
 	@GetMapping
-	public String getProductsTest(Pageable pageable, Model model) {
+	public String getProducts(Pageable pageable, Model model) {
 		model.addAttribute("products", productService.getProducts(pageable));
 		return "products";
 	}

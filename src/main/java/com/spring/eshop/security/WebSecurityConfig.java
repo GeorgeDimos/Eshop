@@ -1,6 +1,6 @@
 package com.spring.eshop.security;
 
-import com.spring.eshop.service.implementations.AuthGroupService;
+import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	final AuthGroupService userDetailsService;
+	private final IUserService userDetailsService;
 
 	@Autowired
-	public WebSecurityConfig(AuthGroupService userDetailsService) {
+	public WebSecurityConfig(IUserService userDetailsService) {
 		this.userDetailsService = userDetailsService;
 	}
 
@@ -34,27 +34,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.csrf().disable()
 				.authorizeRequests()
 				.antMatchers("/checkout").authenticated()
-				.antMatchers("/users/{userId}/**").access("@webSecurity.checkUserIdOrRole(authentication,#userId)")
+				//.antMatchers("/users/{userId}/**").access("@webSecurity.checkUserIdOrRole(authentication,#userId)")
 				.and()
 				.formLogin().loginPage("/login")
+				.defaultSuccessUrl("/successful-login", true)
 				.and()
 				.logout().permitAll()
 				.and().exceptionHandling().accessDeniedPage("/access-denied");
 	}
 
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authenticationProvider());
-	}
-
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
+	protected void configure(AuthenticationManagerBuilder auth) {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder());
 		provider.setAuthoritiesMapper(authoritiesMapper());
 		provider.setPostAuthenticationChecks(UserDetails::isEnabled);
-		return provider;
+		auth.authenticationProvider(provider);
 	}
 
 	@Bean

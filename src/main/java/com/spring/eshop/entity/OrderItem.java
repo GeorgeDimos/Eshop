@@ -1,10 +1,14 @@
 package com.spring.eshop.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -26,9 +30,6 @@ public class OrderItem {
 
 	@Column(name = "quantity")
 	private int quantity;
-
-	public OrderItem() {
-	}
 
 	public OrderItem(Order order, Product product, int quantity) {
 		this.order = order;

@@ -13,7 +13,7 @@
             <a class="nav-link" th:href="@{/cart}">Cart</a>
             <div sec:authorize="isAnonymous()"><a class="nav-link" th:href="@{/login}">Login</a></div>
             <div sec:authorize="isAuthenticated()"><a class="nav-link"
-                                                      th:href="@{'/users/'+${#authentication.getPrincipal().getUserId()}}">Profile</a>
+                                                      th:href="@{'/users/'+${session.user_id}}">Profile</a>
             </div>
             <div sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/logout}">Logout</a></div>
         </div>
