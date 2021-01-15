@@ -36,10 +36,9 @@
             <p th:text="'Price: '+${product.price}+'€'"></p>
             <form method="POST" th:if="${product.stock>0}" th:action="'/products/'+${product.id}">
                 <label>
-                    <p>Quantity:
+                    Quantity:
                         <input min="1" name="quantity" th:max="${product.stock}" type="number" value="1"
                                style="width: 25%"/>
-                    </p>
                 </label>
                 <br>
                 <br>
