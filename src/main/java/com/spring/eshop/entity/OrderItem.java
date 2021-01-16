@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,13 +23,16 @@ public class OrderItem {
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "order_id", nullable = false)
+	@NotNull
 	private Order order;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
+	@NotNull
 	private Product product;
 
 	@Column(name = "quantity")
+	@NotNull
 	private int quantity;
 
 	public OrderItem(Order order, Product product, int quantity) {

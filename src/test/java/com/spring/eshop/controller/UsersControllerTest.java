@@ -56,7 +56,8 @@ class UsersControllerTest {
 		UserInfo info = new UserInfo(1, "Name", "Surname", "email@gmail.com", user);
 		user.setUserInfo(info);
 		given(userService.getUserById(gt(0))).willReturn(user);
-		mockMvc.perform(get("/users/{id}", user.getId()))
+
+		mockMvc.perform(get("/user").sessionAttr("user_id", user.getId()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("profile"))
 				.andExpect(model().attributeExists("user"));
@@ -70,7 +71,7 @@ class UsersControllerTest {
 		Page<Order> page = new PageImpl(List.of(order));
 		given(userService.getUserById(gt(0))).willReturn(user);
 		given(orderService.getOrdersByUser(any(User.class), any())).willReturn(page);
-		mockMvc.perform(get("/users/{id}/orders", user.getId()))
+		mockMvc.perform(get("/user/orders").sessionAttr("user_id", user.getId()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("orders"))
 				.andExpect(model().attributeExists("user"))
@@ -84,7 +85,7 @@ class UsersControllerTest {
 		order.setItems(Set.of(item));
 		given(userService.getUserById(gt(0))).willReturn(user);
 		given(orderService.getOrder(any(User.class), gt(0))).willReturn(order);
-		mockMvc.perform(get("/users/{id}/orders/{oid}", user.getId(), order.getId()))
+		mockMvc.perform(get("/user/orders/{oid}", order.getId()).sessionAttr("user_id", user.getId()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("order"))
 				.andExpect(model().attributeExists("order"));

@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/headers :: common_header(~{::title})"><title>Please sign in</title>
 </head>
-<body>
+<body style="font-family: Arial">
 <div th:insert="fragments/navbar.html"></div>
 <div class="container">
     <div class="alert alert-danger" role="alert" th:if="${param.error}">Invalid credentials or user is not enabled</div>
+    <div class="alert alert-danger" role="alert" th:if="${unauthenticated}" th:text="${unauthenticated}"></div>
     <div class="alert alert-success" role="alert" th:if="${param.logout}">You have been successfully logged out.</div>
     <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
     <div class="row">

@@ -3,7 +3,7 @@
 <head th:replace="fragments/headers :: common_header(~{::title})">
     <title th:text="'Orders of '+ ${user.username}"></title>
 </head>
-<body>
+<body style="font-family: Arial">
 <div th:insert="fragments/navbar.html"></div>
 <div class="container">
     <div class="row">
@@ -16,7 +16,7 @@
                 <tr th:each="order: ${orders}">
                     <td th:text="${orderStat.count}"></td>
                     <td>
-                        <a th:href="@{'/users/' + ${user.id} + '/orders/'+ ${order.id}}"
+                        <a th:href="@{'/user/orders/'+ ${order.id}}"
                            th:text="${order.id}"></a>
                     </td>
                     <td th:text="${order.items.size()}+' items'"></td>

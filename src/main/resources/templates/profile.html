@@ -3,7 +3,7 @@
 <head th:replace="fragments/headers :: common_header(~{::title})">
     <title>Profile Page</title>
 </head>
-<body>
+<body style="font-family: Arial">
 <div th:insert="fragments/navbar.html"></div>
 <div class="container" th:object="${user}">
     <div class="row">
@@ -56,7 +56,7 @@
                     <label>Orders</label>
                 </div>
                 <div class="col-md-6">
-                    <a th:href="@{'/users/'+${user.id}+'/orders/'}">Orders</a>
+                    <a th:href="@{'/user/orders/'}">Orders</a>
                 </div>
             </div>
         </div>

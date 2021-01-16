@@ -20,6 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 import java.util.Map;
 
+import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -84,7 +85,9 @@ class CheckoutControllerTest {
 	@Test
 	@WithMockUser
 	void buyProductsCancel() throws Exception {
-		mockMvc.perform(post("/checkout"))
+		mockMvc.perform(post("/checkout")
+				.sessionAttr("user_id", 1)
+		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/products"));
 	}
@@ -92,7 +95,10 @@ class CheckoutControllerTest {
 	@Test
 	@WithMockUser
 	void buyProducts() throws Exception {
-		mockMvc.perform(post("/checkout").param("confirm", "OK"))
+		mockMvc.perform(post("/checkout")
+				.sessionAttr("user_id", gt(0))
+				.param("confirm", "OK")
+		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/products"));
 
@@ -106,7 +112,10 @@ class CheckoutControllerTest {
 		doThrow(new NotEnoughStockException("TestProduct"))
 				.when(actionService).register(any(OrderRegistration.class));
 
-		mockMvc.perform(post("/checkout").param("confirm", "OK"))
+		mockMvc.perform(post("/checkout")
+				.sessionAttr("user_id", gt(0))
+				.param("confirm", "OK")
+		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cart"))
 				.andExpect(flash().attributeExists("notEnoughStockError"));

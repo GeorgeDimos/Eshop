@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
@@ -29,5 +30,6 @@ public class ConfirmationToken {
 
 	@OneToOne
 	@JoinColumn(name = "user_id")
+	@NotNull
 	private User user;
 }
