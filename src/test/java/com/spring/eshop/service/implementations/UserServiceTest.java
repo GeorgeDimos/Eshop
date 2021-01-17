@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -66,6 +65,7 @@ class UserServiceTest {
 		assertThrows(UsernameNotFoundException.class, () -> {
 			service.loadUserByUsername("nameNotFound");
 		});
+		verify(authGroupDAO, never()).findByUser(any(User.class));
 	}
 
 }

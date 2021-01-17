@@ -1,10 +1,9 @@
 package com.spring.eshop.controller;
 
-import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.ShoppingCart;
+import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.request.OrderRegistration;
+import com.spring.eshop.service.implementations.actions.OrderRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +17,13 @@ public class CheckoutController {
 
 	private final ShoppingCart shoppingCart;
 	private final IUserService userService;
-	private final ActionService actionService;
+	private final OrderRegistration orderRegistration;
 
 	@Autowired
-	public CheckoutController(ShoppingCart shoppingCart, IUserService userService, ActionService actionService) {
+	public CheckoutController(ShoppingCart shoppingCart, IUserService userService, OrderRegistration orderRegistration) {
 		this.shoppingCart = shoppingCart;
 		this.userService = userService;
-		this.actionService = actionService;
+		this.orderRegistration = orderRegistration;
 	}
 
 	@GetMapping
@@ -35,9 +34,11 @@ public class CheckoutController {
 
 	@PostMapping
 	public String buyProducts(@SessionAttribute int user_id, @RequestParam(required = false) String confirm) {
-		if (confirm != null) {
-			actionService.register(new OrderRegistration(new Order(), userService.getUserById(user_id), shoppingCart.getShoppingCart()));
+		if (confirm != null && !shoppingCart.isEmpty()) {
+			User user = userService.getUserById(user_id);
+			orderRegistration.execute(user, shoppingCart.getShoppingCart());
 			shoppingCart.clear();
+			return "redirect:/user/orders";
 		}
 
 		return "redirect:/products";

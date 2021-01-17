@@ -8,6 +8,7 @@ import com.spring.eshop.service.implementations.actions.request.PasswordRecovery
 import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,11 +23,13 @@ public class RecoveryController {
 
 	private final IConfirmationTokenService confirmationTokenService;
 	private final ActionService actionService;
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
-	public RecoveryController(IConfirmationTokenService confirmationTokenService, ActionService actionService) {
+	public RecoveryController(IConfirmationTokenService confirmationTokenService, ActionService actionService, PasswordEncoder passwordEncoder) {
 		this.confirmationTokenService = confirmationTokenService;
 		this.actionService = actionService;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@GetMapping("/activationEmail")
@@ -93,7 +96,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "new-password";
 		}
-		actionService.confirm(new PasswordRecoveryConfirmation(token, user.getPassword()));
+		actionService.confirm(new PasswordRecoveryConfirmation(token, user.getPassword(), passwordEncoder));
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

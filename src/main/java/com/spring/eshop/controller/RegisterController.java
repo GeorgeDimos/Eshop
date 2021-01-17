@@ -4,8 +4,8 @@ import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.actions.ActionService;
+import com.spring.eshop.service.implementations.actions.UserRegistration;
 import com.spring.eshop.service.implementations.actions.confirm.RegistrationConfirmation;
-import com.spring.eshop.service.implementations.actions.request.UserRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,12 @@ import javax.validation.Valid;
 public class RegisterController {
 
 	private final ActionService actionService;
+	private final UserRegistration userRegistration;
 
 	@Autowired
-	public RegisterController(ActionService actionService) {
+	public RegisterController(ActionService actionService, UserRegistration userRegistration) {
 		this.actionService = actionService;
+		this.userRegistration = userRegistration;
 	}
 
 	@GetMapping
@@ -43,7 +45,7 @@ public class RegisterController {
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "register";
 		}
-		actionService.register(new UserRegistration(user, userInfo));
+		userRegistration.execute(user, userInfo);
 		redirectAttributes.addFlashAttribute("success",
 				"User registration successful. Please check your email and confirm your account.");
 		return "redirect:/login";

@@ -1,8 +1,10 @@
 package com.spring.eshop.controller;
 
+import com.spring.eshop.entity.User;
+import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.request.UserRegistration;
+import com.spring.eshop.service.implementations.actions.UserRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -21,9 +24,10 @@ class RegisterControllerTest {
 
 	@MockBean
 	ActionService actionService;
-
 	@MockBean
 	IUserService userService;
+	@MockBean
+	UserRegistration userRegistration;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -50,6 +54,8 @@ class RegisterControllerTest {
 				.andExpect(flash().attributeExists("success"))
 				.andExpect(view().name("redirect:/login"));
 
+		verify(userRegistration).execute(any(User.class), any(UserInfo.class));
+
 	}
 
 	@Test
@@ -66,12 +72,14 @@ class RegisterControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"));
 
+		verify(userRegistration, never()).execute(any(User.class), any(UserInfo.class));
+
 	}
 
 	@Test
 	void registerNewUserFailureUserExists() throws Exception {
 		doThrow(new UserAlreadyExistsException("User already exists"))
-				.when(actionService).register(any(UserRegistration.class));
+				.when(userRegistration).execute(any(User.class), any(UserInfo.class));
 
 		mockMvc.perform(post("/register")
 				.param("username", "george")
@@ -82,6 +90,7 @@ class RegisterControllerTest {
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/register"))
+				.andExpect(flash().attribute("success", nullValue()))
 				.andExpect(flash().attributeExists("userAlreadyExists"));
 	}
 

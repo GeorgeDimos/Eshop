@@ -42,4 +42,8 @@ public class ShoppingCart {
 	public void clear() {
 		itemsList.clear();
 	}
+
+	public boolean isEmpty() {
+		return itemsList.isEmpty();
+	}
 }

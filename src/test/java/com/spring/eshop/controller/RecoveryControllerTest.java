@@ -2,6 +2,7 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.implementations.actions.ActionService;
+import com.spring.eshop.service.implementations.actions.confirm.PasswordRecoveryConfirmation;
 import com.spring.eshop.service.implementations.actions.request.PasswordRecoveryEmail;
 import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
@@ -12,9 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -98,7 +101,7 @@ class RecoveryControllerTest {
 
 	@Test
 	void getPasswordInputPage() throws Exception {
-		given(confirmationTokenService.isValid(any())).willReturn(true);
+		given(confirmationTokenService.isValid(anyString())).willReturn(true);
 		mockMvc.perform(get("/recover/someInvalidToken"))
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("user"))
@@ -107,9 +110,10 @@ class RecoveryControllerTest {
 
 	@Test
 	void getPasswordInputPageInvalidToken() throws Exception {
-		given(confirmationTokenService.isValid(any())).willReturn(false);
+		given(confirmationTokenService.isValid(anyString())).willReturn(false);
 		mockMvc.perform(get("/recover/someInvalidToken"))
 				.andExpect(status().is3xxRedirection())
+				.andExpect(model().attributeDoesNotExist("user"))
 				.andExpect(view().name("redirect:/error"));
 	}
 
@@ -130,6 +134,9 @@ class RecoveryControllerTest {
 		)
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasFieldErrors("user", "password"))
+				.andExpect(flash().attribute("success", nullValue()))
 				.andExpect(view().name("new-password"));
+
+		verify(actionService, never()).confirm(any(PasswordRecoveryConfirmation.class));
 	}
 }

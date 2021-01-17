@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,6 +21,7 @@ import java.util.Set;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,13 +50,12 @@ class UsersControllerTest {
 				.webAppContextSetup(context)
 				.apply(springSecurity())
 				.build();
-		user = new User(1, "Username", "password", true, null, null, null);
+		user = new User(1, "Username", "password", true, null, mock(UserInfo.class), null);
 	}
 
 	@Test
 	void profile() throws Exception {
-		UserInfo info = new UserInfo(1, "Name", "Surname", "email@gmail.com", user);
-		user.setUserInfo(info);
+
 		given(userService.getUserById(gt(0))).willReturn(user);
 
 		mockMvc.perform(get("/user").sessionAttr("user_id", user.getId()))
@@ -65,12 +66,10 @@ class UsersControllerTest {
 
 	@Test
 	void getOrdersList() throws Exception {
-		Order order = new Order(1, user, null);
-		OrderItem item = new OrderItem(1, order, new Product(), 2);
-		order.setItems(Set.of(item));
+		Order order = new Order(1, user, Set.of(mock(OrderItem.class)));
 		Page<Order> page = new PageImpl(List.of(order));
 		given(userService.getUserById(gt(0))).willReturn(user);
-		given(orderService.getOrdersByUser(any(User.class), any())).willReturn(page);
+		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class))).willReturn(page);
 		mockMvc.perform(get("/user/orders").sessionAttr("user_id", user.getId()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("orders"))
@@ -81,13 +80,18 @@ class UsersControllerTest {
 	@Test
 	void getOrderDetails() throws Exception {
 		Order order = new Order(1, user, null);
-		OrderItem item = new OrderItem(1, order, new Product(), 2);
-		order.setItems(Set.of(item));
+		order.setItems(Set.of(
+				new OrderItem(1, order, mock(Product.class), 2)
+		));
 		given(userService.getUserById(gt(0))).willReturn(user);
 		given(orderService.getOrder(any(User.class), gt(0))).willReturn(order);
 		mockMvc.perform(get("/user/orders/{oid}", order.getId()).sessionAttr("user_id", user.getId()))
 				.andExpect(status().isOk())
 				.andExpect(view().name("order"))
 				.andExpect(model().attributeExists("order"));
+	}
+
+	@Test
+	void noUserId() {
 	}
 }

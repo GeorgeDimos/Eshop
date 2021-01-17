@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @NoArgsConstructor
@@ -39,6 +40,7 @@ public class Product {
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")
+	@NotNull
 	private Category category;
 
 	@Override

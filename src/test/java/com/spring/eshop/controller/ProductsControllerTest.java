@@ -1,6 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.Category;
+import com.spring.eshop.entity.Image;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.service.interfaces.IProductService;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -20,6 +22,7 @@ import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -39,27 +42,29 @@ class ProductsControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 
-	Page<Product> page;
 	Product product;
+	Category c1;
 
 	@BeforeEach
 	void setUp() {
-
-		Category c1 = new Category(1, "test_category", null);
-		product = new Product(1,
+		c1 = mock(Category.class);
+		product = product = new Product(1,
 				"test_product_1",
 				"test_description_1",
-				10, 10, List.of(), c1);
-		Product p2 = new Product(2,
-				"test_product_2",
-				"test_description_2",
-				10, 0.10, null, c1);
-		page = new PageImpl<>(List.of(product, p2));
+				10, 10, List.of(new Image()), c1);
 	}
 
 	@Test
 	void getProducts() throws Exception {
-		given(productService.getProducts(any())).willReturn(page);
+
+		Page<Product> pageProducts = new PageImpl<>(List.of(
+				product,
+				new Product(
+						2, "test_product_2",
+						"test_description_2",
+						10, 0.10, null, c1
+				)));
+		given(productService.getProducts(any(Pageable.class))).willReturn(pageProducts);
 
 		mockMvc.perform(get("/products"))
 				.andExpect(status().isOk())

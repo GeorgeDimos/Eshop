@@ -1,6 +1,5 @@
 package com.spring.eshop.controller;
 
-import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.service.interfaces.IUserService;
@@ -10,10 +9,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -38,12 +38,10 @@ class LoginControllerTest {
 	}
 
 	@Test
-	void successEmptyShoppingCart() throws Exception {
-		doReturn(new User(1, "a", "b", true, null, null, null))
-				.when(userService).getCurrentUser();
+	void redirectAfterLoginEmptyShoppingCart() throws Exception {
 
-		doReturn(new HashMap<>()).
-				when(shoppingCart).getShoppingCart();
+		given(userService.getCurrentUser()).willReturn(mock(User.class));
+		given(shoppingCart.getShoppingCart()).willReturn(Collections.EMPTY_MAP);
 
 		mockMvc.perform(get("/successful-login"))
 				.andExpect(status().isOk())
@@ -51,14 +49,10 @@ class LoginControllerTest {
 	}
 
 	@Test
-	void successShoppingCartHasItems() throws Exception {
-		doReturn(new User(1, "a", "b", true, null, null, null))
-				.when(userService).getCurrentUser();
+	void redirectAfterLoginShoppingCartHasItems() throws Exception {
 
-		Map<Product, Integer> map = new HashMap<>();
-		map.put(new Product(), 4);
-		doReturn(map).
-				when(shoppingCart).getShoppingCart();
+		given(userService.getCurrentUser()).willReturn(mock(User.class));
+		given(shoppingCart.getShoppingCart()).willReturn(mock(Map.class));
 
 		mockMvc.perform(get("/successful-login"))
 				.andExpect(status().isOk())
