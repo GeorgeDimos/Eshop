@@ -1,9 +1,10 @@
 <div class="row justify-content-end" xmlns:th="http://www.thymeleaf.org">
-    <form class="col-3" method="GET" th:action="@{${#request.requestURI}}" style="font-size:14px">
+    <form class="col-3" method="GET" style="font-size:14px" th:action="@{${#request.requestURI}}">
         <div class="form-row">
             <!-- Check if there is a search parameter and if it exists then restore it -->
-            <input th:if="${#request.getParameter('name')!=null}" type="hidden" name="name"
-                   th:value="${#request.getParameter('name')}">
+            <input name="name" th:if="${#request.getParameter('name')!=null}"
+                   th:value="${#request.getParameter('name')}"
+                   type="hidden">
 
             <div class="form-group col">
                 <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size">

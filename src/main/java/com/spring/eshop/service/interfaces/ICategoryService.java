@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICategoryService {
 
-    Page<Category> getCategories(Pageable pageable);
+	Page<Category> getCategories(Pageable pageable);
 
-    Page<Product> getProductsOfCategory(int id, Pageable pageable);
+	Page<Product> getProductsOfCategory(int id, Pageable pageable);
 }

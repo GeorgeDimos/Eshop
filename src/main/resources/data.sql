@@ -1,11 +1,14 @@
-LOCK TABLES `category` WRITE;
+LOCK
+TABLES `category` WRITE;
 INSERT INTO `category`
 VALUES (1, 'CPU'),
        (2, 'Graphics Cards'),
        (3, 'PSU');
-UNLOCK TABLES;
+UNLOCK
+TABLES;
 
-LOCK TABLES `product` WRITE;
+LOCK
+TABLES `product` WRITE;
 INSERT INTO `product`
 VALUES (1, 'Intel Core I5-10400F Box',
         '10th Gen Intel Core i5-10400F desktop processor without processor graphics. Optimized for gaming, creating, and productivity. Discrete graphics required. Cooler included in the box. ONLY compatible with 400 series chipset based motherboard. 65W. ',
@@ -47,15 +50,20 @@ LOCK
 TABLES `users` WRITE;
 INSERT INTO `users`
 VALUES (1, 'admin', '$2a$04$QtDywltFkExfswHqKZmZtePwAIDUhIFiAOmaHvE0YYdE48pZnSlUy', 1);
-UNLOCK TABLES;
+UNLOCK
+TABLES;
 
-LOCK TABLES `user_details` WRITE;
+LOCK
+TABLES `user_details` WRITE;
 INSERT INTO `user_details`
 VALUES (1, 'admin', 'admin', 'admin@a', 1);
-UNLOCK TABLES;
+UNLOCK
+TABLES;
 
 
-LOCK TABLES `authorities` WRITE;
+LOCK
+TABLES `authorities` WRITE;
 INSERT INTO `authorities`
 VALUES (1, 'admin', 1);
-UNLOCK TABLES;
+UNLOCK
+TABLES;
