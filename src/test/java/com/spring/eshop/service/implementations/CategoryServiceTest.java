@@ -35,10 +35,10 @@ class CategoryServiceTest {
 				mock(Category.class),
 				mock(Category.class)
 		));
-		given(dao.findAll(pageableStub)).willReturn(page);
+		given(dao.findDistinctBy(pageableStub)).willReturn(page);
 		Page<Category> result = service.getCategories(pageableStub);
 
-		verify(dao).findAll(pageableStub);
+		verify(dao).findDistinctBy(pageableStub);
 		assertThat(result).isNotEmpty();
 		assertThat(result).hasSize(2);
 	}

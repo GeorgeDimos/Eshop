@@ -53,7 +53,7 @@ class ProductServiceTest {
 				mock(Product.class),
 				mock(Product.class)
 		));
-		given(dao.findAll(pageable)).willReturn(products);
+		given(dao.findDistinctBy(pageable)).willReturn(products);
 		Page<Product> result = service.getProducts(pageable);
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(2);
@@ -66,7 +66,7 @@ class ProductServiceTest {
 				mock(Product.class),
 				mock(Product.class)
 		));
-		given(dao.findByNameContaining("name", pageable)).willReturn(products);
+		given(dao.findDistinctByNameContaining("name", pageable)).willReturn(products);
 		Page<Product> result = service.getProductsByName("name", pageable);
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(2);

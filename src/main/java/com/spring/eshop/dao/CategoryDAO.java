@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CategoryDAO extends JpaRepository<Category, Integer> {
-	Page<Category> findAll(Pageable pageable);
 
-	@Query(value = "SELECT p FROM Product p WHERE p.category.id = ?1")
+	Page<Category> findDistinctBy(Pageable pageable);
+
+	@Query(value = "SELECT p FROM Product p WHERE p.category.id = ?1 GROUP BY p.id")
 	Page<Product> getProductsOfCategory(int id, Pageable pageable);
 }
