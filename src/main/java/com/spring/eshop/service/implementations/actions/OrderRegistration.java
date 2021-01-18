@@ -1,7 +1,7 @@
 package com.spring.eshop.service.implementations.actions;
 
+import com.spring.eshop.dao.OrderDAO;
 import com.spring.eshop.dao.ProductDAO;
-import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.entity.Product;
@@ -18,18 +18,18 @@ import java.util.Set;
 
 @Service
 public class OrderRegistration {
-	private final UserDAO userDAO;
+	private final OrderDAO orderDAO;
 	private final ProductDAO productDAO;
 	private final ApplicationEventPublisher publisher;
 
-	public OrderRegistration(UserDAO userDAO, ProductDAO productDAO, ApplicationEventPublisher publisher) {
-		this.userDAO = userDAO;
+	public OrderRegistration(OrderDAO orderDAO, ProductDAO productDAO, ApplicationEventPublisher publisher) {
+		this.orderDAO = orderDAO;
 		this.productDAO = productDAO;
 		this.publisher = publisher;
 	}
 
 	@Transactional
-	public void execute(User user, Map<Product, Integer> shoppingCart) {
+	public int execute(User user, Map<Product, Integer> shoppingCart) {
 		Order order = new Order();
 		Set<OrderItem> orderItems = new HashSet<>();
 
@@ -43,10 +43,10 @@ public class OrderRegistration {
 		});
 
 		order.setItems(orderItems);
-		user.getOrders().add(order);
 		order.setUser(user);
-		userDAO.save(user);
+		orderDAO.save(order);
 
 		publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
+		return order.getId();
 	}
 }

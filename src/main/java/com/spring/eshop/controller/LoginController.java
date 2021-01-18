@@ -7,8 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 public class LoginController {
 
@@ -20,16 +18,15 @@ public class LoginController {
 	}
 
 	@GetMapping(value = "/login")
-	public String login(HttpSession session) {
-		if (session.getAttribute("user_id") != null) {
+	public String login(@AuthenticationPrincipal UserPrinciple userPrinciple) {
+		if (userPrinciple != null) {
 			return "redirect:/user";
 		}
 		return "login";
 	}
 
 	@GetMapping(value = "/successful-login")
-	public String success(@AuthenticationPrincipal UserPrinciple userPrinciple, HttpSession session) {
-		session.setAttribute("user_id", userPrinciple.getUserId());
+	public String success() {
 		if (!shoppingCart.getShoppingCart().isEmpty()) {
 			return "redirect:/cart";
 		}

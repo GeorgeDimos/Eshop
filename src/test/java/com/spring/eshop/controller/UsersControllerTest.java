@@ -1,6 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.*;
+import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,13 +16,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,6 +41,9 @@ class UsersControllerTest {
 
 	@MockBean
 	IOrderService orderService;
+
+	@MockBean
+	UserPrinciple userPrinciple;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -50,15 +59,16 @@ class UsersControllerTest {
 				.webAppContextSetup(context)
 				.apply(springSecurity())
 				.build();
-		user = new User(1, "Username", "password", true, null, mock(UserInfo.class), null);
+		UserInfo userInfo = new UserInfo(1, "first name", "last name", "mail@somewhere", null);
+		user = new User(1, "Username", "password", true, null, userInfo, null);
 	}
 
 	@Test
 	void profile() throws Exception {
 
-		given(userService.getUserById(gt(0))).willReturn(user);
-
-		mockMvc.perform(get("/user").sessionAttr("user_id", user.getId()))
+		mockMvc.perform(get("/user")
+				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+		)
 				.andExpect(status().isOk())
 				.andExpect(view().name("profile"))
 				.andExpect(model().attributeExists("user"));
@@ -68,9 +78,13 @@ class UsersControllerTest {
 	void getOrdersList() throws Exception {
 		Order order = new Order(1, user, Set.of(mock(OrderItem.class)));
 		Page<Order> page = new PageImpl(List.of(order));
-		given(userService.getUserById(gt(0))).willReturn(user);
-		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class))).willReturn(page);
-		mockMvc.perform(get("/user/orders").sessionAttr("user_id", user.getId()))
+
+		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class)))
+				.willReturn(page);
+
+		mockMvc.perform(get("/user/orders")
+				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+		)
 				.andExpect(status().isOk())
 				.andExpect(view().name("orders"))
 				.andExpect(model().attributeExists("user"))
@@ -83,9 +97,12 @@ class UsersControllerTest {
 		order.setItems(Set.of(
 				new OrderItem(1, order, mock(Product.class), 2)
 		));
-		given(userService.getUserById(gt(0))).willReturn(user);
-		given(orderService.getOrder(any(User.class), gt(0))).willReturn(order);
-		mockMvc.perform(get("/user/orders/{oid}", order.getId()).sessionAttr("user_id", user.getId()))
+
+		given(orderService.getOrder(any(), gt(0)))
+				.willReturn(order);
+		mockMvc.perform(get("/user/orders/{oid}", order.getId())
+				.with(user(mock(UserPrinciple.class)))
+		)
 				.andExpect(status().isOk())
 				.andExpect(view().name("order"))
 				.andExpect(model().attributeExists("order"));
@@ -93,5 +110,10 @@ class UsersControllerTest {
 
 	@Test
 	void noUserId() {
+		doThrow(NullPointerException.class).when(userPrinciple).getUser();
+		then(orderService).shouldHaveNoInteractions();
+		assertThat(flash().attributeExists("unauthenticated"));
+		assertThat(status().is3xxRedirection());
+		assertThat(view().name("redirect:/login"));
 	}
 }

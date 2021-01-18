@@ -35,8 +35,8 @@ public class UserPrinciple implements UserDetails {
 		return grantedAuthorities;
 	}
 
-	public int getUserId() {
-		return user.getId();
+	public User getUser() {
+		return user;
 	}
 
 	@Override

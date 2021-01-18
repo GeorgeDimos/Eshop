@@ -41,7 +41,7 @@ class LoginControllerTest {
 
 	@Test
 	void loginWhileAlreadyLoggedIn() throws Exception {
-		mockMvc.perform(get("/login").sessionAttr("user_id", "anything"))
+		mockMvc.perform(get("/login").with(user(mock(UserPrinciple.class))))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/user"));
 	}

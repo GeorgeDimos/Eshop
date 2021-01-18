@@ -1,8 +1,8 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
+import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.implementations.actions.OrderRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,11 +17,10 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
-import static org.mockito.AdditionalMatchers.gt;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -90,7 +89,7 @@ class CheckoutControllerTest {
 		given(shoppingCart.isEmpty()).willReturn(true);
 		then(shoppingCart).shouldHaveNoMoreInteractions();
 		mockMvc.perform(post("/checkout")
-				.sessionAttr("user_id", 1)
+				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
 		)
 				.andExpect(status().is3xxRedirection())
@@ -102,29 +101,29 @@ class CheckoutControllerTest {
 	@WithMockUser
 	void buyProducts() throws Exception {
 		given(shoppingCart.isEmpty()).willReturn(false);
-		given(userService.getUserById(gt(0))).willReturn(mock(User.class));
-		given(shoppingCart.getShoppingCart()).willReturn(mock(Map.class));
+		given(orderRegistration.execute(any(), any(Map.class))).willReturn(2);
+
 		mockMvc.perform(post("/checkout")
-				.sessionAttr("user_id", 1)
+				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
 		)
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/user/orders"));
+				.andExpect(view().name("redirect:/user/orders/" + 2));
 
-		then(orderRegistration).should().execute(any(User.class), any(Map.class));
-		then(shoppingCart).should().clear();
+		verify(orderRegistration).execute(any(), any(Map.class));
+		verify(shoppingCart).clear();
 	}
 
 	@Test
 	@WithMockUser
 	void notEnoughStockInOrder() throws Exception {
-		given(userService.getUserById(gt(0))).willReturn(mock(User.class));
-		given(shoppingCart.getShoppingCart()).willReturn(mock(Map.class));
-		doThrow(mock(NotEnoughStockException.class))
-				.when(orderRegistration).execute(any(User.class), any(Map.class));
+
+		doThrow(NotEnoughStockException.class)
+				.when(orderRegistration).execute(any(), any(Map.class));
+
 		given(shoppingCart.isEmpty()).willReturn(false);
 		mockMvc.perform(post("/checkout")
-				.sessionAttr("user_id", 1)
+				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
 		)
 				.andExpect(status().is3xxRedirection())
