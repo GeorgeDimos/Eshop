@@ -1,13 +1,11 @@
 package com.spring.eshop.service.implementations;
 
-import com.spring.eshop.dao.AuthGroupDAO;
 import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,12 +17,10 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
 	private final UserDAO userDAO;
-	private final AuthGroupDAO authGroupDAO;
 
 	@Autowired
-	public UserService(UserDAO userDAO, AuthGroupDAO authGroupDAO) {
+	public UserService(UserDAO userDAO) {
 		this.userDAO = userDAO;
-		this.authGroupDAO = authGroupDAO;
 	}
 
 	@Override
@@ -38,15 +34,8 @@ public class UserService implements IUserService {
 		if (user.isEmpty()) {
 			throw new UsernameNotFoundException("Can not find user with username: " + username);
 		}
-		List<AuthGroup> authGroups = authGroupDAO.findByUser(user.get());
+
+		List<AuthGroup> authGroups = List.of(user.get().getAuthGroup());
 		return new UserPrinciple(user.get(), authGroups);
 	}
-
-	@Override
-	public User getCurrentUser() {
-		UserPrinciple currentUserPrinciple = (UserPrinciple) SecurityContextHolder.getContext()
-				.getAuthentication().getPrincipal();
-		return userDAO.findById(currentUserPrinciple.getUserId()).orElseThrow();
-	}
-
 }

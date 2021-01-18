@@ -7,5 +7,4 @@ public interface IUserService extends UserDetailsService {
 
 	User getUserById(int id);
 
-	User getCurrentUser();
 }

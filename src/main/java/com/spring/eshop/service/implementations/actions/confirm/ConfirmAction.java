@@ -7,7 +7,7 @@ import com.spring.eshop.entity.User;
 
 public abstract class ConfirmAction {
 
-	protected final String token;
+	private final String token;
 
 	public ConfirmAction(String token) {
 		this.token = token;
