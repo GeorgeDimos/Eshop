@@ -33,7 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.csrf().disable()
 				.authorizeRequests()
-				.antMatchers("/checkout").authenticated()
+				.antMatchers("/checkout/**", "/user/**").authenticated()
+				.antMatchers("/register/**", "/login/**", "/recover/**").not().authenticated()
 				.and()
 				.formLogin().loginPage("/login")
 				.defaultSuccessUrl("/successful-login", true)

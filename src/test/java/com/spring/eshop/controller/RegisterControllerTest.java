@@ -6,15 +6,19 @@ import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.actions.ActionService;
 import com.spring.eshop.service.implementations.actions.UserRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,6 +35,17 @@ class RegisterControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
+
+	@Autowired
+	WebApplicationContext context;
+
+	@BeforeEach
+	void setUp() {
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(context)
+				.apply(springSecurity())
+				.build();
+	}
 
 	@Test
 	void register() throws Exception {

@@ -20,12 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -108,12 +105,4 @@ class UsersControllerTest {
 				.andExpect(model().attributeExists("order"));
 	}
 
-	@Test
-	void noUserId() {
-		doThrow(NullPointerException.class).when(userPrinciple).getUser();
-		then(orderService).shouldHaveNoInteractions();
-		assertThat(flash().attributeExists("unauthenticated"));
-		assertThat(status().is3xxRedirection());
-		assertThat(view().name("redirect:/login"));
-	}
 }

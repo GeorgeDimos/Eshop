@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -40,10 +41,10 @@ class LoginControllerTest {
 	}
 
 	@Test
+	@WithMockUser
 	void loginWhileAlreadyLoggedIn() throws Exception {
-		mockMvc.perform(get("/login").with(user(mock(UserPrinciple.class))))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/user"));
+		assertThat(view().name("login"));
+		assertThat(status().is4xxClientError());
 	}
 
 	@Test

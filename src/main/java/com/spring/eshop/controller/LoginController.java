@@ -1,9 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.security.UserPrinciple;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -18,10 +16,7 @@ public class LoginController {
 	}
 
 	@GetMapping(value = "/login")
-	public String login(@AuthenticationPrincipal UserPrinciple userPrinciple) {
-		if (userPrinciple != null) {
-			return "redirect:/user";
-		}
+	public String login() {
 		return "login";
 	}
 
