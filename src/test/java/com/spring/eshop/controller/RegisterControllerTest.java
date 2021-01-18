@@ -6,6 +6,7 @@ import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.implementations.actions.ActionService;
 import com.spring.eshop.service.implementations.actions.UserRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,13 @@ class RegisterControllerTest {
 				.webAppContextSetup(context)
 				.apply(springSecurity())
 				.build();
+	}
+
+	@AfterEach
+	void tearDown() {
+		reset(actionService);
+		reset(userService);
+		reset(userRegistration);
 	}
 
 	@Test
@@ -116,6 +124,5 @@ class RegisterControllerTest {
 				.andExpect(view().name("login"))
 				.andExpect(model().attributeExists("success"));
 	}
-
 
 }
