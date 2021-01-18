@@ -13,6 +13,6 @@ public interface CategoryDAO extends JpaRepository<Category, Integer> {
 
 	Page<Category> findDistinctBy(Pageable pageable);
 
-	@Query(value = "SELECT p FROM Product p WHERE p.category.id = ?1 GROUP BY p.id")
+	@Query(value = "SELECT DISTINCT p FROM Product p WHERE p.category.id = ?1")
 	Page<Product> getProductsOfCategory(int id, Pageable pageable);
 }
