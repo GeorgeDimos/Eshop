@@ -29,6 +29,11 @@ public class UserService implements IUserService {
 	}
 
 	@Override
+	public void deleteUser(User user) {
+		userDAO.delete(user);
+	}
+
+	@Override
 	public UserDetails loadUserByUsername(String username) {
 		Optional<User> user = userDAO.findByUsername(username);
 		if (user.isEmpty()) {

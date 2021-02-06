@@ -7,4 +7,5 @@ public interface IUserService extends UserDetailsService {
 
 	User getUserById(int id);
 
+	void deleteUser(User user);
 }
