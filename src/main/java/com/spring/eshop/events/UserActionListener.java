@@ -7,6 +7,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Component
 public class UserActionListener {
@@ -53,7 +54,9 @@ public class UserActionListener {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("Confirm User Registration for Spring Eshop");
 		simpleMailMessage.setTo(email);
-		simpleMailMessage.setText("Click the following link to confirm your account\n\nhttp://localhost:8080/register/" + token);
+		String server = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+		simpleMailMessage.setText("Click the following link to confirm your account\n\n"
+				+ server + "/register/" + token);
 		return simpleMailMessage;
 	}
 
@@ -61,7 +64,9 @@ public class UserActionListener {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("Password Recovery for Spring Eshop");
 		simpleMailMessage.setTo(email);
-		simpleMailMessage.setText("Click the following link to recover your password\n\nhttp://localhost:8080/recover/" + token);
+		String server = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+		simpleMailMessage.setText("Click the following link to recover your password\n\n"
+				+ server + "/recover/" + token);
 		return simpleMailMessage;
 	}
 }
