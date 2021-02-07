@@ -34,7 +34,7 @@
             <h3 th:text="${product.name}"></h3>
             <br>
             <p th:text="'Price: '+${product.price}+'€'"></p>
-            <form method="POST" th:action="'/products/'+${product.id}" th:if="${product.stock>0}">
+            <form method="post" th:action="@{'/products/'+${product.id}}" th:if="${product.stock>0}">
                 <label>
                     Quantity:
                     <input min="1" name="quantity" style="width: 25%" th:max="${product.stock}" type="number"

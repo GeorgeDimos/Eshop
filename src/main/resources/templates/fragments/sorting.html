@@ -1,5 +1,5 @@
 <div class="row justify-content-end" xmlns:th="http://www.thymeleaf.org">
-    <form class="col-3" method="GET" style="font-size:14px" th:action="@{${#request.requestURI}}">
+    <form class="col-3" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
         <div class="form-row">
             <!-- Check if there is a search parameter and if it exists then restore it -->
             <input name="name" th:if="${#request.getParameter('name')!=null}"

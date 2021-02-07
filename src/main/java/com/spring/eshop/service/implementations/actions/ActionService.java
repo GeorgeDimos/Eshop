@@ -13,23 +13,23 @@ import javax.transaction.Transactional;
 @Service
 public class ActionService {
 
-    private final UserDAO userDAO;
-    private final ApplicationEventPublisher publisher;
-    private final ConfirmationTokenDAO confirmationTokenDAO;
+	private final UserDAO userDAO;
+	private final ApplicationEventPublisher publisher;
+	private final ConfirmationTokenDAO confirmationTokenDAO;
 
-    @Autowired
-    public ActionService(UserDAO userDAO, ApplicationEventPublisher publisher, ConfirmationTokenDAO confirmationTokenDAO) {
-        this.userDAO = userDAO;
-        this.publisher = publisher;
-        this.confirmationTokenDAO = confirmationTokenDAO;
-    }
+	@Autowired
+	public ActionService(UserDAO userDAO, ApplicationEventPublisher publisher, ConfirmationTokenDAO confirmationTokenDAO) {
+		this.userDAO = userDAO;
+		this.publisher = publisher;
+		this.confirmationTokenDAO = confirmationTokenDAO;
+	}
 
-    public void request(RequestEmail request) {
-        publisher.publishEvent(request.execute(userDAO));
-    }
+	public void request(RequestEmail request) {
+		publisher.publishEvent(request.execute(userDAO));
+	}
 
-    @Transactional
-    public void confirm(ConfirmAction action) {
-        action.execute(userDAO, confirmationTokenDAO);
-    }
+	@Transactional
+	public void confirm(ConfirmAction action) {
+		action.execute(userDAO, confirmationTokenDAO);
+	}
 }

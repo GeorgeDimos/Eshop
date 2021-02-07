@@ -23,7 +23,7 @@
                 </tbody>
             </table>
 
-            <form action="/checkout" method="POST">
+            <form method="post" th:action="@{/checkout}">
                 <input class="btn btn-primary" name="confirm" type="submit" value="Purchase">
                 <button class="btn btn-secondary">Cancel</button>
             </form>

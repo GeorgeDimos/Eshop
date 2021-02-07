@@ -7,9 +7,14 @@ import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -40,10 +45,23 @@ public class UsersController {
 
 	@PostMapping("/confirmAction")
 	public String deleteAccount(@RequestParam(required = false) String confirm,
-								@AuthenticationPrincipal UserPrinciple userPrinciple) {
+								@AuthenticationPrincipal UserPrinciple userPrinciple,
+								HttpServletRequest request) {
 		if (confirm != null) {
 			userService.deleteUser(userPrinciple.getUser());
-			return "redirect:/logout";
+
+			SecurityContextHolder.clearContext();
+
+			HttpSession session = request.getSession(false);
+			if (session != null) {
+				session.invalidate();
+			}
+
+			for (Cookie cookie : request.getCookies()) {
+				cookie.setMaxAge(0);
+			}
+
+			return "redirect:/login?logout";
 		}
 		return "redirect:/user";
 	}

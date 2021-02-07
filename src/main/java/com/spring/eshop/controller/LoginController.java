@@ -28,4 +28,8 @@ public class LoginController {
 		return "redirect:/products";
 	}
 
+	@GetMapping(value = "/logout")
+	public String logout() {
+		return "logout";
+	}
 }

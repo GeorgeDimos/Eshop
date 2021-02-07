@@ -1,7 +1,7 @@
 <div class="container" th:fragment="frag(title)" xmlns:th="http://www.thymeleaf.org">
     <div class="row">
         <div class="col">
-            <form class="form-signin" method="post">
+            <form class="form-signin" method="post" th:action="@{__${#httpServletRequest.requestURI}__}">
                 <h2 class="form-signin-heading" th:text="${title}"></h2>
                 <div class="alert alert-danger" role="alert" th:if="${error}" th:text="${error}"></div>
                 <div class="row">
