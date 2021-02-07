@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -72,6 +73,7 @@ class RegisterControllerTest {
 				.param("firstName", "George")
 				.param("lastName", "Dimos")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("success"))
@@ -89,6 +91,7 @@ class RegisterControllerTest {
 				.param("firstName", "George")
 				.param("lastName", "Dimos")
 				.param("email", "dimgeorge91")
+				.with(csrf())
 		)
 				.andExpect(model().attributeHasFieldErrors("user", "password"))
 				.andExpect(model().attributeHasFieldErrors("userInfo", "email"))
@@ -110,6 +113,7 @@ class RegisterControllerTest {
 				.param("firstName", "George")
 				.param("lastName", "Dimos")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/register"))

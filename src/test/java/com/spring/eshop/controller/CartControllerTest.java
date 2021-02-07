@@ -20,6 +20,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,7 +57,10 @@ class CartControllerTest {
 		Product product = mock(Product.class);
 		given(productService.getProduct(anyInt())).willReturn(product);
 
-		mockMvc.perform(post("/cart").param("id", String.valueOf(product.getId())))
+		mockMvc.perform(post("/cart")
+						.param("id", String.valueOf(product.getId()))
+						.with(csrf())
+				)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cart"));
 

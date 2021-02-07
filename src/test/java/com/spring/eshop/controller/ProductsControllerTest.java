@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -85,7 +86,9 @@ class ProductsControllerTest {
 	void addProductToCartGoToProducts() throws Exception {
 		given(productService.getProduct(gt(0))).willReturn(product);
 		mockMvc.perform(post("/products/{id}", product.getId())
-				.param("quantity", "2"))
+				.param("quantity", "2")
+				.with(csrf())
+		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/products"));
 
@@ -97,7 +100,9 @@ class ProductsControllerTest {
 		given(productService.getProduct(gt(0))).willReturn(product);
 		mockMvc.perform(post("/products/{id}", product.getId())
 				.param("quantity", "2")
-				.param("goToCart", "Ok"))
+				.param("goToCart", "Ok")
+				.with(csrf())
+		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cart"));
 

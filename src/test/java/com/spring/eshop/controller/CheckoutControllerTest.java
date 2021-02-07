@@ -20,6 +20,7 @@ import java.util.Map;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -76,6 +77,7 @@ class CheckoutControllerTest {
 		given(shoppingCart.isEmpty()).willReturn(false);
 		mockMvc.perform(post("/checkout")
 				.sessionAttr("user_id", 1)
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/products"));
@@ -91,6 +93,7 @@ class CheckoutControllerTest {
 		mockMvc.perform(post("/checkout")
 				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/products"));
@@ -106,6 +109,7 @@ class CheckoutControllerTest {
 		mockMvc.perform(post("/checkout")
 				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/user/orders/" + 2));
@@ -125,6 +129,7 @@ class CheckoutControllerTest {
 		mockMvc.perform(post("/checkout")
 				.with(user(mock(UserPrinciple.class)))
 				.param("confirm", "OK")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cart"))

@@ -18,6 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -48,6 +49,7 @@ class RecoveryControllerTest {
 		mockMvc.perform(post("/recover/activationEmail")
 				.param("username", "geoge")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("success"))
@@ -62,6 +64,7 @@ class RecoveryControllerTest {
 		mockMvc.perform(post("/recover/activationEmail")
 				.param("username", "doesntExist")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("error"))
@@ -79,6 +82,7 @@ class RecoveryControllerTest {
 		mockMvc.perform(post("/recover/password")
 				.param("username", "geoge")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("success"))
@@ -93,6 +97,7 @@ class RecoveryControllerTest {
 		mockMvc.perform(post("/recover/password")
 				.param("username", "doesntExist")
 				.param("email", "dimgeorge91@yahoo.gr")
+				.with(csrf())
 		)
 				.andExpect(status().isOk())
 				.andExpect(model().attributeExists("error"))
@@ -121,6 +126,7 @@ class RecoveryControllerTest {
 	void changePassword() throws Exception {
 		mockMvc.perform(post("/recover/someToken")
 				.param("password", "validPassword")
+				.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("success"))
@@ -131,6 +137,7 @@ class RecoveryControllerTest {
 	void changePasswordFieldErrors() throws Exception {
 		mockMvc.perform(post("/recover/someToken")
 				.param("password", "")
+				.with(csrf())
 		)
 				.andExpect(status().isOk())
 				.andExpect(model().attributeHasFieldErrors("user", "password"))
