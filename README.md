@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/GeorgeDimos/Eshop.svg?style=svg)](https://circleci.com/gh/GeorgeDimos/Eshop)
+
 # A simple e-shop made with Spring Boot.
 
 ![home_page](https://i.imgur.com/FW86JcH.jpg)
