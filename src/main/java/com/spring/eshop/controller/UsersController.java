@@ -38,12 +38,12 @@ public class UsersController {
 		return "profile";
 	}
 
-	@GetMapping("/confirmAction")
+	@GetMapping("/deleteAccount")
 	public String deleteAccount() {
-		return "confirmAction";
+		return "deleteAccount";
 	}
 
-	@PostMapping("/confirmAction")
+	@PostMapping("/deleteAccount")
 	public String deleteAccount(@RequestParam(required = false) String confirm,
 								@AuthenticationPrincipal UserPrinciple userPrinciple,
 								HttpServletRequest request) {

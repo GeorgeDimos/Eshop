@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/checkout/**", "/user/**").authenticated()
 				.antMatchers("/register/**", "/login/**", "/recover/**").not().authenticated()
+				.antMatchers("/resources/**").permitAll()
 				.and()
 				.formLogin().loginPage("/login")
 				.defaultSuccessUrl("/successful-login", true)

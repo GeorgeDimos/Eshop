@@ -3,7 +3,7 @@
 <head th:replace="fragments/headers :: common_header(~{::title})">
     <title>Profile Page</title>
 </head>
-<body style="font-family: Arial">
+<body>
 <div th:insert="fragments/navbar.html"></div>
 <div class="container" th:object="${user}">
     <div class="row">
@@ -62,10 +62,10 @@
             <br>
             <div class="row">
                 <div class="col-md-6">
-                    <label class="danger">Delete Account</label>
+                    <label>Delete Account</label>
                 </div>
                 <div class="col-md-6">
-                    <a class="btn btn-danger" href="/user/confirmAction" role="button">Delete!</a>
+                    <a class="btn btn-danger" th:href="@{'/user/deleteAccount'}" role="button">Delete!</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,14 @@
+<div class="container" th:fragment="frag(message)" xmlns:th="http://www.thymeleaf.org">
+    <form method="post" th:action="@{__${#httpServletRequest.requestURI}__}">
+        <div class="form-row justify-content-center">
+            <h3 th:text="${message}"></h3>
+        </div>
+        <br>
+        <div class="form-group text-center">
+            <input class="btn btn-danger" name="confirm" type="submit" value="confirm">
+            <input class="btn btn-secondary" type="submit" value="Cancel">
+        </div>
+    </form>
+</div>
+</body>
+</html>
