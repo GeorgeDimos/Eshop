@@ -35,4 +35,4 @@ Run with
 ./mvnw spring-boot:run
 ```
 
-Use http://localhost:8080/ and login with admin/admin or create a new user with your email.
+Use http://localhost:5000/ and login with admin/admin or create a new user with your email.
