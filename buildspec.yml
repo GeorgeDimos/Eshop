@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - mvn clean package
+  post_build:
+    commands:
+      - echo Build completed successfully
+      - mv target/eshop-0.0.1-SNAPSHOT.jar eshop.jar
+artifacts:
+  files:
+    - eshop.jar
