@@ -22,7 +22,7 @@ public class LoginController {
 
 	@GetMapping(value = "/successful-login")
 	public String success() {
-		if (!shoppingCart.getShoppingCart().isEmpty()) {
+		if (!shoppingCart.getItemsList().isEmpty()) {
 			return "redirect:/cart";
 		}
 		return "redirect:/products";

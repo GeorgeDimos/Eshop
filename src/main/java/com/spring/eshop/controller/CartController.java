@@ -25,7 +25,7 @@ public class CartController {
 
 	@GetMapping
 	public String goToCart(Model model) {
-		model.addAttribute("shoppingList", shoppingCart.getShoppingCart());
+		model.addAttribute("shoppingCart", shoppingCart);
 		return "cart";
 	}
 

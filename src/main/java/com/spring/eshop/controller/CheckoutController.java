@@ -27,7 +27,7 @@ public class CheckoutController {
 
 	@GetMapping
 	public String checkout(Model model) {
-		model.addAttribute("shoppingList", shoppingCart.getShoppingCart());
+		model.addAttribute("shoppingCart", shoppingCart);
 		return "checkout";
 	}
 
@@ -36,7 +36,7 @@ public class CheckoutController {
 							  @RequestParam(required = false) String confirm) {
 		if (confirm != null && !shoppingCart.isEmpty()) {
 			User user = userPrinciple.getUser();
-			int orderId = orderRegistration.execute(user, shoppingCart.getShoppingCart());
+			int orderId = orderRegistration.execute(user, shoppingCart.getItemsList());
 			shoppingCart.clear();
 			return "redirect:/user/orders/" + orderId;
 		}

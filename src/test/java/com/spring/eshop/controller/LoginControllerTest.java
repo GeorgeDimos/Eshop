@@ -49,7 +49,7 @@ class LoginControllerTest {
 
 	@Test
 	void redirectAfterLoginEmptyShoppingCart() throws Exception {
-		given(shoppingCart.getShoppingCart()).willReturn(Collections.EMPTY_MAP);
+		given(shoppingCart.getItemsList()).willReturn(Collections.EMPTY_MAP);
 
 		mockMvc.perform(get("/successful-login").with(user(mock(UserPrinciple.class))))
 				.andExpect(status().is3xxRedirection())
@@ -59,7 +59,7 @@ class LoginControllerTest {
 	@Test
 	@WithMockUser
 	void redirectAfterLoginShoppingCartHasItems() throws Exception {
-		given(shoppingCart.getShoppingCart()).willReturn(mock(Map.class));
+		given(shoppingCart.getItemsList()).willReturn(mock(Map.class));
 
 		mockMvc.perform(get("/successful-login").with(user(mock(UserPrinciple.class))))
 				.andExpect(status().is3xxRedirection())

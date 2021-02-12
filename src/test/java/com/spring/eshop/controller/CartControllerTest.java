@@ -44,7 +44,7 @@ class CartControllerTest {
 	@Test
 	void goToCart() throws Exception {
 		Map<Product, Integer> cart = mock(Map.class);
-		given(shoppingCart.getShoppingCart()).willReturn(cart);
+		given(shoppingCart.getItemsList()).willReturn(cart);
 
 		mockMvc.perform(get("/cart"))
 				.andExpect(status().isOk())

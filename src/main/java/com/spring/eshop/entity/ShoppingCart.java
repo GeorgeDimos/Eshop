@@ -20,8 +20,16 @@ public class ShoppingCart {
 		this.itemsList = itemsList;
 	}
 
-	public Map<Product, Integer> getShoppingCart() {
+	public Map<Product, Integer> getItemsList() {
 		return this.itemsList;
+	}
+
+	public double getSum() {
+		double sum = 0;
+		for (Product p : itemsList.keySet()) {
+			sum += p.getPrice() * itemsList.get(p);
+		}
+		return sum;
 	}
 
 	public void add(Product product, int quantity) {

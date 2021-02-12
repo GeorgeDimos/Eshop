@@ -14,10 +14,10 @@
             <br>
             <div class="alert alert-warning" role="alert" th:if="${notEnoughStockError}"
                  th:text="${notEnoughStockError}"></div>
-            <table class="table table-hover" th:if="${!shoppingList.empty}">
+            <table class="table table-hover" th:if="${!shoppingCart.itemsList.empty}">
                 <thead th:replace="fragments/table_head :: head('Product','Quantity of Products','Price','Remove')">
                 <tbody>
-                <tr th:each="item: ${shoppingList}">
+                <tr th:each="item: ${shoppingCart.itemsList}">
                     <td>
                         <a th:href="@{'/products/' + ${item.key.id}}"
                            th:text="${item.key.name}"></a>
@@ -33,13 +33,17 @@
                         </form>
                     </td>
                 </tr>
+                <tr>
+                    <td>Sum:</td>
+                    <td th:text="${shoppingCart.sum}+'€'"></td>
+                </tr>
                 </tbody>
             </table>
-            <form method="get" th:if="${!shoppingList.empty}">
+            <form method="get" th:if="${!shoppingCart.itemsList.empty}">
                 <button class="btn btn-primary" formaction="/checkout">Checkout</button>
                 <button class="btn btn-secondary" formaction="/products">Cancel</button>
             </form>
-            <p th:if="${shoppingList.empty}">Shopping Cart is empty</p>
+            <p th:if="${shoppingCart.empty}">Shopping Cart is empty</p>
         </div>
     </div>
 </div>

@@ -63,7 +63,7 @@ class CheckoutControllerTest {
 	@WithMockUser
 	void checkoutLoggedIn() throws Exception {
 
-		given(shoppingCart.getShoppingCart()).willReturn(mock(Map.class));
+		given(shoppingCart.getItemsList()).willReturn(mock(Map.class));
 
 		mockMvc.perform(get("/checkout"))
 				.andExpect(status().isOk())

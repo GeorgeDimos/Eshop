@@ -15,10 +15,14 @@
             <table class="table table-hover">
                 <thead th:replace="fragments/table_head :: head('Product','Quantity','Price',~{})"></thead>
                 <tbody>
-                <tr th:each="item: ${shoppingList}">
+                <tr th:each="item: ${shoppingCart.itemsList}">
                     <td th:text="${item.key.name}"></td>
                     <td th:text="${item.value}"></td>
                     <td th:text="${item.value*item.key.price}+'€'"></td>
+                </tr>
+                <tr>
+                    <td>Sum:</td>
+                    <td th:text="${shoppingCart.sum}+'€'"></td>
                 </tr>
                 </tbody>
             </table>
