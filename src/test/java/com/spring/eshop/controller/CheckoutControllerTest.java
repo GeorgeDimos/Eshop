@@ -63,12 +63,10 @@ class CheckoutControllerTest {
 	@WithMockUser
 	void checkoutLoggedIn() throws Exception {
 
-		given(shoppingCart.getItemsList()).willReturn(mock(Map.class));
-
 		mockMvc.perform(get("/checkout"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("checkout"))
-				.andExpect(model().attributeExists("shoppingList"));
+				.andExpect(model().attributeExists("shoppingCart"));
 	}
 
 	@Test

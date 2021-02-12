@@ -13,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
@@ -43,12 +41,10 @@ class CartControllerTest {
 
 	@Test
 	void goToCart() throws Exception {
-		Map<Product, Integer> cart = mock(Map.class);
-		given(shoppingCart.getItemsList()).willReturn(cart);
 
 		mockMvc.perform(get("/cart"))
 				.andExpect(status().isOk())
-				.andExpect(model().attribute("shoppingList", cart))
+				.andExpect(model().attribute("shoppingCart", shoppingCart))
 				.andExpect(view().name("cart"));
 	}
 
