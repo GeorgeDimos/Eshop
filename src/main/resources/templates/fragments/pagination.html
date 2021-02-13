@@ -1,24 +1,10 @@
 <nav th:fragment="frag (items)" xmlns:th="http://www.thymeleaf.org">
-    <ul class="pagination justify-content-end">
-        <li class="page-item disabled" th:if="${!items.hasPrevious()}">
-            <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item" th:if="${items.hasPrevious()}">
-            <a class="page-link" th:href="@{${#request.requestURI}(
-                                size=${items.pageable.pageSize},
-								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
-								page=${items.pageable.pageNumber}-1)}">Previous</a>
-        </li>
-
-
-        <li class="page-item disabled" th:if="${!items.hasNext()}">
-            <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Next</a>
-        </li>
-        <li class="page-item" th:if="${items.hasNext()}">
-            <a class="page-link" th:href="@{${#request.requestURI}(
-                                size=${items.pageable.pageSize},
-								sort=${items.pageable.sort.empty} ? '' : ${items.pageable.sort.toString().replace(': ',',')},
-								page=${items.pageable.pageNumber}+1)}">Next</a>
-        </li>
+    <ul class="pagination justify-content-end" th:if="${#request.getParameter('name')==null}">
+        <li th:replace="fragments/pageButton :: button(${items.hasPrevious()}, -1, 'Previous')"></li>
+        <li th:replace="fragments/pageButton :: button(${items.hasNext()}, 1, 'Next')"></li>
+    </ul>
+    <ul class="pagination justify-content-end" th:if="${#request.getParameter('name')!=null}">
+        <li th:replace="fragments/searchPageButton :: button(${items.hasPrevious()}, -1, 'Previous')"></li>
+        <li th:replace="fragments/searchPageButton :: button(${items.hasNext()}, 1, 'Next')"></li>
     </ul>
 </nav>

@@ -1,0 +1,39 @@
+<div th:fragment="button(hasItem, step, buttonName)" xmlns:th="http://www.thymeleaf.org">
+    <li class="page-item disabled" th:if="${!hasItem}">
+        <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>
+    </li>
+    <li class="page-item" th:if="${hasItem}">
+        <a class="page-link"
+           th:href="@{${#request.requestURI}(
+                                   name=${#request.parameterMap.get('name')},
+                                   page=${items.pageable.pageNumber+ step})}"
+           th:if="${items.pageable.pageSize==20 && items.pageable.sort.empty}"
+           th:text="${buttonName}">
+        </a>
+        <a class="page-link"
+           th:href="@{${#request.requestURI}(
+                                    name=${#request.parameterMap.get('name')},
+                                    sort=${items.pageable.sort.toString().replace(': ',',')},
+                                    page=${items.pageable.pageNumber + step})}"
+           th:if="${items.pageable.pageSize==20 && !items.pageable.sort.empty}"
+           th:text="${buttonName}">
+        </a>
+        <a class="page-link"
+           th:href="@{${#request.requestURI}(
+                                    name=${#request.parameterMap.get('name')},
+                                    size=${items.pageable.pageSize},
+                                    page=${items.pageable.pageNumber + step})}"
+           th:if="${items.pageable.pageSize!=20 && items.pageable.sort.empty}"
+           th:text="${buttonName}">
+        </a>
+        <a class="page-link"
+           th:href="@{${#request.requestURI}(
+                                    name=${#request.parameterMap.get('name')},
+                                    size=${items.pageable.pageSize},
+                                    sort=${items.pageable.sort.toString().replace(': ',',')},
+                                    page=${items.pageable.pageNumber + step})}"
+           th:if="${items.pageable.pageSize!=20 && !items.pageable.sort.empty}"
+           th:text="${buttonName}">
+        </a>
+    </li>
+</div>

@@ -1,20 +1,35 @@
-<div xmlns:th="http://www.thymeleaf.org">
-    <form class="row justify-content-end" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
+<div class="row justify-content-end" xmlns:th="http://www.thymeleaf.org">
+    <form class="col-2" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
 
         <!-- Check if there is a search parameter and if it exists then restore it -->
         <input name="name" th:if="${#request.getParameter('name')!=null}"
                th:value="${#request.getParameter('name')}"
                type="hidden">
 
-        <select class="col-1 custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size"
+        <input name="sort" th:if="${#request.getParameter('sort')!=null}"
+               th:value="${#request.getParameter('sort')}"
+               type="hidden">
+
+        <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectView" name="size"
                 onchange='if(this.value != 0) { this.form.submit(); }'>
-            <option value="15">View</option>
+            <option th:selected="${#request.getParameter('size')=='20'}" value="20">View</option>
             <option th:selected="${#request.getParameter('size')=='5'}" value="5">5</option>
             <option th:selected="${#request.getParameter('size')=='10'}" value="10">10</option>
-            <option th:selected="${#request.getParameter('size')=='20'}" value="20">20</option>
+            <option value="20">20</option>
         </select>
+    </form>
 
-        <select class="col-2 custom-select my-1 mr-sm-2" id="inlineFormSelectSort" name="sort"
+    <form class="col-2" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
+        <!-- Check if there is a search parameter and if it exists then restore it -->
+        <input name="name" th:if="${#request.getParameter('name')!=null}"
+               th:value="${#request.getParameter('name')}"
+               type="hidden">
+
+        <input name="size" th:if="${#request.getParameter('size')!=null}"
+               th:value="${#request.getParameter('size')}"
+               type="hidden">
+
+        <select class="custom-select my-1 mr-sm-2" id="inlineFormSelectSort" name="sort"
                 onchange='if(this.value != 0) { this.form.submit(); }'>
             <option value="id">Sort By</option>
             <option th:selected="${#request.getParameter('sort')=='price,ASC'}" value="price,ASC">Price
