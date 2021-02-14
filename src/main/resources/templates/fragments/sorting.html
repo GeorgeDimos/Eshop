@@ -1,5 +1,5 @@
 <div class="row justify-content-end" xmlns:th="http://www.thymeleaf.org">
-    <form class="col-lg-2" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
+    <form class="sorting col-lg-2" method="get" th:action="@{${#request.requestURI}}">
 
         <!-- Check if there is a search parameter and if it exists then restore it -->
         <input name="name" th:if="${#request.getParameter('name')!=null}"
@@ -19,7 +19,7 @@
         </select>
     </form>
 
-    <form class="col-lg-2" method="get" style="font-size:14px" th:action="@{${#request.requestURI}}">
+    <form class="sorting col-lg-2" method="get" th:action="@{${#request.requestURI}}">
         <!-- Check if there is a search parameter and if it exists then restore it -->
         <input name="name" th:if="${#request.getParameter('name')!=null}"
                th:value="${#request.getParameter('name')}"

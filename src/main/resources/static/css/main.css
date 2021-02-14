@@ -2,6 +2,18 @@
     font-family: arial;
 }
 
-.navbar{
+.navbar {
     background-color: #ebf2f2;
+}
+
+.sorting {
+    font-size: 14px;
+}
+
+.product-info {
+    font-size: larger;
+}
+
+.product-quantity-range {
+    width: 25%;
 }

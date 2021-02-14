@@ -9,13 +9,13 @@
 <div th:insert="fragments/navbar.html"></div>
 <div class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-lg-8">
             <div class="carousel slide" data-ride="carousel" id="carouselControls"
                  th:if="${!product.images.empty}">
                 <div class="carousel-inner embed-responsive-16by9" th:id="right">
                     <div th:class="'embed-responsive-item carousel-item' + ${imageStat.index!=0 ? '':' active'}"
                          th:each="image : ${product.images}">
-                        <img class="img-fluid embed-responsive-item" style="width: auto"
+                        <img class="img-fluid embed-responsive-item"
                              th:alt="${image.name}"
                              th:src="@{'/image/'+${image.name}+'.jpg'}"/>
                     </div>
@@ -30,14 +30,15 @@
                 </a>
             </div>
         </div>
-        <div class="col" style="font-size: larger">
+        <div class="col product-info">
             <h3 th:text="${product.name}"></h3>
             <br>
             <p th:text="'Price: '+${product.price}+'€'"></p>
             <form method="post" th:action="@{'/products/'+${product.id}}" th:if="${product.stock>0}">
                 <label>
                     Quantity:
-                    <input min="1" name="quantity" style="width: 25%" th:max="${product.stock}" type="number"
+                    <input class="product-quantity-range" min="1" name="quantity" th:max="${product.stock}"
+                           type="number"
                            value="1"/>
                 </label>
                 <br>
