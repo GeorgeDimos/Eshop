@@ -65,4 +65,12 @@ class LoginControllerTest {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/cart"));
 	}
+
+	@Test
+	void logout() throws Exception {
+		mockMvc.perform(get("/logout")
+				.with(user(mock(UserPrinciple.class))))
+				.andExpect(status().isOk())
+				.andExpect(view().name("logout"));
+	}
 }

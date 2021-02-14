@@ -1,4 +1,4 @@
-package com.spring.eshop.service.implementations.actions;
+package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.OrderDAO;
 import com.spring.eshop.dao.ProductDAO;
@@ -8,6 +8,7 @@ import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.events.OrderReceivedEvent;
 import com.spring.eshop.exceptions.NotEnoughStockException;
+import com.spring.eshop.service.interfaces.IOrderRegistration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
-public class OrderRegistration {
+public class OrderRegistration implements IOrderRegistration {
 	private final OrderDAO orderDAO;
 	private final ProductDAO productDAO;
 	private final ApplicationEventPublisher publisher;

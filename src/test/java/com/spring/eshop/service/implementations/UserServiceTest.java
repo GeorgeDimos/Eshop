@@ -19,8 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -64,4 +63,18 @@ class UserServiceTest {
 		});
 	}
 
+	@Test
+	void deleteUser() {
+		User user = mock(User.class);
+		service.deleteUser(user);
+		verify(userDAO).delete(user);
+	}
+
+	@Test
+	void deleteNull() {
+		doThrow(new IllegalArgumentException()).when(userDAO).delete(null);
+		assertThrows(IllegalArgumentException.class, () -> {
+			service.deleteUser(null);
+		});
+	}
 }

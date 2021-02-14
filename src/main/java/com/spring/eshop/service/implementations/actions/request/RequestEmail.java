@@ -4,23 +4,24 @@ import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 public abstract class RequestEmail {
 
-	private final String username;
-	private final String email;
+	private final UserDAO userDAO;
+	private final ApplicationEventPublisher publisher;
 
-	protected RequestEmail(String username, String email) {
-		this.username = username;
-		this.email = email;
+	public RequestEmail(UserDAO userDAO, ApplicationEventPublisher publisher) {
+		this.userDAO = userDAO;
+		this.publisher = publisher;
 	}
 
-	public final ApplicationEvent execute(UserDAO userDAO) {
+	public final void execute(String username, String email) {
 		User user = userDAO.findByUsernameAndUserInfoEmail(username, email).orElseThrow(() -> new InvalidUserInfoException("Invalid user info"));
 		if (isInvalid(user)) {
 			throw error();
 		}
-		return response(user);
+		publisher.publishEvent(response(user));
 	}
 
 	protected abstract boolean isInvalid(User user);

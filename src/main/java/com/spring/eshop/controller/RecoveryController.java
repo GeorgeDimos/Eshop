@@ -2,13 +2,9 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.confirm.PasswordRecoveryConfirmation;
-import com.spring.eshop.service.implementations.actions.request.PasswordRecoveryEmail;
-import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
+import com.spring.eshop.service.interfaces.IRecoveryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,14 +18,12 @@ import javax.validation.Valid;
 public class RecoveryController {
 
 	private final IConfirmationTokenService confirmationTokenService;
-	private final ActionService actionService;
-	private final PasswordEncoder passwordEncoder;
+	private final IRecoveryService recoveryService;
 
 	@Autowired
-	public RecoveryController(IConfirmationTokenService confirmationTokenService, ActionService actionService, PasswordEncoder passwordEncoder) {
+	public RecoveryController(IConfirmationTokenService confirmationTokenService, IRecoveryService recoveryService) {
 		this.confirmationTokenService = confirmationTokenService;
-		this.actionService = actionService;
-		this.passwordEncoder = passwordEncoder;
+		this.recoveryService = recoveryService;
 	}
 
 	@GetMapping("/activationEmail")
@@ -44,8 +38,7 @@ public class RecoveryController {
 										RedirectAttributes redirectAttributes) {
 
 		try {
-
-			actionService.request(new ResendActivationEmail(username, email));
+			recoveryService.resendActivationEmail(username, email);
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("error", ex.getMessage());
 			return "resendActivationEmail";
@@ -67,8 +60,7 @@ public class RecoveryController {
 								  RedirectAttributes redirectAttributes) {
 
 		try {
-
-			actionService.request(new PasswordRecoveryEmail(username, email));
+			recoveryService.passwordRecoveryEmail(username, email);
 		} catch (InvalidUserInfoException ex) {
 			model.addAttribute("error", ex.getMessage());
 			return "recover-password";
@@ -96,7 +88,7 @@ public class RecoveryController {
 		if (bindingResultUser.hasFieldErrors("password")) {
 			return "new-password";
 		}
-		actionService.confirm(new PasswordRecoveryConfirmation(token, user.getPassword(), passwordEncoder));
+		recoveryService.passwordRecoveryConfirmation(token, user.getPassword());
 		redirectAttributes.addFlashAttribute("success", "Password successfully changed");
 		return "redirect:/login";
 	}

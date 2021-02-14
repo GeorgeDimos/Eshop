@@ -12,10 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 @Controller
 @RequestMapping("/user")
 public class UsersController {
@@ -45,21 +41,11 @@ public class UsersController {
 
 	@PostMapping("/deleteAccount")
 	public String deleteAccount(@RequestParam(required = false) String confirm,
-								@AuthenticationPrincipal UserPrinciple userPrinciple,
-								HttpServletRequest request) {
+								@AuthenticationPrincipal UserPrinciple userPrinciple) {
 		if (confirm != null) {
 			userService.deleteUser(userPrinciple.getUser());
 
 			SecurityContextHolder.clearContext();
-
-			HttpSession session = request.getSession(false);
-			if (session != null) {
-				session.invalidate();
-			}
-
-			for (Cookie cookie : request.getCookies()) {
-				cookie.setMaxAge(0);
-			}
 
 			return "redirect:/login?logout";
 		}

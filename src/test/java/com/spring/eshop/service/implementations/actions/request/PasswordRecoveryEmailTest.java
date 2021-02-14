@@ -7,16 +7,19 @@ import com.spring.eshop.exceptions.InvalidUserInfoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PasswordRecoveryEmailTest {
@@ -24,25 +27,32 @@ class PasswordRecoveryEmailTest {
 
 	@Mock
 	UserDAO userDAO;
+	@Mock
+	ApplicationEventPublisher publisher;
 
-	User user;
-	UserInfo userInfo;
+	@InjectMocks
 	PasswordRecoveryEmail recoveryEmail;
+
+	User enabledUser;
+	User disabledUser;
+	UserInfo userInfo;
+
 
 	@BeforeEach
 	void setUp() {
-		recoveryEmail = new PasswordRecoveryEmail("u", "email@mail.gr");
-		userInfo = new UserInfo(1, "f", "l", "email@mail.gr", null);
+		userInfo = mock(UserInfo.class);
+		enabledUser = new User(1, "u", "p", true, null, userInfo, null);
+		disabledUser = new User(1, "u", "p", false, null, userInfo, null);
 	}
 
 	@Test
 	void execute() {
-		user = new User(1, "u", "p", true, null, userInfo, null);
-		given(userDAO.findByUsernameAndUserInfoEmail(user.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(user));
+		given(userDAO.findByUsernameAndUserInfoEmail(enabledUser.getUsername(), userInfo.getEmail()))
+				.willReturn(Optional.of(enabledUser));
 
-		ApplicationEvent result = recoveryEmail.execute(userDAO);
-		assertNotNull(result);
+		recoveryEmail.execute(enabledUser.getUsername(), userInfo.getEmail());
+
+		verify(publisher).publishEvent(any(ApplicationEvent.class));
 	}
 
 	@Test
@@ -51,21 +61,22 @@ class PasswordRecoveryEmailTest {
 				.willReturn(Optional.empty());
 
 		assertThrows(InvalidUserInfoException.class, () -> {
-			recoveryEmail.execute(userDAO);
+			recoveryEmail.execute(anyString(), anyString());
 		});
 
+		verify(publisher, never()).publishEvent(any(ApplicationEvent.class));
 	}
 
 	@Test
 	void executeUserIsNotYetEnabled() {
-		user = new User(1, "u", "p", false, null, userInfo, null);
-		given(userDAO.findByUsernameAndUserInfoEmail(user.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(user));
+		given(userDAO.findByUsernameAndUserInfoEmail(disabledUser.getUsername(), userInfo.getEmail()))
+				.willReturn(Optional.of(disabledUser));
 
 		assertThrows(InvalidUserInfoException.class, () -> {
-			recoveryEmail.execute(userDAO);
+			recoveryEmail.execute(disabledUser.getUsername(), userInfo.getEmail());
 		});
 
+		verify(publisher, never()).publishEvent(any(ApplicationEvent.class));
 	}
 
 }

@@ -23,22 +23,21 @@ import java.util.Set;
 import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @WebMvcTest(UsersController.class)
 class UsersControllerTest {
 
 	@MockBean
 	IUserService userService;
-
 	@MockBean
 	IOrderService orderService;
-
 	@MockBean
 	UserPrinciple userPrinciple;
 
@@ -105,4 +104,36 @@ class UsersControllerTest {
 				.andExpect(model().attributeExists("order"));
 	}
 
+	@Test
+	void deleteAccount() throws Exception {
+		mockMvc.perform(get("/user/deleteAccount")
+				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+		)
+				.andExpect(status().isOk())
+				.andExpect(view().name("deleteAccount"));
+	}
+
+	@Test
+	void confirmDeleteAccount() throws Exception {
+
+		mockMvc.perform(post("/user/deleteAccount")
+				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+				.with(csrf())
+				.param("confirm", "ok")
+		)
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/login?logout"));
+		verify(userService).deleteUser(user);
+	}
+
+	@Test
+	void cancelDeleteAccount() throws Exception {
+		mockMvc.perform(post("/user/deleteAccount")
+				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+				.with(csrf())
+		)
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/user"));
+		verify(userService, never()).deleteUser(any(User.class));
+	}
 }

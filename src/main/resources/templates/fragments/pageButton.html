@@ -1,6 +1,6 @@
 <div th:fragment="button(hasItem, step, buttonName)" xmlns:th="http://www.thymeleaf.org">
     <li class="page-item disabled" th:if="${!hasItem}">
-        <a aria-disabled="true" class="page-link" href="#" tabindex="-1">Previous</a>
+        <a aria-disabled="true" class="page-link" href="#" tabindex="-1" th:text="${buttonName}"></a>
     </li>
     <li class="page-item" th:if="${hasItem}">
         <a class="page-link"

@@ -1,10 +1,11 @@
-package com.spring.eshop.service.implementations.actions;
+package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.events.ActivationRequiredEvent;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
+import com.spring.eshop.service.implementations.actions.confirm.RegistrationConfirmation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -30,6 +31,8 @@ class UserRegistrationTest {
 	UserDAO userDAO;
 	@Mock
 	ApplicationEventPublisher publisher;
+	@Mock
+	RegistrationConfirmation registrationConfirmation;
 	@InjectMocks
 	UserRegistration userRegistration;
 
@@ -38,28 +41,36 @@ class UserRegistrationTest {
 
 	@BeforeEach
 	void setUp() {
-		user = new User(1, "u", "p", true, null, null, null);
+		user = new User(1, "u", "text_password", true, null, null, null);
 		userInfo = new UserInfo(1, "f", "l", "email@mail.gr", null);
 	}
 
 	@Test
-	void execute() {
+	void register() {
 		given(userDAO.existsByUsernameOrUserInfoEmail(anyString(), anyString()))
 				.willReturn(false);
-		userRegistration.execute(user, userInfo);
-		verify(userDAO).save(any(User.class));
+		userRegistration.register(user, userInfo);
+		assertNotEquals("text_password", user.getPassword());
+		assertEquals(passwordEncoder.encode("text_password"), user.getPassword());
+		verify(userDAO).save(user);
 		verify(publisher).publishEvent(any(ActivationRequiredEvent.class));
 	}
 
 	@Test
-	void executeUserExists() {
+	void registerButUserExists() {
 		given(userDAO.existsByUsernameOrUserInfoEmail(anyString(), anyString()))
 				.willReturn(true);
 		assertThrows(UserAlreadyExistsException.class, () -> {
-			userRegistration.execute(user, userInfo);
+			userRegistration.register(user, userInfo);
 		});
 
 		verify(userDAO, never()).save(any(User.class));
 		verify(publisher, never()).publishEvent(any(ActivationRequiredEvent.class));
+	}
+
+	@Test
+	void confirmRegistration() {
+		userRegistration.confirm("token");
+		verify(registrationConfirmation).execute("token", null);
 	}
 }

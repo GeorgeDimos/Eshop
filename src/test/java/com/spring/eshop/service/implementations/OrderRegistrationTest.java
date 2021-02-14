@@ -1,11 +1,8 @@
-package com.spring.eshop.service.implementations.actions;
+package com.spring.eshop.service.implementations;
 
 import com.spring.eshop.dao.OrderDAO;
 import com.spring.eshop.dao.ProductDAO;
-import com.spring.eshop.entity.Category;
-import com.spring.eshop.entity.Product;
-import com.spring.eshop.entity.User;
-import com.spring.eshop.entity.UserInfo;
+import com.spring.eshop.entity.*;
 import com.spring.eshop.events.OrderReceivedEvent;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +54,7 @@ class OrderRegistrationTest {
 		given(productDAO.order(gt(0), gt(0))).willReturn(1);
 		int result = orderRegistration.execute(user, shoppingCart);
 		assertThat(result).isNotNull();
+		verify(orderDAO).save(any(Order.class));
 		verify(productDAO, times(shoppingCart.size())).order(gt(0), gt(0));
 		verify(publisher).publishEvent(any(OrderReceivedEvent.class));
 	}
@@ -71,6 +69,7 @@ class OrderRegistrationTest {
 
 		verify(productDAO).order(gt(0), gt(0));
 		then(productDAO).shouldHaveNoMoreInteractions();
+		verify(orderDAO, never()).save(any(Order.class));
 		verify(publisher, never()).publishEvent(any(OrderReceivedEvent.class));
 	}
 }

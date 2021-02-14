@@ -1,11 +1,8 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.exceptions.InvalidUserInfoException;
-import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.confirm.PasswordRecoveryConfirmation;
-import com.spring.eshop.service.implementations.actions.request.PasswordRecoveryEmail;
-import com.spring.eshop.service.implementations.actions.request.ResendActivationEmail;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
+import com.spring.eshop.service.interfaces.IRecoveryService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -30,7 +26,7 @@ class RecoveryControllerTest {
 	IConfirmationTokenService confirmationTokenService;
 
 	@MockBean
-	ActionService actionService;
+	IRecoveryService recoveryService;
 
 	@MockBean
 	IUserService userService;
@@ -59,7 +55,7 @@ class RecoveryControllerTest {
 	@Test
 	void resendActivationEmailInvalidUsername() throws Exception {
 		doThrow(new InvalidUserInfoException("Invalid Username"))
-				.when(actionService).request(any(ResendActivationEmail.class));
+				.when(recoveryService).resendActivationEmail(anyString(), anyString());
 
 		mockMvc.perform(post("/recover/activationEmail")
 				.param("username", "doesntExist")
@@ -92,7 +88,7 @@ class RecoveryControllerTest {
 	@Test
 	void recoverPasswordInvalidUsername() throws Exception {
 		doThrow(new InvalidUserInfoException("Invalid Username"))
-				.when(actionService).request(any(PasswordRecoveryEmail.class));
+				.when(recoveryService).passwordRecoveryEmail(anyString(), anyString());
 
 		mockMvc.perform(post("/recover/password")
 				.param("username", "doesntExist")
@@ -144,6 +140,6 @@ class RecoveryControllerTest {
 				.andExpect(flash().attribute("success", nullValue()))
 				.andExpect(view().name("new-password"));
 
-		verify(actionService, never()).confirm(any(PasswordRecoveryConfirmation.class));
+		verify(recoveryService, never()).passwordRecoveryConfirmation(anyString(), anyString());
 	}
 }

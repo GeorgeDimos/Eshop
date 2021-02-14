@@ -6,6 +6,10 @@ import com.spring.eshop.entity.ConfirmationToken;
 import com.spring.eshop.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.NoSuchElementException;
@@ -14,51 +18,57 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class PasswordRecoveryConfirmationTest {
 
+	@Mock
+	UserDAO userDAO;
+	@Mock
+	ConfirmationTokenDAO confirmationTokenDAO;
+	@Mock
+	PasswordEncoder passwordEncoder;
+
+	@InjectMocks
 	PasswordRecoveryConfirmation confirmation;
 
 	ConfirmationToken token;
-
-	UserDAO userDAO;
-	ConfirmationTokenDAO confirmationTokenDAO;
 	User user;
+	String password;
 
 	@BeforeEach
 	void setUp() {
-		PasswordEncoder encoder = mock(PasswordEncoder.class);
-		user = new User(1, "u", "p", false, null, null, null);
+		user = new User(1, "u", "old_password", false, null, null, null);
 		token = new ConfirmationToken(1, "test", null, user);
-		confirmation = new PasswordRecoveryConfirmation("test", "newpassword", encoder);
-		userDAO = mock(UserDAO.class);
-		confirmationTokenDAO = mock(ConfirmationTokenDAO.class);
+		password = "new_password";
 	}
 
 	@Test
 	void execute() {
-		given(confirmationTokenDAO.findByToken("test"))
+		given(confirmationTokenDAO.findByToken("validToken"))
 				.willReturn(Optional.of(token));
 
-		confirmation.execute(userDAO, confirmationTokenDAO);
+		confirmation.execute("validToken", password);
 
-		assertNotEquals("p", user.getPassword());
+		assertNotEquals("old_password", user.getPassword());
+		assertEquals(passwordEncoder.encode(password), user.getPassword());
 		verify(userDAO).save(any(User.class));
-		verify(confirmationTokenDAO).deleteByToken("test");
+		verify(confirmationTokenDAO).deleteByToken("validToken");
 	}
 
 	@Test
 	void executeInvalidToken() {
 
-		given(confirmationTokenDAO.findByToken("test"))
+		given(confirmationTokenDAO.findByToken("invlalidToken"))
 				.willReturn(Optional.empty());
 
 		assertThrows(NoSuchElementException.class, () -> {
-			confirmation.execute(userDAO, confirmationTokenDAO);
+			confirmation.execute("invlalidToken", password);
 		});
 
-		assertEquals("p", user.getPassword());
+		assertEquals("old_password", user.getPassword());
 		verify(userDAO, never()).save(any(User.class));
 		verify(confirmationTokenDAO, never()).deleteByToken("test");
 	}

@@ -4,7 +4,7 @@ import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.security.UserPrinciple;
-import com.spring.eshop.service.implementations.actions.OrderRegistration;
+import com.spring.eshop.service.interfaces.IOrderRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,10 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CheckoutController {
 
 	private final ShoppingCart shoppingCart;
-	private final OrderRegistration orderRegistration;
+	private final IOrderRegistration orderRegistration;
 
 	@Autowired
-	public CheckoutController(ShoppingCart shoppingCart, OrderRegistration orderRegistration) {
+	public CheckoutController(ShoppingCart shoppingCart, IOrderRegistration orderRegistration) {
 		this.shoppingCart = shoppingCart;
 		this.orderRegistration = orderRegistration;
 	}

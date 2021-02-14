@@ -3,8 +3,7 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
-import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.UserRegistration;
+import com.spring.eshop.service.interfaces.IUserRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RegisterControllerTest {
 
 	@MockBean
-	ActionService actionService;
+	IUserRegistration userRegistration;
 	@MockBean
 	IUserService userService;
-	@MockBean
-	UserRegistration userRegistration;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -51,7 +48,6 @@ class RegisterControllerTest {
 
 	@AfterEach
 	void tearDown() {
-		reset(actionService);
 		reset(userService);
 		reset(userRegistration);
 	}
@@ -79,8 +75,7 @@ class RegisterControllerTest {
 				.andExpect(flash().attributeExists("success"))
 				.andExpect(view().name("redirect:/login"));
 
-		verify(userRegistration).execute(any(User.class), any(UserInfo.class));
-
+		verify(userRegistration).register(any(User.class), any(UserInfo.class));
 	}
 
 	@Test
@@ -98,14 +93,13 @@ class RegisterControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("register"));
 
-		verify(userRegistration, never()).execute(any(User.class), any(UserInfo.class));
-
+		verify(userRegistration, never()).register(any(User.class), any(UserInfo.class));
 	}
 
 	@Test
 	void registerNewUserFailureUserExists() throws Exception {
 		doThrow(new UserAlreadyExistsException("User already exists"))
-				.when(userRegistration).execute(any(User.class), any(UserInfo.class));
+				.when(userRegistration).register(any(User.class), any(UserInfo.class));
 
 		mockMvc.perform(post("/register")
 				.param("username", "george")

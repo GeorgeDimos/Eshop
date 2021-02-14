@@ -5,24 +5,29 @@ import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.ConfirmationToken;
 import com.spring.eshop.entity.User;
 
+import javax.transaction.Transactional;
+
 public abstract class ConfirmAction {
 
-	private final String token;
+	private final UserDAO userDAO;
+	private final ConfirmationTokenDAO confirmationTokenDAO;
 
-	public ConfirmAction(String token) {
-		this.token = token;
+	public ConfirmAction(UserDAO userDAO, ConfirmationTokenDAO confirmationTokenDAO) {
+		this.userDAO = userDAO;
+		this.confirmationTokenDAO = confirmationTokenDAO;
 	}
 
-	public void execute(UserDAO userDAO, ConfirmationTokenDAO confirmationTokenDAO) {
+	@Transactional
+	public void execute(String token, String password) {
 
 		ConfirmationToken confirmationToken = confirmationTokenDAO.findByToken(token).orElseThrow();
 		User user = confirmationToken.getUser();
 
-		action(user);
+		action(user, password);
 
 		userDAO.save(user);
 		confirmationTokenDAO.deleteByToken(token);
 	}
 
-	protected abstract void action(User user);
+	protected abstract void action(User user, String password);
 }

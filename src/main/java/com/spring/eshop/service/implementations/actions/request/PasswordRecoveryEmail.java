@@ -1,14 +1,18 @@
 package com.spring.eshop.service.implementations.actions.request;
 
+import com.spring.eshop.dao.UserDAO;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.events.PasswordRecoveryEvent;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PasswordRecoveryEmail extends RequestEmail {
 
-	public PasswordRecoveryEmail(String username, String email) {
-		super(username, email);
+	public PasswordRecoveryEmail(UserDAO userDAO, ApplicationEventPublisher publisher) {
+		super(userDAO, publisher);
 	}
 
 	@Override

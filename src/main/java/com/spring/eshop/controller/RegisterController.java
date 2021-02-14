@@ -3,9 +3,7 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
-import com.spring.eshop.service.implementations.actions.ActionService;
-import com.spring.eshop.service.implementations.actions.UserRegistration;
-import com.spring.eshop.service.implementations.actions.confirm.RegistrationConfirmation;
+import com.spring.eshop.service.interfaces.IUserRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegisterController {
 
-	private final ActionService actionService;
-	private final UserRegistration userRegistration;
+	private final IUserRegistration userRegistration;
 
 	@Autowired
-	public RegisterController(ActionService actionService, UserRegistration userRegistration) {
-		this.actionService = actionService;
+	public RegisterController(IUserRegistration userRegistration) {
 		this.userRegistration = userRegistration;
 	}
 
@@ -45,7 +41,7 @@ public class RegisterController {
 		if (bindingResultUser.hasErrors() || bindingResultUserDetails.hasErrors()) {
 			return "register";
 		}
-		userRegistration.execute(user, userInfo);
+		userRegistration.register(user, userInfo);
 		redirectAttributes.addFlashAttribute("success",
 				"User registration successful. Please check your email and confirm your account.");
 		return "redirect:/login";
@@ -53,7 +49,7 @@ public class RegisterController {
 
 	@GetMapping("/{token}")
 	public String confirmRegistration(@PathVariable("token") String token, Model model) {
-		actionService.confirm(new RegistrationConfirmation(token));
+		userRegistration.confirm(token);
 		model.addAttribute("success",
 				"Your account is confirmed. You can now login.");
 		return "login";

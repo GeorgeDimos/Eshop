@@ -6,6 +6,10 @@ import com.spring.eshop.entity.ConfirmationToken;
 import com.spring.eshop.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -15,51 +19,51 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class RegistrationConfirmationTest {
 
+	@Mock
+	UserDAO userDAO;
+	@Mock
+	ConfirmationTokenDAO confirmationTokenDAO;
+
+	@InjectMocks
 	RegistrationConfirmation confirmation;
 
-	ConfirmationToken token;
-
-	UserDAO userDAO;
-	ConfirmationTokenDAO confirmationTokenDAO;
 	User user;
+	ConfirmationToken token;
 
 	@BeforeEach
 	void setUp() {
 		user = new User(1, "u", "p", false, null, null, null);
-		token = new ConfirmationToken(1, "test", null, user);
-		confirmation = new RegistrationConfirmation("test");
-
-		userDAO = mock(UserDAO.class);
-		confirmationTokenDAO = mock(ConfirmationTokenDAO.class);
+		token = new ConfirmationToken(1, "validToken", null, user);
 	}
 
 	@Test
 	void execute() {
 
-		given(confirmationTokenDAO.findByToken("test"))
+		given(confirmationTokenDAO.findByToken("validToken"))
 				.willReturn(Optional.of(token));
 
-		confirmation.execute(userDAO, confirmationTokenDAO);
+		confirmation.execute("validToken", null);
 
 		assertTrue(user.getEnabled());
-		verify(userDAO).save(any(User.class));
-		verify(confirmationTokenDAO).deleteByToken("test");
+		verify(userDAO).save(user);
+		verify(confirmationTokenDAO).deleteByToken("validToken");
 	}
 
 	@Test
 	void executeInvalidToken() {
 
-		given(confirmationTokenDAO.findByToken("test"))
+		given(confirmationTokenDAO.findByToken("invalidToken"))
 				.willReturn(Optional.empty());
 
 		assertThrows(NoSuchElementException.class, () -> {
-			confirmation.execute(userDAO, confirmationTokenDAO);
+			confirmation.execute("invalidToken", null);
 		});
 
 		assertFalse(user.getEnabled());
 		verify(userDAO, never()).save(any(User.class));
-		verify(confirmationTokenDAO, never()).deleteByToken("test");
+		verify(confirmationTokenDAO, never()).deleteByToken(anyString());
 	}
 }

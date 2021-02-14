@@ -7,41 +7,51 @@ import com.spring.eshop.exceptions.InvalidUserInfoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ResendActivationEmailTest {
 
 	@Mock
 	UserDAO userDAO;
+	@Mock
+	ApplicationEventPublisher publisher;
 
-	User user;
+	@InjectMocks
+	ResendActivationEmail activationEmail;
+
+	User enabledUser;
+	User inactiveUser;
 	UserInfo userInfo;
-	ResendActivationEmail recoveryEmail;
+
 
 	@BeforeEach
 	void setUp() {
-		recoveryEmail = new ResendActivationEmail("u", "email@mail.gr");
-		userInfo = new UserInfo(1, "f", "l", "email@mail.gr", null);
+		userInfo = mock(UserInfo.class);
+		enabledUser = new User(1, "u", "p", true, null, userInfo, null);
+		inactiveUser = new User(1, "u", "p", false, null, userInfo, null);
 	}
 
 	@Test
 	void execute() {
-		user = new User(1, "u", "p", false, null, userInfo, null);
-		given(userDAO.findByUsernameAndUserInfoEmail(user.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(user));
+		given(userDAO.findByUsernameAndUserInfoEmail(inactiveUser.getUsername(), userInfo.getEmail()))
+				.willReturn(Optional.of(inactiveUser));
 
-		ApplicationEvent result = recoveryEmail.execute(userDAO);
-		assertNotNull(result);
+		activationEmail.execute(inactiveUser.getUsername(), userInfo.getEmail());
+
+		verify(publisher).publishEvent(any(ApplicationEvent.class));
 	}
 
 	@Test
@@ -50,20 +60,21 @@ class ResendActivationEmailTest {
 				.willReturn(Optional.empty());
 
 		assertThrows(InvalidUserInfoException.class, () -> {
-			recoveryEmail.execute(userDAO);
+			activationEmail.execute(anyString(), anyString());
 		});
 
+		verify(publisher, never()).publishEvent(any(ApplicationEvent.class));
 	}
 
 	@Test
-	void executeUserIsNotYetEnabled() {
-		user = new User(1, "u", "p", true, null, userInfo, null);
-		given(userDAO.findByUsernameAndUserInfoEmail(user.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(user));
+	void executeUserIsAlreadyEnabled() {
+		given(userDAO.findByUsernameAndUserInfoEmail(enabledUser.getUsername(), userInfo.getEmail()))
+				.willReturn(Optional.of(enabledUser));
 
 		assertThrows(InvalidUserInfoException.class, () -> {
-			recoveryEmail.execute(userDAO);
+			activationEmail.execute(enabledUser.getUsername(), userInfo.getEmail());
 		});
 
+		verify(publisher, never()).publishEvent(any(ApplicationEvent.class));
 	}
 }

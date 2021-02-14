@@ -3,7 +3,7 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.security.UserPrinciple;
-import com.spring.eshop.service.implementations.actions.OrderRegistration;
+import com.spring.eshop.service.implementations.OrderRegistration;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
