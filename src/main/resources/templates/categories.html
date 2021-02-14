@@ -8,7 +8,7 @@
 <body>
 <div th:insert="fragments/navbar.html"></div>
 <div class="container">
-    <table class="table table-hover" th:if="${!categories.empty}">
+    <table class="table table-hover text-center" th:if="${!categories.empty}">
         <thead th:replace="fragments/table_head :: head('Category','Number of Products',~{},~{})"></thead>
         <tbody>
         <tr th:each="category: ${categories}" th:if="${!category.products.empty}">

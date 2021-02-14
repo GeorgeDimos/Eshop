@@ -6,65 +6,64 @@
 <body>
 <div th:insert="fragments/navbar.html"></div>
 <div class="container" th:object="${user}">
-    <div class="row">
-        <div class="col col-md-3"></div>
-        <div class="col">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
             <h2 th:text="${user.userInfo.firstName} + ' ' + ${user.userInfo.lastName}"></h2>
             <br>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>User Id</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <p th:text="${user.id}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>Username</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <p th:text="${user.username}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>First name</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <p th:text="${user.userInfo.firstName}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>Last name</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <p th:text="${user.userInfo.lastName}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>Email</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <p th:text="${user.userInfo.email}"></p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>Orders</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <a th:href="@{'/user/orders/'}">Orders</a>
                 </div>
             </div>
             <br>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col">
                     <label>Delete Account</label>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <a class="btn btn-danger" th:href="@{'/user/deleteAccount'}" role="button">Delete!</a>
                 </div>
             </div>
