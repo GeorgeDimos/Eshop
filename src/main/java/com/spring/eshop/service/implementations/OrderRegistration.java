@@ -40,7 +40,12 @@ public class OrderRegistration implements IOrderRegistration {
 				throw new NotEnoughStockException(product.getName());
 			}
 
-			orderItems.add(new OrderItem(order, product, quantity));
+			OrderItem orderItem = new OrderItem();
+			orderItem.setOrder(order);
+			orderItem.setProduct(product);
+			orderItem.setQuantity(quantity);
+
+			orderItems.add(orderItem);
 		});
 
 		order.setItems(orderItems);

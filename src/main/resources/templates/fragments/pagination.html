@@ -1,4 +1,4 @@
-<nav th:fragment="frag (items)" xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="frag (items)" th:if="${!items.empty}" xmlns:th="http://www.thymeleaf.org">
     <ul class="pagination justify-content-end" th:if="${#request.getParameter('name')==null}">
         <li th:replace="fragments/pageButton :: button(${items.hasPrevious()}, -1, 'Previous')"></li>
         <li th:replace="fragments/pageButton :: button(${items.hasNext()}, 1, 'Next')"></li>

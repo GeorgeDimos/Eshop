@@ -8,8 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -26,7 +26,7 @@ public class OrderItem {
 	@NotNull
 	private Order order;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	@NotNull
 	private Product product;
@@ -35,9 +35,5 @@ public class OrderItem {
 	@NotNull
 	private int quantity;
 
-	public OrderItem(Order order, Product product, int quantity) {
-		this.order = order;
-		this.product = product;
-		this.quantity = quantity;
-	}
 }
+

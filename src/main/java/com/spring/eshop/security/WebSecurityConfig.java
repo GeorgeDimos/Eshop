@@ -31,10 +31,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-				.authorizeRequests()
-				.antMatchers("/checkout/**", "/user/**").authenticated()
-				.antMatchers("/register/**", "/login/**", "/recover/**").not().authenticated()
-				.antMatchers("/resources/**").permitAll()
+						.csrf().ignoringAntMatchers("/api/**")
+						.and()
+						.authorizeRequests()
+						.antMatchers("/checkout/**", "/user/**").authenticated()
+						.antMatchers("/register/**", "/login/**", "/recover/**").not().authenticated()
+						//.antMatchers("/api/**").hasRole("ADMIN")
+						.antMatchers("/resources/**").permitAll()
 				.and()
 				.formLogin().loginPage("/login")
 				.defaultSuccessUrl("/successful-login", true)
