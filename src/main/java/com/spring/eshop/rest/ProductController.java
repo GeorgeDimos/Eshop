@@ -93,7 +93,7 @@ class ProductModelAssembler implements RepresentationModelAssembler<ProductView,
 		return EntityModel.of(entity
 						, linkTo(methodOn(ProductController.class).getProduct(entity.id)).withSelfRel()
 						, linkTo(methodOn(ProductController.class).getProducts()).withRel("products")
+						, linkTo(methodOn(CategoryController.class).getCategory(entity.categoryId)).withRel("category")
 		);
 	}
 }
-

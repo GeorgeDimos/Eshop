@@ -38,12 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						.antMatchers("/register/**", "/login/**", "/recover/**").not().authenticated()
 						//.antMatchers("/api/**").hasRole("ADMIN")
 						.antMatchers("/resources/**").permitAll()
-				.and()
-				.formLogin().loginPage("/login")
-				.defaultSuccessUrl("/successful-login", true)
-				.and()
-				.logout().permitAll()
-				.and().exceptionHandling().accessDeniedPage("/access-denied");
+						.and()
+						.formLogin().loginPage("/login")
+						.defaultSuccessUrl("/successful-login", true)
+						.and()
+						.logout().permitAll()
+						.and().exceptionHandling().accessDeniedPage("/access-denied");
 	}
 
 	@Override

@@ -18,7 +18,9 @@ public class CategoryView {
 
 	public CategoryView(Category category) {
 		name = category.getName();
-		products = category.getProducts().stream().map(ProductView::new).collect(Collectors.toList());
+		products = category.getProducts().stream()
+						.map(ProductView::new)
+						.collect(Collectors.toList());
 		id = category.getId();
 	}
 
