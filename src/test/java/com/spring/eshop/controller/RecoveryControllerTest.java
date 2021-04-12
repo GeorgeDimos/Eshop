@@ -3,7 +3,6 @@ package com.spring.eshop.controller;
 import com.spring.eshop.exceptions.InvalidUserInfoException;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import com.spring.eshop.service.interfaces.IRecoveryService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -27,9 +26,6 @@ class RecoveryControllerTest {
 
 	@MockBean
 	IRecoveryService recoveryService;
-
-	@MockBean
-	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;

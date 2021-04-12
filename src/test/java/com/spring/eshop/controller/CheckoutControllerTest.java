@@ -4,7 +4,6 @@ import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.implementations.OrderRegistration;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +31,7 @@ class CheckoutControllerTest {
 
 	@MockBean
 	ShoppingCart shoppingCart;
-	@MockBean
-	IUserService userService;
+
 	@MockBean
 	OrderRegistration orderRegistration;
 

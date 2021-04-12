@@ -3,7 +3,6 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.Category;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.service.interfaces.ICategoryService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,9 +29,6 @@ class CategoriesControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
-
-	@MockBean
-	IUserService userService;
 
 	@Test
 	void getCategories() throws Exception {

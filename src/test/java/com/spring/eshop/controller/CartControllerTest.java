@@ -3,7 +3,6 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.service.interfaces.IProductService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -30,8 +29,6 @@ class CartControllerTest {
 	IProductService productService;
 	@MockBean
 	ShoppingCart shoppingCart;
-	@MockBean
-	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;

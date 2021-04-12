@@ -2,7 +2,6 @@ package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.security.UserPrinciple;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,9 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(LoginController.class)
 class LoginControllerTest {
-
-	@MockBean
-	IUserService userService;
 
 	@MockBean
 	ShoppingCart shoppingCart;

@@ -3,7 +3,6 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.Category;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.service.interfaces.IProductService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,6 @@ class SearchControllerTest {
 
 	@MockBean
 	IProductService productService;
-
-	@MockBean
-	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;

@@ -5,7 +5,6 @@ import com.spring.eshop.entity.Image;
 import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.service.interfaces.IProductService;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +35,6 @@ class ProductsControllerTest {
 
 	@MockBean
 	ShoppingCart shoppingCart;
-
-	@MockBean
-	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;
