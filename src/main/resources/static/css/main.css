@@ -17,3 +17,26 @@
 .product-quantity-range {
     width: 25%;
 }
+
+.github-oauth2 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.github-oauth2 a {
+    color: #ffffff;
+}
+
+.github-oauth2 a:hover {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.github-oauth2 i {
+    background: url("/GitHub-Mark-32px.png") left no-repeat;
+    height: 32px;
+    width: 32px;
+    display: block;
+    margin-right: 20px;
+}

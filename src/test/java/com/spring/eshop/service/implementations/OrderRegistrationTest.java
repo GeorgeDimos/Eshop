@@ -12,6 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Map;
 
@@ -52,7 +55,14 @@ class OrderRegistrationTest {
 	@Test
 	void execute() {
 		given(productDAO.order(gt(0), gt(0))).willReturn(1);
-		int result = orderRegistration.execute(user, shoppingCart);
+
+		SecurityContext securityContext = mock(SecurityContext.class);
+		Authentication auth = mock(Authentication.class);
+		when(securityContext.getAuthentication()).thenReturn(auth);
+		when(auth.getPrincipal()).thenReturn(user);
+		SecurityContextHolder.setContext(securityContext);
+
+		Order result = orderRegistration.execute(shoppingCart);
 		assertThat(result).isNotNull();
 		verify(orderDAO).save(any(Order.class));
 		verify(productDAO, times(shoppingCart.size())).order(gt(0), gt(0));
@@ -64,7 +74,7 @@ class OrderRegistrationTest {
 		given(productDAO.order(gt(0), gt(0))).willReturn(0);
 
 		assertThrows(NotEnoughStockException.class, () -> {
-			orderRegistration.execute(user, shoppingCart);
+			orderRegistration.execute(shoppingCart);
 		});
 
 		verify(productDAO).order(gt(0), gt(0));

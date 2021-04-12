@@ -10,6 +10,8 @@ import com.spring.eshop.events.OrderReceivedEvent;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.interfaces.IOrderRegistration;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -30,7 +32,28 @@ public class OrderRegistration implements IOrderRegistration {
 	}
 
 	@Transactional
-	public int execute(User user, Map<Product, Integer> shoppingCart) {
+	public Order execute(Map<Product, Integer> shoppingCart) {
+		Order order = createOrder(shoppingCart);
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if(principal instanceof User) {
+			User user = (User) principal;
+			order.setUser(user);
+			publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
+		} else {
+			OAuth2User user = (OAuth2User) principal;
+			String email = user.getAttribute("email");
+			if (email != null) {
+				publisher.publishEvent(new OrderReceivedEvent(order, email));
+			}
+		}
+
+		orderDAO.save(order);
+
+		return order;
+	}
+
+	private Order createOrder(Map<Product, Integer> shoppingCart) {
 		Order order = new Order();
 		Set<OrderItem> orderItems = new HashSet<>();
 
@@ -49,10 +72,6 @@ public class OrderRegistration implements IOrderRegistration {
 		});
 
 		order.setItems(orderItems);
-		order.setUser(user);
-		orderDAO.save(order);
-
-		publisher.publishEvent(new OrderReceivedEvent(order, user.getUserInfo().getEmail()));
-		return order.getId();
+		return order;
 	}
 }

@@ -1,6 +1,7 @@
 package com.spring.eshop.events;
 
 import com.spring.eshop.entity.Order;
+import com.spring.eshop.entity.OrderItem;
 import com.spring.eshop.service.interfaces.IConfirmationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
@@ -45,8 +46,13 @@ public class UserActionListener {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setSubject("New Order - Spring Eshop");
 		simpleMailMessage.setTo(email);
-		simpleMailMessage.setText("Hello " + order.getUser().getUsername() + "!\n\n" +
-				"Thank you for your order!");
+		String body = "Hello!\n\n" +
+						"Thank you for your order!\n\n" +
+						"Order's contents:\n";
+		for (OrderItem item : order.getItems()) {
+			body += (item.getProduct().getName() + ": " + item.getQuantity()) + " ordered\n";
+		}
+		simpleMailMessage.setText(body);
 		return simpleMailMessage;
 	}
 

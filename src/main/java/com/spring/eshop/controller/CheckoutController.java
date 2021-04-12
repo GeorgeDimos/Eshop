@@ -1,11 +1,9 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.interfaces.IOrderRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +15,7 @@ public class CheckoutController {
 
 	private final ShoppingCart shoppingCart;
 	private final IOrderRegistration orderRegistration;
+
 
 	@Autowired
 	public CheckoutController(ShoppingCart shoppingCart, IOrderRegistration orderRegistration) {
@@ -31,16 +30,24 @@ public class CheckoutController {
 	}
 
 	@PostMapping
-	public String buyProducts(@AuthenticationPrincipal User user,
-														@RequestParam(required = false) String confirm) {
+	public String buyProducts(@RequestParam(required = false) String confirm,
+														RedirectAttributes flashAttributes) {
 		if (confirm != null && !shoppingCart.isEmpty()) {
-			int orderId = orderRegistration.execute(user, shoppingCart.getItemsList());
+			flashAttributes.addFlashAttribute("order", orderRegistration.execute(shoppingCart.getItemsList()));
 			shoppingCart.clear();
-			return "redirect:/user/orders/" + orderId;
+			return "redirect:/checkout/order";
 		}
 
 		return "redirect:/products";
 	}
+
+	@GetMapping("/order")
+	public String order(Model model){
+		if(model.containsAttribute("order"))
+			return "order";
+		return "redirect:/home";
+	}
+
 
 	@ExceptionHandler(NotEnoughStockException.class)
 	public String notEnoughStockInOrder(NotEnoughStockException ex, RedirectAttributes redirectAttrs) {

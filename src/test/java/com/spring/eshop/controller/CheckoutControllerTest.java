@@ -1,5 +1,6 @@
 package com.spring.eshop.controller;
 
+import com.spring.eshop.entity.Order;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
@@ -104,17 +105,17 @@ class CheckoutControllerTest {
 	@WithMockUser
 	void buyProducts() throws Exception {
 		given(shoppingCart.isEmpty()).willReturn(false);
-		given(orderRegistration.execute(any(), any(Map.class))).willReturn(2);
+		given(orderRegistration.execute(any(Map.class))).willReturn(mock(Order.class));
 
 		mockMvc.perform(post("/checkout")
 						.with(user(mock(User.class)))
-				.param("confirm", "OK")
-				.with(csrf())
+						.param("confirm", "OK")
+						.with(csrf())
 		)
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/user/orders/" + 2));
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/checkout/order"));
 
-		verify(orderRegistration).execute(any(), any(Map.class));
+		verify(orderRegistration).execute(any(Map.class));
 		verify(shoppingCart).clear();
 	}
 
@@ -123,7 +124,7 @@ class CheckoutControllerTest {
 	void notEnoughStockInOrder() throws Exception {
 
 		doThrow(NotEnoughStockException.class)
-				.when(orderRegistration).execute(any(), any(Map.class));
+						.when(orderRegistration).execute(any(Map.class));
 
 		given(shoppingCart.isEmpty()).willReturn(false);
 		mockMvc.perform(post("/checkout")
