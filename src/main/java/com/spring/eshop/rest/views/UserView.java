@@ -1,6 +1,10 @@
 package com.spring.eshop.rest.views;
 
+import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserView {
 	public int id;
@@ -9,7 +13,7 @@ public class UserView {
 	public String firstName;
 	public String lastName;
 	public String email;
-	public String authority;
+	public Set<String> authority;
 
 	public UserView(User user) {
 		id = user.getId();
@@ -18,6 +22,9 @@ public class UserView {
 		firstName = user.getUserInfo().getFirstName();
 		lastName = user.getUserInfo().getLastName();
 		email = user.getUserInfo().getEmail();
-		authority = user.getAuthGroup().getAuthority();
+		authority = new HashSet<>();
+		for (AuthGroup authGroup : user.getAuthGroup()) {
+			authority.add(authGroup.getAuthority());
+		}
 	}
 }

@@ -16,9 +16,9 @@ public class AuthGroup {
 	private int id;
 
 	@Column(name = "authority")
-	private String authority = "user";
+	private String authority;
 
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user;
 }

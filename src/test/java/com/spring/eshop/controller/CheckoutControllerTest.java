@@ -1,9 +1,10 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
+import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.implementations.OrderRegistration;
+import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ class CheckoutControllerTest {
 
 	@MockBean
 	OrderRegistration orderRegistration;
+
+	@MockBean
+	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -87,7 +91,7 @@ class CheckoutControllerTest {
 		given(shoppingCart.isEmpty()).willReturn(true);
 		then(shoppingCart).shouldHaveNoMoreInteractions();
 		mockMvc.perform(post("/checkout")
-				.with(user(mock(UserPrinciple.class)))
+						.with(user(mock(User.class)))
 				.param("confirm", "OK")
 				.with(csrf())
 		)
@@ -103,7 +107,7 @@ class CheckoutControllerTest {
 		given(orderRegistration.execute(any(), any(Map.class))).willReturn(2);
 
 		mockMvc.perform(post("/checkout")
-				.with(user(mock(UserPrinciple.class)))
+						.with(user(mock(User.class)))
 				.param("confirm", "OK")
 				.with(csrf())
 		)
@@ -123,7 +127,7 @@ class CheckoutControllerTest {
 
 		given(shoppingCart.isEmpty()).willReturn(false);
 		mockMvc.perform(post("/checkout")
-				.with(user(mock(UserPrinciple.class)))
+						.with(user(mock(User.class)))
 				.param("confirm", "OK")
 				.with(csrf())
 		)

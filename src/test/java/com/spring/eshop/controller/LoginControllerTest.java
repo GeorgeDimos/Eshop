@@ -1,7 +1,7 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.security.UserPrinciple;
+import com.spring.eshop.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -47,9 +47,9 @@ class LoginControllerTest {
 	void redirectAfterLoginEmptyShoppingCart() throws Exception {
 		given(shoppingCart.getItemsList()).willReturn(Collections.EMPTY_MAP);
 
-		mockMvc.perform(get("/successful-login").with(user(mock(UserPrinciple.class))))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/products"));
+		mockMvc.perform(get("/successful-login").with(user(mock(User.class))))
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/products"));
 	}
 
 	@Test
@@ -57,15 +57,15 @@ class LoginControllerTest {
 	void redirectAfterLoginShoppingCartHasItems() throws Exception {
 		given(shoppingCart.getItemsList()).willReturn(mock(Map.class));
 
-		mockMvc.perform(get("/successful-login").with(user(mock(UserPrinciple.class))))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cart"));
+		mockMvc.perform(get("/successful-login").with(user(mock(User.class))))
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/cart"));
 	}
 
 	@Test
 	void logout() throws Exception {
 		mockMvc.perform(get("/logout")
-				.with(user(mock(UserPrinciple.class))))
+						.with(user(mock(User.class))))
 				.andExpect(status().isOk())
 				.andExpect(view().name("logout"));
 	}

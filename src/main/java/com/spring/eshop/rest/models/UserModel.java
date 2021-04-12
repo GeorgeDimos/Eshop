@@ -7,6 +7,7 @@ import com.spring.eshop.entity.UserInfo;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class UserModel {
 
@@ -32,7 +33,9 @@ public class UserModel {
 		user.getUserInfo().setEmail(userModel.email);
 		user.getUserInfo().setFirstName(userModel.firstName);
 		user.getUserInfo().setLastName(userModel.lastName);
-		user.getAuthGroup().setAuthority(userModel.authority);
+		AuthGroup authGroup = new AuthGroup();
+		authGroup.setAuthority(userModel.authority);
+		user.getAuthGroup().add(authGroup);
 	}
 
 	public User translateToUser() {
@@ -52,7 +55,7 @@ public class UserModel {
 		AuthGroup authGroup = new AuthGroup();
 		authGroup.setAuthority(authority);
 		authGroup.setUser(user);
-		user.setAuthGroup(authGroup);
+		user.setAuthGroup(Set.of(authGroup));
 
 		return user;
 	}

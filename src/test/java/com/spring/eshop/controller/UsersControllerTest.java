@@ -1,7 +1,6 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.*;
-import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,8 +37,6 @@ class UsersControllerTest {
 	IUserService userService;
 	@MockBean
 	IOrderService orderService;
-	@MockBean
-	UserPrinciple userPrinciple;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -52,22 +49,24 @@ class UsersControllerTest {
 	@BeforeEach
 	void setUp() {
 		mockMvc = MockMvcBuilders
-				.webAppContextSetup(context)
-				.apply(springSecurity())
-				.build();
-		UserInfo userInfo = new UserInfo(1, "first name", "last name", "mail@somewhere", null);
-		user = new User(1, "Username", "password", true, null, userInfo, null);
+						.webAppContextSetup(context)
+						.apply(springSecurity())
+						.build();
+		UserInfo userInfo = new UserInfo(1, "first name", "last name", "mail@somewhere", user);
+		AuthGroup e1 = new AuthGroup();
+		e1.setAuthority("user");
+		user = new User(1, "Username", "password", true, Collections.emptyList(), userInfo, Set.of(e1));
 	}
 
 	@Test
 	void profile() throws Exception {
 
 		mockMvc.perform(get("/user")
-				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+						.with(user(user))
 		)
-				.andExpect(status().isOk())
-				.andExpect(view().name("profile"))
-				.andExpect(model().attributeExists("user"));
+						.andExpect(status().isOk())
+						.andExpect(view().name("profile"))
+						.andExpect(model().attributeExists("user"));
 	}
 
 	@Test
@@ -76,15 +75,15 @@ class UsersControllerTest {
 		Page<Order> page = new PageImpl(List.of(order));
 
 		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class)))
-				.willReturn(page);
+						.willReturn(page);
 
 		mockMvc.perform(get("/user/orders")
-				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+						.with(user(user))
 		)
-				.andExpect(status().isOk())
-				.andExpect(view().name("orders"))
-				.andExpect(model().attributeExists("user"))
-				.andExpect(model().attributeExists("orders"));
+						.andExpect(status().isOk())
+						.andExpect(view().name("orders"))
+						.andExpect(model().attributeExists("user"))
+						.andExpect(model().attributeExists("orders"));
 	}
 
 	@Test
@@ -97,7 +96,7 @@ class UsersControllerTest {
 		given(orderService.getOrder(any(), gt(0)))
 				.willReturn(order);
 		mockMvc.perform(get("/user/orders/{oid}", order.getId())
-				.with(user(mock(UserPrinciple.class)))
+						.with(user(user))
 		)
 				.andExpect(status().isOk())
 				.andExpect(view().name("order"))
@@ -107,7 +106,7 @@ class UsersControllerTest {
 	@Test
 	void deleteAccount() throws Exception {
 		mockMvc.perform(get("/user/deleteAccount")
-				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
+						.with(user(user))
 		)
 				.andExpect(status().isOk())
 				.andExpect(view().name("deleteAccount"));
@@ -117,23 +116,23 @@ class UsersControllerTest {
 	void confirmDeleteAccount() throws Exception {
 
 		mockMvc.perform(post("/user/deleteAccount")
-				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
-				.with(csrf())
-				.param("confirm", "ok")
+						.with(user(user))
+						.with(csrf())
+						.param("confirm", "ok")
 		)
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/login?logout"));
-		verify(userService).deleteUser(user);
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/login?logout"));
+		verify(userService).delete(user);
 	}
 
 	@Test
 	void cancelDeleteAccount() throws Exception {
 		mockMvc.perform(post("/user/deleteAccount")
-				.with(user(new UserPrinciple(user, Collections.EMPTY_LIST)))
-				.with(csrf())
+						.with(user(user))
+						.with(csrf())
 		)
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/user"));
-		verify(userService, never()).deleteUser(any(User.class));
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/user"));
+		verify(userService, never()).delete(any(User.class));
 	}
 }

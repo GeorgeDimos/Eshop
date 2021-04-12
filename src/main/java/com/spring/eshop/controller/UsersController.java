@@ -1,7 +1,6 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.User;
-import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderService;
 import com.spring.eshop.service.interfaces.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +26,10 @@ public class UsersController {
 
 	@GetMapping
 	public String profile(
-			@AuthenticationPrincipal UserPrinciple userPrinciple,
-			Model model
+					@AuthenticationPrincipal User user,
+					Model model
 	) {
-		model.addAttribute("user", userPrinciple.getUser());
+		model.addAttribute("user", user);
 		return "profile";
 	}
 
@@ -41,9 +40,9 @@ public class UsersController {
 
 	@PostMapping("/deleteAccount")
 	public String deleteAccount(@RequestParam(required = false) String confirm,
-								@AuthenticationPrincipal UserPrinciple userPrinciple) {
+															@AuthenticationPrincipal User user) {
 		if (confirm != null) {
-			userService.deleteUser(userPrinciple.getUser());
+			userService.delete(user);
 
 			SecurityContextHolder.clearContext();
 
@@ -54,11 +53,10 @@ public class UsersController {
 
 	@GetMapping("/orders")
 	public String getOrdersList(
-			@AuthenticationPrincipal UserPrinciple userPrinciple,
-			Model model,
-			Pageable pageable
+					@AuthenticationPrincipal User user,
+					Model model,
+					Pageable pageable
 	) {
-		User user = userPrinciple.getUser();
 		model.addAttribute("user", user);
 		model.addAttribute("orders", orderService.getOrdersByUser(user, pageable));
 		return "orders";
@@ -66,11 +64,10 @@ public class UsersController {
 
 	@GetMapping("/orders/{oid}")
 	public String getOrderDetails(
-			@AuthenticationPrincipal UserPrinciple userPrinciple,
-			@PathVariable int oid,
-			Model model
+					@AuthenticationPrincipal User user,
+					@PathVariable int oid,
+					Model model
 	) {
-		User user = userPrinciple.getUser();
 		model.addAttribute("order", orderService.getOrder(user, oid));
 		return "order";
 	}

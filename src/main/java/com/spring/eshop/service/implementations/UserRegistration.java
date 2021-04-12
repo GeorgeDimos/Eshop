@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Set;
 
 @Service
 public class UserRegistration implements IUserRegistration {
@@ -39,8 +40,9 @@ public class UserRegistration implements IUserRegistration {
 		userInfo.setUser(user);
 
 		AuthGroup authGroup = new AuthGroup();
+		authGroup.setAuthority("user");
 		authGroup.setUser(user);
-		user.setAuthGroup(authGroup);
+		user.setAuthGroup(Set.of(authGroup));
 		userDAO.save(user);
 
 		publisher.publishEvent(new ActivationRequiredEvent(user, userInfo.getEmail()));

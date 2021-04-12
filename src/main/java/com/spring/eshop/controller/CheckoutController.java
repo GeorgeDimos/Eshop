@@ -3,7 +3,6 @@ package com.spring.eshop.controller;
 import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
-import com.spring.eshop.security.UserPrinciple;
 import com.spring.eshop.service.interfaces.IOrderRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,10 +31,9 @@ public class CheckoutController {
 	}
 
 	@PostMapping
-	public String buyProducts(@AuthenticationPrincipal UserPrinciple userPrinciple,
-							  @RequestParam(required = false) String confirm) {
+	public String buyProducts(@AuthenticationPrincipal User user,
+														@RequestParam(required = false) String confirm) {
 		if (confirm != null && !shoppingCart.isEmpty()) {
-			User user = userPrinciple.getUser();
 			int orderId = orderRegistration.execute(user, shoppingCart.getItemsList());
 			shoppingCart.clear();
 			return "redirect:/user/orders/" + orderId;
