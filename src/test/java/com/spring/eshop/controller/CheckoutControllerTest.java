@@ -5,7 +5,6 @@ import com.spring.eshop.entity.ShoppingCart;
 import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.implementations.OrderRegistration;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +36,6 @@ class CheckoutControllerTest {
 	@MockBean
 	OrderRegistration orderRegistration;
 
-	@MockBean
-	IUserService userService;
-
 	@Autowired
 	MockMvc mockMvc;
 
@@ -56,10 +52,8 @@ class CheckoutControllerTest {
 
 	@Test
 	void checkoutWithoutUser() throws Exception {
-
 		mockMvc.perform(get("/checkout"))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(redirectedUrlPattern("**/login"));
+						.andExpect(status().is4xxClientError());
 	}
 
 	@Test

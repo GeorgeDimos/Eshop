@@ -4,7 +4,6 @@ import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.interfaces.IUserRegistration;
-import com.spring.eshop.service.interfaces.IUserService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,6 @@ class RegisterControllerTest {
 
 	@MockBean
 	IUserRegistration userRegistration;
-	@MockBean
-	IUserService userService;
 
 	@Autowired
 	MockMvc mockMvc;
@@ -48,7 +45,6 @@ class RegisterControllerTest {
 
 	@AfterEach
 	void tearDown() {
-		reset(userService);
 		reset(userRegistration);
 	}
 
