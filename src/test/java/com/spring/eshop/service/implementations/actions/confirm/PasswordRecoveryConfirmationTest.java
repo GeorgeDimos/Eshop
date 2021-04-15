@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -34,42 +35,40 @@ class PasswordRecoveryConfirmationTest {
 	@InjectMocks
 	PasswordRecoveryConfirmation confirmation;
 
-	ConfirmationToken token;
 	User user;
 	String password;
 
 	@BeforeEach
 	void setUp() {
 		user = new User(1, "u", "old_password", false, null, null, null);
-		token = new ConfirmationToken(1, "test", null, user);
 		password = "new_password";
 	}
 
 	@Test
 	void execute() {
-		given(confirmationTokenDAO.findByToken("validToken"))
-				.willReturn(Optional.of(token));
+		given(confirmationTokenDAO.findByToken(anyString()))
+						.willReturn(Optional.of(new ConfirmationToken(1, "validToken", null, user)));
 
 		confirmation.execute("validToken", password);
 
 		assertNotEquals("old_password", user.getPassword());
 		assertEquals(passwordEncoder.encode(password), user.getPassword());
-		verify(userDAO).save(any(User.class));
+		verify(userDAO).save(user);
 		verify(confirmationTokenDAO).deleteByToken("validToken");
 	}
 
 	@Test
 	void executeInvalidToken() {
 
-		given(confirmationTokenDAO.findByToken("invlalidToken"))
-				.willReturn(Optional.empty());
+		given(confirmationTokenDAO.findByToken(anyString()))
+						.willReturn(Optional.empty());
 
 		assertThrows(NoSuchElementException.class, () -> {
-			confirmation.execute("invlalidToken", password);
+			confirmation.execute("invalidToken", password);
 		});
 
 		assertEquals("old_password", user.getPassword());
 		verify(userDAO, never()).save(any(User.class));
-		verify(confirmationTokenDAO, never()).deleteByToken("test");
+		verify(confirmationTokenDAO, never()).deleteByToken("invalidToken");
 	}
 }

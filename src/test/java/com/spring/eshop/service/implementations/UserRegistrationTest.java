@@ -48,11 +48,12 @@ class UserRegistrationTest {
 	@Test
 	void register() {
 		given(userDAO.existsByUsernameOrUserInfoEmail(anyString(), anyString()))
-				.willReturn(false);
+						.willReturn(false);
 		userRegistration.register(user, userInfo);
 		assertNotEquals("text_password", user.getPassword());
 		assertEquals(passwordEncoder.encode("text_password"), user.getPassword());
 		verify(userDAO).save(user);
+		assertTrue(user.getAuthGroup().stream().anyMatch(authGroup -> authGroup.getAuthority().equals("user")));
 		verify(publisher).publishEvent(any(ActivationRequiredEvent.class));
 	}
 

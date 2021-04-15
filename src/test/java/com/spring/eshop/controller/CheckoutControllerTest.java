@@ -1,28 +1,25 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.Order;
+import com.spring.eshop.entity.Product;
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.entity.User;
 import com.spring.eshop.exceptions.NotEnoughStockException;
 import com.spring.eshop.service.implementations.OrderRegistration;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CheckoutController.class)
 class CheckoutControllerTest {
 
-	@MockBean
+	@SpyBean
 	ShoppingCart shoppingCart;
 
 	@MockBean
@@ -38,17 +35,6 @@ class CheckoutControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
-
-	@Autowired
-	WebApplicationContext context;
-
-	@BeforeEach
-	void setUp() {
-		mockMvc = MockMvcBuilders
-				.webAppContextSetup(context)
-				.apply(springSecurity())
-				.build();
-	}
 
 	@Test
 	void checkoutWithoutUser() throws Exception {
@@ -59,7 +45,6 @@ class CheckoutControllerTest {
 	@Test
 	@WithMockUser
 	void checkoutLoggedIn() throws Exception {
-
 		mockMvc.perform(get("/checkout"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("checkout"))
@@ -71,12 +56,11 @@ class CheckoutControllerTest {
 	void buyProductsCancel() throws Exception {
 		given(shoppingCart.isEmpty()).willReturn(false);
 		mockMvc.perform(post("/checkout")
-				.sessionAttr("user_id", 1)
-				.with(csrf())
+						.with(csrf())
 		)
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/products"));
-		then(orderRegistration).shouldHaveNoMoreInteractions();
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/products"));
+		then(orderRegistration).shouldHaveNoInteractions();
 		then(shoppingCart).shouldHaveNoInteractions();
 	}
 
@@ -86,7 +70,6 @@ class CheckoutControllerTest {
 		given(shoppingCart.isEmpty()).willReturn(true);
 		then(shoppingCart).shouldHaveNoMoreInteractions();
 		mockMvc.perform(post("/checkout")
-						.with(user(mock(User.class)))
 				.param("confirm", "OK")
 				.with(csrf())
 		)
@@ -98,11 +81,11 @@ class CheckoutControllerTest {
 	@Test
 	@WithMockUser
 	void buyProducts() throws Exception {
-		given(shoppingCart.isEmpty()).willReturn(false);
+		shoppingCart.add(mock(Product.class), 2);
+		shoppingCart.add(mock(Product.class), 3);
 		given(orderRegistration.execute(any(Map.class))).willReturn(mock(Order.class));
 
 		mockMvc.perform(post("/checkout")
-						.with(user(mock(User.class)))
 						.param("confirm", "OK")
 						.with(csrf())
 		)
@@ -110,7 +93,7 @@ class CheckoutControllerTest {
 						.andExpect(view().name("redirect:/checkout/order"));
 
 		verify(orderRegistration).execute(any(Map.class));
-		verify(shoppingCart).clear();
+		assertTrue(shoppingCart.getItemsList().isEmpty());
 	}
 
 	@Test
@@ -120,15 +103,32 @@ class CheckoutControllerTest {
 		doThrow(NotEnoughStockException.class)
 						.when(orderRegistration).execute(any(Map.class));
 
-		given(shoppingCart.isEmpty()).willReturn(false);
+		shoppingCart.add(mock(Product.class), 2);
 		mockMvc.perform(post("/checkout")
-						.with(user(mock(User.class)))
-				.param("confirm", "OK")
-				.with(csrf())
+						.param("confirm", "OK")
+						.with(csrf())
 		)
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/cart"))
-				.andExpect(flash().attributeExists("notEnoughStockError"));
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/cart"))
+						.andExpect(flash().attributeExists("notEnoughStockError"));
 		verify(shoppingCart, never()).clear();
+	}
+
+	@Test
+	@WithMockUser
+	void getOrderViewAfterCheckout() throws Exception {
+		mockMvc.perform(get("/checkout/order")
+						.flashAttr("order", mock(Order.class))
+		)
+						.andExpect(status().isOk())
+						.andExpect(view().name("order"));
+	}
+
+	@Test
+	@WithMockUser
+	void getOrderViewWithoutCheckout() throws Exception {
+		mockMvc.perform(get("/checkout/order"))
+						.andExpect(status().is3xxRedirection())
+						.andExpect(view().name("redirect:/home"));
 	}
 }

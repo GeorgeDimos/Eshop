@@ -32,22 +32,18 @@ class ResendActivationEmailTest {
 	@InjectMocks
 	ResendActivationEmail activationEmail;
 
-	User enabledUser;
-	User inactiveUser;
 	UserInfo userInfo;
-
 
 	@BeforeEach
 	void setUp() {
 		userInfo = mock(UserInfo.class);
-		enabledUser = new User(1, "u", "p", true, null, userInfo, null);
-		inactiveUser = new User(1, "u", "p", false, null, userInfo, null);
 	}
 
 	@Test
 	void execute() {
+		User inactiveUser = new User(1, "u", "p", false, null, userInfo, null);
 		given(userDAO.findByUsernameAndUserInfoEmail(inactiveUser.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(inactiveUser));
+						.willReturn(Optional.of(inactiveUser));
 
 		activationEmail.execute(inactiveUser.getUsername(), userInfo.getEmail());
 
@@ -68,8 +64,9 @@ class ResendActivationEmailTest {
 
 	@Test
 	void executeUserIsAlreadyEnabled() {
+		User enabledUser = new User(1, "u", "p", true, null, userInfo, null);
 		given(userDAO.findByUsernameAndUserInfoEmail(enabledUser.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(enabledUser));
+						.willReturn(Optional.of(enabledUser));
 
 		assertThrows(InvalidUserInfoException.class, () -> {
 			activationEmail.execute(enabledUser.getUsername(), userInfo.getEmail());

@@ -18,6 +18,8 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.AdditionalMatchers.gt;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -48,13 +50,12 @@ class ProductServiceTest {
 
 	@Test
 	void getProducts() {
-		Pageable pageable = mock(Pageable.class);
 		Page<Product> products = new PageImpl<>(List.of(
-				mock(Product.class),
-				mock(Product.class)
+						mock(Product.class),
+						mock(Product.class)
 		));
-		given(dao.findDistinctBy(pageable)).willReturn(products);
-		Page<Product> result = service.getProducts(pageable);
+		given(dao.findDistinctBy(any(Pageable.class))).willReturn(products);
+		Page<Product> result = service.getProducts(mock(Pageable.class));
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(2);
 	}
@@ -63,10 +64,10 @@ class ProductServiceTest {
 	void getProductsByName() {
 		Pageable pageable = mock(Pageable.class);
 		Page<Product> products = new PageImpl<>(List.of(
-				mock(Product.class),
-				mock(Product.class)
+						mock(Product.class),
+						mock(Product.class)
 		));
-		given(dao.findDistinctByNameContaining("name", pageable)).willReturn(products);
+		given(dao.findDistinctByNameContaining(anyString(), any(Pageable.class))).willReturn(products);
 		Page<Product> result = service.getProductsByName("name", pageable);
 		assertThat(result).isNotNull();
 		assertThat(result).hasSize(2);

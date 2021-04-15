@@ -1,7 +1,6 @@
 package com.spring.eshop.controller;
 
 import com.spring.eshop.entity.ShoppingCart;
-import com.spring.eshop.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,10 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -30,24 +27,25 @@ class LoginControllerTest {
 	MockMvc mockMvc;
 
 	@Test
-	void login() throws Exception {
+	void loginView() throws Exception {
 		mockMvc.perform(get("/login"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("login"));
+						.andExpect(status().isOk())
+						.andExpect(view().name("login"));
 	}
 
 	@Test
 	@WithMockUser
-	void loginWhileAlreadyLoggedIn() throws Exception {
-		assertThat(view().name("login"));
-		assertThat(status().is4xxClientError());
+	void loginViewWhileAlreadyLoggedIn() throws Exception {
+		mockMvc.perform(get("/login"))
+						.andExpect(status().is4xxClientError());
 	}
 
 	@Test
+	@WithMockUser
 	void redirectAfterLoginEmptyShoppingCart() throws Exception {
-		given(shoppingCart.getItemsList()).willReturn(Collections.EMPTY_MAP);
+		given(shoppingCart.getItemsList()).willReturn(Collections.emptyMap());
 
-		mockMvc.perform(get("/successful-login").with(user(mock(User.class))))
+		mockMvc.perform(get("/successful-login"))
 						.andExpect(status().is3xxRedirection())
 						.andExpect(view().name("redirect:/products"));
 	}
@@ -57,16 +55,16 @@ class LoginControllerTest {
 	void redirectAfterLoginShoppingCartHasItems() throws Exception {
 		given(shoppingCart.getItemsList()).willReturn(mock(Map.class));
 
-		mockMvc.perform(get("/successful-login").with(user(mock(User.class))))
+		mockMvc.perform(get("/successful-login"))
 						.andExpect(status().is3xxRedirection())
 						.andExpect(view().name("redirect:/cart"));
 	}
 
 	@Test
+	@WithMockUser
 	void logout() throws Exception {
-		mockMvc.perform(get("/logout")
-						.with(user(mock(User.class))))
-				.andExpect(status().isOk())
-				.andExpect(view().name("logout"));
+		mockMvc.perform(get("/logout"))
+						.andExpect(status().isOk())
+						.andExpect(view().name("logout"));
 	}
 }

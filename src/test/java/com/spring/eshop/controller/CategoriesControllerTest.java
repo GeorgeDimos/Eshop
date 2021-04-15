@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.AdditionalMatchers.gt;
@@ -35,31 +36,51 @@ class CategoriesControllerTest {
 		given(categoryService.getCategories(any(Pageable.class))).willReturn(new PageImpl<>(List.of(mock(Category.class))));
 
 		mockMvc.perform(get("/categories"))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("categories"))
-				.andExpect(view().name("categories"));
+						.andExpect(status().isOk())
+						.andExpect(model().attributeExists("categories"))
+						.andExpect(view().name("categories"));
+	}
+
+	@Test
+	void getEmpty() throws Exception {
+		given(categoryService.getCategories(any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
+
+		mockMvc.perform(get("/categories"))
+						.andExpect(status().isOk())
+						.andExpect(model().attributeExists("categories"))
+						.andExpect(view().name("categories"));
 	}
 
 	@Test
 	void getProductsByCategory() throws Exception {
 		Category c1 = mock(Category.class);
 		Page<Product> pageProducts = new PageImpl<>(List.of(
-				new Product(
-						1, "test_product_1",
-						"test_description_1",
-						10, 10, null, c1
-				),
-				new Product(
-						2, "test_product_2",
-						"test_description_2",
-						10, 0.10, null, c1
-				)));
+						new Product(
+										1, "test_product_1",
+										"test_description_1",
+										10, 10, null, c1
+						),
+						new Product(
+										2, "test_product_2",
+										"test_description_2",
+										10, 0.10, null, c1
+						)));
 
 		given(categoryService.getProductsOfCategory(gt(0), any(Pageable.class))).willReturn(pageProducts);
 
 		mockMvc.perform(get("/categories/{id}", 1))
-				.andExpect(status().isOk())
-				.andExpect(model().attributeExists("products"))
-				.andExpect(view().name("products"));
+						.andExpect(status().isOk())
+						.andExpect(model().attributeExists("products"))
+						.andExpect(view().name("products"));
+	}
+
+	@Test
+	void getNoProductsInCategory() throws Exception {
+		given(categoryService.getProductsOfCategory(gt(0), any(Pageable.class))).willReturn(new PageImpl<>(Collections.emptyList()));
+
+		mockMvc.perform(get("/categories/{id}", 1))
+						.andExpect(status().isOk())
+						.andExpect(model().attributeExists("products"))
+						.andExpect(view().name("products"));
 	}
 }

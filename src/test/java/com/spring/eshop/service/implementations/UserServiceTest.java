@@ -32,7 +32,7 @@ class UserServiceTest {
 	@Test
 	void loadUserByUsername() {
 		User user = new User(1, "username", "password", true, Collections.emptyList(), null, Collections.emptySet());
-		given(userDAO.findByUsername(user.getUsername())).willReturn(Optional.of(user));
+		given(userDAO.findByUsername(anyString())).willReturn(Optional.of(user));
 		UserDetails result = service.loadUserByUsername(user.getUsername());
 		assertThat(result).isNotNull();
 		assertThat(result.getUsername()).isEqualTo("username");

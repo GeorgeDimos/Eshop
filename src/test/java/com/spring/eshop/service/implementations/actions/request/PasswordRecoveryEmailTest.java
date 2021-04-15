@@ -33,22 +33,18 @@ class PasswordRecoveryEmailTest {
 	@InjectMocks
 	PasswordRecoveryEmail recoveryEmail;
 
-	User enabledUser;
-	User disabledUser;
 	UserInfo userInfo;
-
 
 	@BeforeEach
 	void setUp() {
 		userInfo = mock(UserInfo.class);
-		enabledUser = new User(1, "u", "p", true, null, userInfo, null);
-		disabledUser = new User(1, "u", "p", false, null, userInfo, null);
 	}
 
 	@Test
 	void execute() {
+		User enabledUser = new User(1, "u", "p", true, null, userInfo, null);
 		given(userDAO.findByUsernameAndUserInfoEmail(enabledUser.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(enabledUser));
+						.willReturn(Optional.of(enabledUser));
 
 		recoveryEmail.execute(enabledUser.getUsername(), userInfo.getEmail());
 
@@ -69,8 +65,9 @@ class PasswordRecoveryEmailTest {
 
 	@Test
 	void executeUserIsNotYetEnabled() {
+		User disabledUser = new User(1, "u", "p", false, null, userInfo, null);
 		given(userDAO.findByUsernameAndUserInfoEmail(disabledUser.getUsername(), userInfo.getEmail()))
-				.willReturn(Optional.of(disabledUser));
+						.willReturn(Optional.of(disabledUser));
 
 		assertThrows(InvalidUserInfoException.class, () -> {
 			recoveryEmail.execute(disabledUser.getUsername(), userInfo.getEmail());

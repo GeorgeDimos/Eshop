@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,10 +33,10 @@ class OrderServiceTest {
 		User user = mock(User.class);
 		Pageable pageable = mock(Pageable.class);
 		Page<Order> orders = new PageImpl<>(List.of(
-				mock(Order.class),
-				mock(Order.class)
+						mock(Order.class),
+						mock(Order.class)
 		));
-		when(dao.getOrdersByUser(user, pageable)).thenReturn(orders);
+		when(dao.getOrdersByUser(any(User.class), any(Pageable.class))).thenReturn(orders);
 
 		Page<Order> result = service.getOrdersByUser(user, pageable);
 
@@ -46,9 +47,9 @@ class OrderServiceTest {
 
 	@Test
 	void getOrder() {
-		User user = mock(User.class);
 		Order order = mock(Order.class);
-		when(dao.getOrderByIdAndUser(1, user)).thenReturn(Optional.of(order));
+		when(dao.getOrderByIdAndUser(gt(0), any(User.class))).thenReturn(Optional.of(order));
+		User user = mock(User.class);
 		Order result = service.getOrder(user, 1);
 		verify(dao).getOrderByIdAndUser(1, user);
 		assertThat(result).isNotNull();

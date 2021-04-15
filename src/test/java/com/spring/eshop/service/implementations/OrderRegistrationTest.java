@@ -13,9 +13,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,7 +57,7 @@ class OrderRegistrationTest {
 	}
 
 	@Test
-	void execute() {
+	void executeRegisteredUser() {
 		given(productDAO.order(gt(0), gt(0))).willReturn(1);
 
 		SecurityContext securityContext = mock(SecurityContext.class);
@@ -67,6 +71,59 @@ class OrderRegistrationTest {
 		verify(orderDAO).save(any(Order.class));
 		verify(productDAO, times(shoppingCart.size())).order(gt(0), gt(0));
 		verify(publisher).publishEvent(any(OrderReceivedEvent.class));
+	}
+
+	@Test
+	void executeUnregisteredUserWithEmail() {
+		given(productDAO.order(gt(0), gt(0))).willReturn(1);
+
+		SecurityContext securityContext = mock(SecurityContext.class);
+		Authentication auth = mock(Authentication.class);
+		when(securityContext.getAuthentication()).thenReturn(auth);
+		OAuth2User oAuthuser = new OAuth2User() {
+			@Override
+			public Map<String, Object> getAttributes() {
+				Map<String, Object> attributes = new HashMap();
+				attributes.put("email", "oAuth2user@email.com");
+				return attributes;
+			}
+
+			@Override
+			public Collection<? extends GrantedAuthority> getAuthorities() {
+				return null;
+			}
+
+			@Override
+			public String getName() {
+				return null;
+			}
+		};
+		when(auth.getPrincipal()).thenReturn(oAuthuser);
+		SecurityContextHolder.setContext(securityContext);
+
+		Order result = orderRegistration.execute(shoppingCart);
+		assertThat(result).isNotNull();
+		verify(orderDAO).save(any(Order.class));
+		verify(productDAO, times(shoppingCart.size())).order(gt(0), gt(0));
+		verify(publisher).publishEvent(any(OrderReceivedEvent.class));
+	}
+
+	@Test
+	void executeUnregisteredUserNoEmail() {
+		given(productDAO.order(gt(0), gt(0))).willReturn(1);
+
+		SecurityContext securityContext = mock(SecurityContext.class);
+		Authentication auth = mock(Authentication.class);
+		when(securityContext.getAuthentication()).thenReturn(auth);
+		OAuth2User oAuthuser = mock(OAuth2User.class);
+		when(auth.getPrincipal()).thenReturn(oAuthuser);
+		SecurityContextHolder.setContext(securityContext);
+
+		Order result = orderRegistration.execute(shoppingCart);
+		assertThat(result).isNotNull();
+		verify(orderDAO).save(any(Order.class));
+		verify(productDAO, times(shoppingCart.size())).order(gt(0), gt(0));
+		verify(publisher, never()).publishEvent(any(OrderReceivedEvent.class));
 	}
 
 	@Test

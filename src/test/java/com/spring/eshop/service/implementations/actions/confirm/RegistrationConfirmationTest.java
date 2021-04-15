@@ -31,19 +31,16 @@ class RegistrationConfirmationTest {
 	RegistrationConfirmation confirmation;
 
 	User user;
-	ConfirmationToken token;
 
 	@BeforeEach
 	void setUp() {
 		user = new User(1, "u", "p", false, null, null, null);
-		token = new ConfirmationToken(1, "validToken", null, user);
 	}
 
 	@Test
 	void execute() {
-
-		given(confirmationTokenDAO.findByToken("validToken"))
-				.willReturn(Optional.of(token));
+		given(confirmationTokenDAO.findByToken(anyString()))
+						.willReturn(Optional.of(new ConfirmationToken(1, "validToken", null, user)));
 
 		confirmation.execute("validToken", null);
 
@@ -55,8 +52,8 @@ class RegistrationConfirmationTest {
 	@Test
 	void executeInvalidToken() {
 
-		given(confirmationTokenDAO.findByToken("invalidToken"))
-				.willReturn(Optional.empty());
+		given(confirmationTokenDAO.findByToken(anyString()))
+						.willReturn(Optional.empty());
 
 		assertThrows(NoSuchElementException.class, () -> {
 			confirmation.execute("invalidToken", null);

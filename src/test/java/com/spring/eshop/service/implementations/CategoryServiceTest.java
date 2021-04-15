@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.gt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -32,10 +34,10 @@ class CategoryServiceTest {
 	void getCategories() {
 		Pageable pageableStub = mock(Pageable.class);
 		Page<Category> page = new PageImpl(List.of(
-				mock(Category.class),
-				mock(Category.class)
+						mock(Category.class),
+						mock(Category.class)
 		));
-		given(dao.findDistinctBy(pageableStub)).willReturn(page);
+		given(dao.findDistinctBy(any(Pageable.class))).willReturn(page);
 		Page<Category> result = service.getCategories(pageableStub);
 
 		verify(dao).findDistinctBy(pageableStub);
@@ -48,10 +50,10 @@ class CategoryServiceTest {
 		Pageable pageableStub = mock(Pageable.class);
 		Category c1 = mock(Category.class);
 		Page<Product> page = new PageImpl(List.of(
-				new Product(1, "test product", "test product description", 3, 10.5, null, c1),
-				new Product(2, "test product 2", "test product description 2", 1, 15, null, c1)
+						new Product(1, "test product", "test product description", 3, 10.5, null, c1),
+						new Product(2, "test product 2", "test product description 2", 1, 15, null, c1)
 		));
-		given(dao.getProductsOfCategory(1, pageableStub)).willReturn(page);
+		given(dao.getProductsOfCategory(gt(0), any(Pageable.class))).willReturn(page);
 		Page<Product> result = service.getProductsOfCategory(1, pageableStub);
 
 		verify(dao).getProductsOfCategory(1, pageableStub);

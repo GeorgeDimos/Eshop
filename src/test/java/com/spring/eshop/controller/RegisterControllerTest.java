@@ -4,21 +4,17 @@ import com.spring.eshop.entity.User;
 import com.spring.eshop.entity.UserInfo;
 import com.spring.eshop.exceptions.UserAlreadyExistsException;
 import com.spring.eshop.service.interfaces.IUserRegistration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,40 +28,31 @@ class RegisterControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 
-	@Autowired
-	WebApplicationContext context;
-
-	@BeforeEach
-	void setUp() {
-		mockMvc = MockMvcBuilders
-				.webAppContextSetup(context)
-				.apply(springSecurity())
-				.build();
-	}
-
-	@AfterEach
-	void tearDown() {
-		reset(userRegistration);
-	}
-
 	@Test
 	void register() throws Exception {
 		mockMvc.perform(get("/register"))
-				.andExpect(status().isOk())
-				.andExpect(view().name("register"))
-				.andExpect(model().attributeExists("user"))
-				.andExpect(model().attributeExists("userInfo"));
+						.andExpect(status().isOk())
+						.andExpect(view().name("register"))
+						.andExpect(model().attributeExists("user"))
+						.andExpect(model().attributeExists("userInfo"));
+	}
+
+	@Test
+	@WithMockUser
+	void registerLoggedIn() throws Exception {
+		mockMvc.perform(get("/register"))
+						.andExpect(status().is4xxClientError());
 	}
 
 	@Test
 	void registerNewUser() throws Exception {
 		mockMvc.perform(post("/register")
-				.param("username", "george")
-				.param("password", "pass")
-				.param("firstName", "George")
-				.param("lastName", "Dimos")
-				.param("email", "dimgeorge91@yahoo.gr")
-				.with(csrf())
+						.param("username", "george")
+						.param("password", "pass")
+						.param("firstName", "George")
+						.param("lastName", "Dimos")
+						.param("email", "dimgeorge91@yahoo.gr")
+						.with(csrf())
 		)
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("success"))

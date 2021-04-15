@@ -12,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +23,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,21 +38,22 @@ class UsersControllerTest {
 	@Autowired
 	MockMvc mockMvc;
 
-	@Autowired
-	WebApplicationContext context;
-
 	User user;
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders
-						.webAppContextSetup(context)
-						.apply(springSecurity())
-						.build();
 		UserInfo userInfo = new UserInfo(1, "first name", "last name", "mail@somewhere", user);
 		AuthGroup e1 = new AuthGroup();
 		e1.setAuthority("user");
 		user = new User(1, "Username", "password", true, Collections.emptyList(), userInfo, Set.of(e1));
+	}
+
+	@Test
+	void profileWithoutUser() throws Exception {
+
+		mockMvc.perform(get("/user")
+		)
+						.andExpect(status().is4xxClientError());
 	}
 
 	@Test
@@ -70,9 +68,24 @@ class UsersControllerTest {
 	}
 
 	@Test
+	void getNoOrdersList() throws Exception {
+		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class)))
+						.willReturn(new PageImpl(Collections.emptyList()));
+
+		mockMvc.perform(get("/user/orders")
+						.with(user(user))
+		)
+						.andExpect(status().isOk())
+						.andExpect(view().name("orders"))
+						.andExpect(model().attributeExists("user"))
+						.andExpect(model().attributeExists("orders"));
+	}
+
+	@Test
 	void getOrdersList() throws Exception {
-		Order order = new Order(1, user, Set.of(mock(OrderItem.class)));
-		Page<Order> page = new PageImpl(List.of(order));
+		Order order1 = new Order(1, user, Set.of(mock(OrderItem.class)));
+		Order order2 = new Order(2, user, Set.of(mock(OrderItem.class)));
+		Page<Order> page = new PageImpl(List.of(order1, order2));
 
 		given(orderService.getOrdersByUser(any(User.class), any(Pageable.class)))
 						.willReturn(page);
@@ -88,19 +101,19 @@ class UsersControllerTest {
 
 	@Test
 	void getOrderDetails() throws Exception {
-		Order order = new Order(1, user, null);
-		order.setItems(Set.of(
-				new OrderItem(1, order, mock(Product.class), 2)
+		Order order = new Order(1, user, Set.of(
+						new OrderItem(1, null, mock(Product.class), 2),
+						new OrderItem(2, null, mock(Product.class), 3)
 		));
 
-		given(orderService.getOrder(any(), gt(0)))
-				.willReturn(order);
+		given(orderService.getOrder(any(User.class), gt(0)))
+						.willReturn(order);
 		mockMvc.perform(get("/user/orders/{oid}", order.getId())
 						.with(user(user))
 		)
-				.andExpect(status().isOk())
-				.andExpect(view().name("order"))
-				.andExpect(model().attributeExists("order"));
+						.andExpect(status().isOk())
+						.andExpect(view().name("order"))
+						.andExpect(model().attributeExists("order"));
 	}
 
 	@Test
