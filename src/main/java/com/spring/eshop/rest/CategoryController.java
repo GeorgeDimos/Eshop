@@ -39,6 +39,7 @@ public class CategoryController {
 										.map(assembler::toModel)
 										.collect(Collectors.toList())
 						, linkTo(methodOn(CategoryController.class).getCategories()).withSelfRel()
+						, linkTo(methodOn(RootController.class).getApiInfo()).withRel("api")
 		);
 	}
 

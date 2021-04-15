@@ -2,10 +2,12 @@ package com.spring.eshop.rest.views;
 
 import com.spring.eshop.entity.AuthGroup;
 import com.spring.eshop.entity.User;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Relation(collectionRelation = "users")
 public class UserView {
 	public int id;
 	public String username;

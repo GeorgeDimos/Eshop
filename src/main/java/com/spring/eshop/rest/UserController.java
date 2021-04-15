@@ -46,6 +46,7 @@ public class UserController {
 										.map(assembler::toModel)
 										.collect(Collectors.toList())
 						, linkTo(methodOn(UserController.class).getUsers()).withSelfRel()
+						, linkTo(methodOn(RootController.class).getApiInfo()).withRel("api")
 		);
 	}
 

@@ -1,12 +1,14 @@
 package com.spring.eshop.rest.views;
 
 import com.spring.eshop.entity.Category;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Relation(collectionRelation = "categories")
 public class CategoryView {
 	public int id;
 	@NotNull

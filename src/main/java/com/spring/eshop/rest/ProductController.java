@@ -44,6 +44,7 @@ public class ProductController {
 										.map(assembler::toModel)
 										.collect(Collectors.toList())
 						, linkTo(methodOn(ProductController.class).getProducts()).withSelfRel()
+						, linkTo(methodOn(RootController.class).getApiInfo()).withRel("api")
 		);
 	}
 

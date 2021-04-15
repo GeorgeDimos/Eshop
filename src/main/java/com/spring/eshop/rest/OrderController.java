@@ -37,7 +37,9 @@ public class OrderController {
 										.map(OrderView::new)
 										.map(assembler::toModel)
 										.collect(Collectors.toList())
-						, linkTo(methodOn(OrderController.class).getOrders()).withSelfRel());
+						, linkTo(methodOn(OrderController.class).getOrders()).withSelfRel()
+						, linkTo(methodOn(RootController.class).getApiInfo()).withRel("api")
+		);
 	}
 
 	@GetMapping("/{id}")
@@ -73,8 +75,7 @@ class OrderModelAssembler implements RepresentationModelAssembler<OrderView, Ent
 	public EntityModel<OrderView> toModel(OrderView order) {
 		return EntityModel.of(order
 						, linkTo(methodOn(OrderController.class).getOrder(order.id)).withSelfRel()
-						, linkTo(methodOn(OrderController.class).getOrders()).withRel("orders")
-						, linkTo(methodOn(UserController.class).getUser(order.userId)).withRel("user")
-		);
+						, linkTo(methodOn(OrderController.class).getOrders()).withRel("orders"))
+						.addIf(order.userId != 0, () -> linkTo(methodOn(UserController.class).getUser(order.userId)).withRel("user"));
 	}
 }

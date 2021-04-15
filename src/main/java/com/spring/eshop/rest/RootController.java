@@ -18,11 +18,13 @@ public class RootController {
 
 		RepresentationModel model = new RepresentationModel();
 
-		model.add(linkTo(methodOn(RootController.class).getApiInfo()).withSelfRel());
-		model.add(linkTo(methodOn(ProductController.class).getProducts()).withRel("products"));
-		model.add(linkTo(methodOn(CategoryController.class).getCategories()).withRel("categories"));
-		model.add(linkTo(methodOn(UserController.class).getUsers()).withRel("users"));
-		model.add(linkTo(methodOn(OrderController.class).getOrders()).withRel("orders"));
+		model.add(
+						linkTo(methodOn(RootController.class).getApiInfo()).withSelfRel()
+						, linkTo(methodOn(ProductController.class).getProducts()).withRel("products")
+						, linkTo(methodOn(CategoryController.class).getCategories()).withRel("categories")
+						, linkTo(methodOn(UserController.class).getUsers()).withRel("users")
+						, linkTo(methodOn(OrderController.class).getOrders()).withRel("orders")
+		);
 
 		return ResponseEntity.ok(model);
 	}

@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UserModel {
 
@@ -24,7 +25,7 @@ public class UserModel {
 	@Pattern(regexp = "^(.+)@(.+)", message = "{email.invalid}")
 	public String email;
 
-	public String authority;
+	public Set<String> authorities;
 
 	public static void updateUser(User user, UserModel userModel) {
 		user.setUsername(userModel.username);
@@ -33,9 +34,12 @@ public class UserModel {
 		user.getUserInfo().setEmail(userModel.email);
 		user.getUserInfo().setFirstName(userModel.firstName);
 		user.getUserInfo().setLastName(userModel.lastName);
-		AuthGroup authGroup = new AuthGroup();
-		authGroup.setAuthority(userModel.authority);
-		user.getAuthGroup().add(authGroup);
+		user.setAuthGroup(userModel.authorities.stream().map(authority -> {
+			AuthGroup authGroup = new AuthGroup();
+			authGroup.setUser(user);
+			authGroup.setAuthority(authority);
+			return authGroup;
+		}).collect(Collectors.toSet()));
 	}
 
 	public User translateToUser() {
@@ -52,10 +56,12 @@ public class UserModel {
 		userInfo.setUser(user);
 		user.setUserInfo(userInfo);
 
-		AuthGroup authGroup = new AuthGroup();
-		authGroup.setAuthority(authority);
-		authGroup.setUser(user);
-		user.setAuthGroup(Set.of(authGroup));
+		user.setAuthGroup(authorities.stream().map(authority -> {
+			AuthGroup authGroup = new AuthGroup();
+			authGroup.setAuthority(authority);
+			authGroup.setUser(user);
+			return authGroup;
+		}).collect(Collectors.toSet()));
 
 		return user;
 	}
