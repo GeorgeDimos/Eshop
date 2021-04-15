@@ -20,17 +20,7 @@
 
 .github-oauth2 {
     display: flex;
-    justify-content: space-around;
     align-items: center;
-}
-
-.github-oauth2 a {
-    color: #ffffff;
-}
-
-.github-oauth2 a:hover {
-    text-decoration: none;
-    color: #ffffff;
 }
 
 .github-oauth2 i {
