@@ -3,7 +3,7 @@ package com.spring.eshop.rest.views;
 import com.spring.eshop.entity.Category;
 import org.springframework.hateoas.server.core.Relation;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Relation(collectionRelation = "categories")
 public class CategoryView {
 	public int id;
-	@NotNull
+	@NotBlank
 	public String name;
 	public List<ProductView> products;
 
