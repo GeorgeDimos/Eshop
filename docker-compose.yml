@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=eshop
+    restart: always
+
+  eshop:
+    image: eshopimage
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - RDS_HOSTNAME=db
+      - RDS_PORT=3306
+      - RDS_DB_NAME=eshop
+      - RDS_USERNAME=root
+      - RDS_PASSWORD=root
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - db
