@@ -101,6 +101,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<profiles>
+						<profile>localhost</profile>
+						<profile>docker</profile>
+						<profile>aws</profile>
+					</profiles>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
