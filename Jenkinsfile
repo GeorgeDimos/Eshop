@@ -35,11 +35,39 @@ pipeline {
 
         stage('Docker Image') {
             agent any
-            steps{
-                script {
-                  dockerImage = docker.build("eshopimage","-f ./jenkins/Dockerfile .")
+            stages{
+                stage('Build'){
+                    steps{
+                        script {
+                          dockerImage = docker.build("eshopimage","-f ./jenkins/Dockerfile .")
+                        }
+                    }
+                }
+                stage('Start app') {
+                    steps{
+                        sh 'docker-compose up -d'
+                    }
+                    post {
+                        success {
+                           echo "App started successfully :)"
+                        }
+                        failure {
+                           echo "App failed to start :("
+                        }
+                     }
+                }
+                stage('Tests') {
+                    steps {
+                        echo 'tests'
+                    }
+                }
+                stage('Stop app') {
+                    steps{
+                        sh 'docker-compose down'
+                    }
                 }
             }
+
         }
     }
 }
