@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.3"
 
 services:
   db:
@@ -20,6 +20,7 @@ services:
       - RDS_DB_NAME=eshop
       - RDS_USERNAME=root
       - RDS_PASSWORD=root
+      - SPRING_PROFILES_ACTIVE=docker
     ports:
       - "8080:5000"
     restart: always
